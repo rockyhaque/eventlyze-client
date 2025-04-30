@@ -65,8 +65,12 @@ export default function RegisterForm() {
       } else {
         toast.error(res?.message);
       }
-    } catch (err: any) {
-      console.error(err);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error(err.message);
+      } else {
+        console.error('An unknown error occurred');
+      }
     }
   }
 
