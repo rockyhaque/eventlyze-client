@@ -174,7 +174,7 @@ export default function TermsOfServicePage() {
                 By using our service, you acknowledge that you have read and understood these Terms of Service.
               </p>
               <Button asChild className=" hover:bg-purple-900">
-                <Link href="/register">Return to Home</Link>
+                <Link href="/register">Return to Retister Form</Link>
               </Button>
             </div>
           </div>
