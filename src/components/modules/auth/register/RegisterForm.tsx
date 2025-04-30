@@ -58,6 +58,7 @@ export default function RegisterForm() {
       setIsLoading(true);
       const res = await registerUser(newdata);
       setIsLoading(false);
+      reset()
       if (res?.success) {
         toast.success(res?.message);
         router.push("/");
