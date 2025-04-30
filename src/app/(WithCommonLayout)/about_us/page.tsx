@@ -152,7 +152,40 @@ export default function AboutUSPage() {
         </div>
       </section>
 
-     
+      {/* Team Section */}
+      <section className="py-20 px-4 bg-gray-50">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#12081F] mb-4">Meet Our Team</h2>
+            <p className="text-gray-700 max-w-2xl mx-auto">
+              The passionate people behind Event Planner who are dedicated to making your event experience exceptional.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {[
+              { name: "Alex Johnson", role: "CEO & Founder" },
+              { name: "Sarah Williams", role: "CTO" },
+              { name: "Michael Chen", role: "Head of Design" },
+              { name: "Priya Sharma", role: "Customer Success" },
+            ].map((member, index) => (
+              <div key={index} className="text-center">
+                <div className="mb-4 mx-auto overflow-hidden rounded-full w-32 h-32 bg-gray-200">
+                  <img
+                    src={avatar.src}
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h3 className="text-xl font-semibold text-[#12081F]">{member.name}</h3>
+                <p className="text-gray-600">{member.role}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
     </div>
   )
 }
