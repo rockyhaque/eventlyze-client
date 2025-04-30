@@ -26,7 +26,39 @@ export default function AboutUSPage() {
         </div>
       </section>
 
-      
+      {/* Our Story Section */}
+      <section className="py-20 px-4 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <img
+                src={teamwokeimage.src}
+                alt="Our team"
+                className="rounded-lg shadow-lg"
+              />
+            </div>
+            <div className="space-y-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#12081F]">Our Story</h2>
+              <p className="text-gray-700">
+                Event Planner was born from a simple observation: planning and joining events should be straightforward,
+                but rarely is. In 2023, our team of event enthusiasts and tech innovators came together to create a
+                platform that solves the common frustrations of event management.
+              </p>
+              <p className="text-gray-700">
+                Whether you're hosting a small workshop or a large conference, our platform provides the tools you need
+                to create, manage, and monetize your events. For attendees, we offer a seamless way to discover, join,
+                and participate in events that matter to them.
+              </p>
+              <p className="text-gray-700">
+                Today, Event Planner is trusted by thousands of event creators and participants worldwide, making
+                meaningful connections happen every day.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+     
     </div>
   )
 }
