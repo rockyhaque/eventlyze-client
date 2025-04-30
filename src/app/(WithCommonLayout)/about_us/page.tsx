@@ -185,7 +185,25 @@ export default function AboutUSPage() {
         </div>
       </section>
 
-
+      {/* CTA Section */}
+      <section className="py-20 px-4 bg-[#12081F] text-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
+            <p className="text-xl text-purple-200 mb-8">
+              Join thousands of event creators and participants on our platform today.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700">
+                <Link href="/register">Create an Account</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+                <Link href="/events">Explore Events</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
