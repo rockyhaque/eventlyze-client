@@ -38,6 +38,8 @@ export default function AboutUSPage() {
                 src={teamwokeimage.src}
                 alt="Our team"
                 className="rounded-lg shadow-lg"
+                width={500}
+                height={500}
               />
             </div>
             <div className="space-y-6">
@@ -182,6 +184,8 @@ export default function AboutUSPage() {
                     src={avatar.src}
                     alt={member.name}
                     className="w-full h-full object-cover"
+                    width={128} 
+                    height={128}
                   />
                 </div>
                 <h3 className="text-xl font-semibold text-[#12081F]">{member.name}</h3>
