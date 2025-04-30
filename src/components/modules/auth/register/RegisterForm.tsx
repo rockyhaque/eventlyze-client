@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/card"
 import { Eye, EyeOff, ArrowRight, Check } from "lucide-react"
 import { FormData, formSchema, getPasswordStrength } from "./registerValidtion"
+import { registerUser } from "@/services/AuthService"
+import { toast } from "sonner"
 
 
 const defaultValues: FormData = {
@@ -46,12 +48,25 @@ export default function RegisterForm() {
   const passwordStrength = getPasswordStrength(password)
 
  
-  const onSubmit = (data: FormData) => {
-    setIsLoading(true)
-    console.log(data)
-    console.log("Form Submitted")
-    reset()
-    setIsLoading(false)
+  const onSubmit = async (data: FormData) => {
+     const newdata = {
+       name: data.firstName + " " + data.lastName,
+       email: data.email,
+       password: data.password
+     }
+    try {
+      setIsLoading(true);
+      const res = await registerUser(newdata);
+      setIsLoading(false);
+      if (res?.success) {
+        toast.success(res?.message);
+        router.push("/");
+      } else {
+        toast.error(res?.message);
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
   }
 
   
