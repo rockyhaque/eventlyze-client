@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar, Users, CreditCard, Shield, Award, Heart } from "lucide-react"
 import teamwokeimage from "@/assets/TeamWoke.jpg";
 import avatar from "@/assets/avatar.png";
+import Image from "next/image";
 
 export default function AboutUSPage() {
   return (
@@ -17,7 +18,9 @@ export default function AboutUSPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">About Eventlyze </h1>
             <p className="text-xl text-purple-200 mb-8">
-              We're on a mission to make event planning and participation seamless, secure, and enjoyable for everyone.
+             {
+                ` We're on a mission to make event planning and participation seamless, secure, and enjoyable for everyone.`
+             }
             </p>
             <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700">
               <Link href="/register">Join Our Community</Link>
@@ -31,7 +34,7 @@ export default function AboutUSPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <img
+              <Image
                 src={teamwokeimage.src}
                 alt="Our team"
                 className="rounded-lg shadow-lg"
@@ -45,9 +48,11 @@ export default function AboutUSPage() {
                 platform that solves the common frustrations of event management.
               </p>
               <p className="text-gray-700">
-                Whether you're hosting a small workshop or a large conference, our platform provides the tools you need
+               {
+                ` Whether you're hosting a small workshop or a large conference, our platform provides the tools you need
                 to create, manage, and monetize your events. For attendees, we offer a seamless way to discover, join,
-                and participate in events that matter to them.
+                and participate in events that matter to them.`
+               }
               </p>
               <p className="text-gray-700">
                 Today, Event Planner is trusted by thousands of event creators and participants worldwide, making
@@ -87,8 +92,10 @@ export default function AboutUSPage() {
               </div>
               <h3 className="text-xl font-semibold mb-3 text-[#12081F]">Quality & Excellence</h3>
               <p className="text-gray-600">
-                We're committed to delivering a high-quality platform that exceeds expectations. We continuously improve
+                {`
+                 We're committed to delivering a high-quality platform that exceeds expectations. We continuously improve
                 our features based on user feedback and industry best practices.
+                `}
               </p>
             </div>
 
@@ -171,7 +178,7 @@ export default function AboutUSPage() {
             ].map((member, index) => (
               <div key={index} className="text-center">
                 <div className="mb-4 mx-auto overflow-hidden rounded-full w-32 h-32 bg-gray-200">
-                  <img
+                  <Image
                     src={avatar.src}
                     alt={member.name}
                     className="w-full h-full object-cover"
