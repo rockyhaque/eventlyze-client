@@ -58,7 +58,55 @@ export default function AboutUSPage() {
         </div>
       </section>
 
-     
+      {/* Our Values Section */}
+      <section className="py-20 px-4 bg-gray-50">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#12081F] mb-4">Our Values</h2>
+            <p className="text-gray-700 max-w-2xl mx-auto">
+              These core principles guide everything we do at Event Planner, from product development to customer
+              support.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                <Shield className="w-6 h-6 text-purple-700" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-[#12081F]">Security & Trust</h3>
+              <p className="text-gray-600">
+                We prioritize the security of your data and financial transactions. Our platform is built with robust
+                security measures to protect both event creators and participants.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                <Award className="w-6 h-6 text-purple-700" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-[#12081F]">Quality & Excellence</h3>
+              <p className="text-gray-600">
+                We're committed to delivering a high-quality platform that exceeds expectations. We continuously improve
+                our features based on user feedback and industry best practices.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                <Heart className="w-6 h-6 text-purple-700" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-[#12081F]">Community & Inclusion</h3>
+              <p className="text-gray-600">
+                We believe in creating a platform where everyone feels welcome. We foster a diverse and inclusive
+                community where all types of events and participants can thrive.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    
     </div>
   )
 }
