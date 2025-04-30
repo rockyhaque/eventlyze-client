@@ -162,9 +162,11 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-xl font-semibold mt-8 mb-4 text-[#12081F]">8. Changes to This Privacy Policy</h2>
 
             <p>
-              We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new
+              {
+              `We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new
               Privacy Policy on this page and updating the "Last Updated" date at the top of this Privacy Policy. You
-              are advised to review this Privacy Policy periodically for any changes.
+              are advised to review this Privacy Policy periodically for any changes.`
+              }
             </p>
 
             <h2 className="text-xl font-semibold mt-8 mb-4 text-[#12081F]">9. International Transfers</h2>
