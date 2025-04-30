@@ -5,7 +5,6 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/card"
 import { Eye, EyeOff, ArrowRight } from "lucide-react"
 import { loginSchema, LoginSchema } from "./loginValidation"
+import { loginUser } from "@/services/AuthService"
 
 
 
@@ -43,6 +43,23 @@ export default function LoginForm() {
   const rememberMeValue = watch("rememberMe")
 
   const onSubmit = async (data: LoginSchema) => {
+
+    try {
+      const res = await loginUser(data);
+      setIsLoading(true);
+      // if (res?.success) {
+      //   toast.success(res?.message);
+      //   if (redirect) {
+      //     router.push(redirect);
+      //   } else {
+      //     router.push("/");
+      //   }
+      // } else {
+      //   toast.error(res?.message);
+      // }
+    } catch (err: any) {
+      console.error(err);
+    }
     setIsLoading(true)
     console.log(data)
     reset()
