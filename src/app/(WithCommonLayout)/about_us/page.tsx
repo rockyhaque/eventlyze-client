@@ -106,7 +106,53 @@ export default function AboutUSPage() {
         </div>
       </section>
 
-    
+      {/* How It Works Section */}
+      <section className="py-20 px-4 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#12081F] mb-4">How It Works</h2>
+            <p className="text-gray-700 max-w-2xl mx-auto">
+              Our platform makes event planning and participation simple and efficient.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Calendar className="w-8 h-8 text-purple-700" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-[#12081F]">Create Events</h3>
+              <p className="text-gray-600">
+                Create public or private events with optional registration fees. Customize every aspect of your event to
+                match your vision.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-purple-700" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-[#12081F]">Manage Participants</h3>
+              <p className="text-gray-600">
+                Approve or reject join requests, send invitations, and communicate with your attendees all in one place.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CreditCard className="w-8 h-8 text-purple-700" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-[#12081F]">Secure Payments</h3>
+              <p className="text-gray-600">
+                Collect registration fees securely through our integrated payment system. Track payments and manage
+                refunds easily.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+     
     </div>
   )
 }
