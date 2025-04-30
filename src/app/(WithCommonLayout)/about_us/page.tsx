@@ -197,7 +197,7 @@ export default function AboutUSPage() {
               <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700">
                 <Link href="/register">Create an Account</Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+              <Button asChild variant="outline" size="lg" className="border-white text-black hover:bg-white/10 hover:text-white">
                 <Link href="/events">Explore Events</Link>
               </Button>
             </div>
