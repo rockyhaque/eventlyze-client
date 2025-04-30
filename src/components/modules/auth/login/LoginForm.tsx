@@ -52,6 +52,7 @@ export default function LoginForm() {
       const res = await loginUser(data);
       setIsLoading(false);
       if (res?.success) {
+        reset()
         toast.success(res?.message);
         if (redirect) {
           router.push(redirect);
@@ -61,8 +62,12 @@ export default function LoginForm() {
       } else {
         toast.error(res?.message);
       }
-    } catch (err: any) {
-      console.error(err);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error(err.message);
+      } else {
+        console.error('An unknown error occurred');
+      }
     }
    
 
