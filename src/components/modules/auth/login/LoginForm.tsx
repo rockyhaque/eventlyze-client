@@ -35,7 +35,7 @@ export default function LoginForm() {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const {register,handleSubmit,formState: { errors },setValue,watch,} = useForm<LoginSchema>({
+  const {register,handleSubmit,formState: { errors },setValue,watch,reset} = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues:defaultValues
   })
@@ -44,6 +44,9 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginSchema) => {
     setIsLoading(true)
+    console.log(data)
+    reset()
+    setIsLoading(false)
 
   
   }
