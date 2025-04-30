@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
@@ -20,6 +20,7 @@ import {
 import { Eye, EyeOff, ArrowRight } from "lucide-react"
 import { loginSchema, LoginSchema } from "./loginValidation"
 import { loginUser } from "@/services/AuthService"
+import { toast } from "sonner"
 
 
 
@@ -32,6 +33,8 @@ const defaultValues: LoginSchema = {
 
 
 export default function LoginForm() {
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirectPath");
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -45,25 +48,23 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginSchema) => {
 
     try {
-      const res = await loginUser(data);
       setIsLoading(true);
-      // if (res?.success) {
-      //   toast.success(res?.message);
-      //   if (redirect) {
-      //     router.push(redirect);
-      //   } else {
-      //     router.push("/");
-      //   }
-      // } else {
-      //   toast.error(res?.message);
-      // }
+      const res = await loginUser(data);
+      setIsLoading(false);
+      if (res?.success) {
+        toast.success(res?.message);
+        if (redirect) {
+          router.push(redirect);
+        } else {
+          router.push("/");
+        }
+      } else {
+        toast.error(res?.message);
+      }
     } catch (err: any) {
       console.error(err);
     }
-    setIsLoading(true)
-    console.log(data)
-    reset()
-    setIsLoading(false)
+   
 
   
   }
