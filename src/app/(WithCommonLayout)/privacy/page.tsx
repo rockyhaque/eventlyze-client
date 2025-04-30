@@ -24,10 +24,13 @@ export default function PrivacyPolicyPage() {
 
           <div className="prose max-w-none text-gray-700">
             <p>
-              At Event Planner, we take your privacy seriously. This Privacy Policy explains how we collect, use,
+             {
+                ` At Event Planner, we take your privacy seriously. This Privacy Policy explains how we collect, use,
               disclose, and safeguard your information when you use our website, services, and applications
               (collectively, the "Service"). Please read this Privacy Policy carefully. By using the Service, you
               consent to the data practices described in this policy.
+                `
+             }
             </p>
 
             <h2 className="text-xl font-semibold mt-8 mb-4 text-[#12081F]">1. Information We Collect</h2>
@@ -146,7 +149,7 @@ export default function PrivacyPolicyPage() {
               .
             </p>
 
-            <h2 className="text-xl font-semibold mt-8 mb-4 text-[#12081F]">7. Children's Privacy</h2>
+            <h2 className="text-xl font-semibold mt-8 mb-4 text-[#12081F]">7. {`Children's Privacy`}</h2>
 
             <p>
               Our Service is not directed to individuals under the age of 16. We do not knowingly collect personal
