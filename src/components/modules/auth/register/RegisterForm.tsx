@@ -49,6 +49,7 @@ export default function RegisterForm() {
   const onSubmit = (data: FormData) => {
     setIsLoading(true)
     console.log(data)
+    console.log("Form Submitted")
     reset()
     setIsLoading(false)
   }
