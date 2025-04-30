@@ -22,8 +22,11 @@ export const registerUser = async (userData: FieldValues) => {
     }
 
     return result;
-  } catch (error: any) {
-    return Error(error);
+  } catch (error: unknown) {
+     if(error instanceof Error) {
+      return error
+     }
+     return error
   }
 }
 
