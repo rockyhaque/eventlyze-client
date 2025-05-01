@@ -21,7 +21,7 @@ export function HowItWorks() {
       icon: Users,
       title: "Connect",
       description: "Meet like-minded people and build your network.",
-      color: "bg-accent/10 text-accent-foreground",
+      color: "bg-accent/10 text-accent",
     },
     {
       icon: CheckCircle,
