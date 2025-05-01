@@ -24,7 +24,7 @@ export function HeroSection() {
         <div className="absolute -bottom-[10%] -left-[10%] h-[300px] w-[300px] rounded-full bg-secondary/20 blur-[100px]" />
       </div>
 
-      <div className="container grid gap-12 md:grid-cols-2 md:items-center">
+      <div className="container grid gap-12 md:grid-cols-2 md:items-center pb-20">
         <motion.div
           className="flex flex-col gap-6"
           initial={{ opacity: 0, y: 20 }}
