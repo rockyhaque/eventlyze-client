@@ -24,14 +24,14 @@ export function HeroSection() {
         <div className="absolute -bottom-[10%] -left-[10%] h-[300px] w-[300px] rounded-full bg-secondary/20 blur-[100px]" />
       </div>
 
-      <div className="container grid gap-12 md:grid-cols-2 md:items-center">
+      <div className="container grid gap-12 md:grid-cols-2 md:items-center pb-20">
         <motion.div
           className="flex flex-col gap-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="inline-flex items-center gap-2 rounded-full bg-muted px-4 py-1.5 text-sm font-medium">
+          <div className="inline-flex items-center gap-2 rounded-full bg-muted px-4 py-1.5 text-sm font-medium max-w-fit">
             <span className="relative flex h-3 w-3">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex h-3 w-3 rounded-full bg-primary"></span>

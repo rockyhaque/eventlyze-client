@@ -326,32 +326,6 @@ export function EventSlider() {
             })}
           </AnimatePresence>
         </div>
-
-        {/* Navigation dots */}
-        <div className="mt-8 flex justify-center">
-          <div className="flex gap-2">
-            {events.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => handleDotClick(index)}
-                className={cn(
-                  "h-2 w-2 rounded-full transition-all",
-                  activeIndex === index ? "w-8 bg-primary" : "bg-muted",
-                )}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-10 flex justify-center">
-          <Button size="lg" asChild>
-            <Link href="/events">
-              View All Events
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
       </div>
     </section>
   )
@@ -385,14 +359,13 @@ function EventCard({ event, isActive, mouseX, mouseY }: EventCardProps) {
         rotateX: isActive ? rotateX : 0,
         rotateY: isActive ? rotateY : 0,
       }}
-      whileHover={{ scale: isActive ? 1.02 : 1 }}
       transition={{ type: "spring", stiffness: 400, damping: 30 }}
     >
       <div className="relative flex h-full flex-col">
         {/* Image section with parallax */}
         <div className="relative h-[60%] w-full overflow-hidden">
           <motion.div
-            className="absolute inset-0"
+            className="absolute inset-0 h-full object-cover overflow-hidden rounded-t-2xl"
             style={{
               y: isActive ? imageY : 0,
               x: isActive ? imageX : 0,
@@ -403,9 +376,8 @@ function EventCard({ event, isActive, mouseX, mouseY }: EventCardProps) {
               alt={event.title}
               width={600}
               height={400}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+              className="h-full w-full object-cover transition-transform duration-700 rounded-t-2xl"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
           </motion.div>
 
           {/* Floating badges */}
