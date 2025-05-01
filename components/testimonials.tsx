@@ -2,12 +2,10 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { motion } from "framer-motion"
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { motion, AnimatePresence } from "framer-motion"
+import { Quote } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-// Sample testimonials data
 const testimonials = [
   {
     id: 1,
@@ -43,6 +41,8 @@ const testimonials = [
 
 export function Testimonials() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [hoverDirection, setHoverDirection] = useState<"prev" | "next" | null>(null)
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
 
   const handlePrev = () => {
     setActiveIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))
@@ -61,19 +61,33 @@ export function Testimonials() {
         </div>
 
         <div className="relative mx-auto max-w-4xl">
-          <div className="absolute -left-4 -top-4 h-20 w-20 text-primary opacity-20">
+          <div className="absolute z-10 -left-4 -top-4 h-20 w-20 text-primary">
             <Quote className="h-full w-full" />
           </div>
 
-          <div className="relative overflow-hidden rounded-xl bg-muted/50 p-8 md:p-12">
+          <div
+            className="relative overflow-hidden rounded-xl bg-muted/50 p-8 md:p-12 cursor-none"
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect()
+              const x = e.clientX - rect.left
+              const y = e.clientY - rect.top
+              setCursorPos({ x: e.clientX, y: e.clientY })
+              setHoverDirection(x < rect.width / 2 ? "prev" : "next")
+            }}
+            onMouseLeave={() => setHoverDirection(null)}
+            onClick={() => {
+              if (hoverDirection === "prev") handlePrev()
+              else handleNext()
+            }}
+          >
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={testimonial.id}
                 className="flex flex-col items-center text-center"
-                initial={{ opacity: 0, x: 100 }}
+                initial={{ opacity: 0, y: -100 }}
                 animate={{
                   opacity: activeIndex === index ? 1 : 0,
-                  x: activeIndex === index ? 0 : 100,
+                  y: activeIndex === index ? 0 : -100,
                   position: activeIndex === index ? "relative" : "absolute",
                 }}
                 transition={{ duration: 0.5 }}
@@ -99,18 +113,31 @@ export function Testimonials() {
                 </div>
               </motion.div>
             ))}
+
+            {/* Floating Cursor Label */}
+            <AnimatePresence>
+              {hoverDirection && (
+                <motion.div
+                  key={hoverDirection}
+                  className="pointer-events-none fixed z-50 flex h-16 w-16 items-center justify-center rounded-full bg-primary/30 backdrop-blur-xl shadow-sm text-xs font-bold text-white"
+                  style={{
+                    top: cursorPos.y - 32,
+                    left: cursorPos.x - 32,
+                  }}
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                  {hoverDirection.toUpperCase()}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
+          {/* Manual Controls (optional, still included) */}
           <div className="mt-8 flex justify-center gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handlePrev}
-              aria-label="Previous testimonial"
-              className="rounded-full"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </Button>
+
             <div className="flex gap-2">
               {testimonials.map((_, index) => (
                 <button
@@ -124,15 +151,7 @@ export function Testimonials() {
                 />
               ))}
             </div>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleNext}
-              aria-label="Next testimonial"
-              className="rounded-full"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </Button>
+
           </div>
         </div>
       </div>
