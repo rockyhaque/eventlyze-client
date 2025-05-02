@@ -78,7 +78,7 @@ export function DashboardSidebar() {
               href={route.href}
               className={cn(
                 "group flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                pathname === route.href ? "bg-accent" : "transparent",
+                pathname === route.href ? "bg-accent text-accent-foreground" : "transparent",
               )}
             >
               <route.icon className={cn("h-5 w-5", route.color)} />
