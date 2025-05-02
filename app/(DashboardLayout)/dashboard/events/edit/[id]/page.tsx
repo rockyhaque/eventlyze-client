@@ -57,22 +57,6 @@ export default function EditEventPage() {
     <>
    
       <div className="flex-1 p-6 md:p-8 overflow-auto">
-        <Breadcrumb className="mb-6">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/manage-events">Manage Events</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink>Edit Event</BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold">Edit Event</h1>
           <div className="flex gap-2">
