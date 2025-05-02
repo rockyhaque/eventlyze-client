@@ -7,6 +7,31 @@ interface ReviewsListProps {
   type: ReviewType
 }
 
+export interface ReceivedReview {
+  id: string
+  reviewer: string
+  reviewerAvatar: string
+  reviewerInitials: string
+  eventName: string
+  rating: number
+  comment: string
+  date: string
+  helpful: number
+  replied: boolean
+}
+
+export interface GivenReview {
+  id: string
+  organizer: string
+  organizerAvatar: string
+  organizerInitials: string
+  eventName: string
+  rating: number
+  comment: string
+  date: string
+  helpful: number
+}
+
 export function ReviewsList({ type }: ReviewsListProps) {
   const reviews = {
     received: [
@@ -36,7 +61,7 @@ export function ReviewsList({ type }: ReviewsListProps) {
         helpful: 8,
         replied: false,
       },
-    ],
+    ] as ReceivedReview[],
     given: [
       {
         id: "3",
@@ -62,7 +87,7 @@ export function ReviewsList({ type }: ReviewsListProps) {
         date: "Aug 15, 2023",
         helpful: 2,
       },
-    ],
+    ] as GivenReview[],
   }
 
   const currentReviews = reviews[type]
@@ -92,26 +117,26 @@ export function ReviewsList({ type }: ReviewsListProps) {
                     <AvatarImage
                       src={
                         type === "received"
-                          ? review.reviewerAvatar
-                          : review.organizerAvatar
+                          ? (review as ReceivedReview).reviewerAvatar
+                          : (review as GivenReview).organizerAvatar
                       }
                       alt={
                         type === "received"
-                          ? review.reviewer
-                          : review.organizer
+                          ? (review as ReceivedReview).reviewer
+                          : (review as GivenReview).organizer
                       }
                     />
                     <AvatarFallback>
                       {type === "received"
-                        ? review.reviewerInitials
-                        : review.organizerInitials}
+                        ? (review as ReceivedReview).reviewerInitials
+                        : (review as GivenReview).organizerInitials}
                     </AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="font-medium">
                       {type === "received"
-                        ? review.reviewer
-                        : review.organizer}
+                        ? (review as ReceivedReview).reviewer
+                        : (review as GivenReview).organizer}
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {review.eventName}
