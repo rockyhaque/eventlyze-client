@@ -7,18 +7,29 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CheckCircle2 } from "lucide-react"
+import { addNewsLetter } from "@/services/NewsLetterSerice"
 
 export function Newsletter() {
   const [email, setEmail] = useState("")
   const [isSubmitted, setIsSubmitted] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+// Submit Handeler
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (email) {
-      // In a real app, this would be an API call
-      setIsSubmitted(true)
+      try {
+        const result = await addNewsLetter(email);
+
+        if (result.success) {
+          setIsSubmitted(true);
+        } else {
+          console.error(result.message);
+        }
+      } catch (error) {
+        console.error("Failed to submit:", error);
+      }
     }
-  }
+  };
 
   return (
     <section className="py-16">
@@ -45,8 +56,11 @@ export function Newsletter() {
               </p>
             </motion.div>
           ) : (
+
             <form onSubmit={handleSubmit} className="mt-8">
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
+
+                {/* Inpute Email */}
                 <Input
                   type="email"
                   placeholder="Enter your email"
@@ -55,9 +69,11 @@ export function Newsletter() {
                   className="flex-1 h-auto max-w-[300px]"
                   required
                 />
+
                 <Button type="submit" size="lg">
                   Subscribe
                 </Button>
+
               </div>
               <p className="mt-2 text-center text-xs text-muted-foreground">
                 By subscribing, you agree to our{" "}
@@ -71,6 +87,7 @@ export function Newsletter() {
                 .
               </p>
             </form>
+
           )}
         </div>
       </div>
