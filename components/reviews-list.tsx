@@ -8,7 +8,6 @@ interface ReviewsListProps {
 }
 
 export function ReviewsList({ type }: ReviewsListProps) {
-  // Mock data for different review types
   const reviews = {
     received: [
       {
@@ -18,7 +17,8 @@ export function ReviewsList({ type }: ReviewsListProps) {
         reviewerInitials: "SJ",
         eventName: "Tech Conference 2023",
         rating: 5,
-        comment: "Excellent organization! The speakers were top-notch and the venue was perfect. Will definitely attend next year.",
+        comment:
+          "Excellent organization! The speakers were top-notch and the venue was perfect. Will definitely attend next year.",
         date: "Oct 16, 2023",
         helpful: 12,
         replied: true,
@@ -30,7 +30,8 @@ export function ReviewsList({ type }: ReviewsListProps) {
         reviewerInitials: "MB",
         eventName: "Product Launch Party",
         rating: 4,
-        comment: "Great event overall. The product demos were impressive and the networking opportunities were valuable. The only downside was the limited parking.",
+        comment:
+          "Great event overall. The product demos were impressive and the networking opportunities were valuable. The only downside was the limited parking.",
         date: "Nov 6, 2023",
         helpful: 8,
         replied: false,
@@ -44,7 +45,8 @@ export function ReviewsList({ type }: ReviewsListProps) {
         organizerAvatar: "/placeholder.svg?height=40&width=40&text=DL",
         organizerInitials: "DL",
         rating: 5,
-        comment: "Fantastic retreat! The activities were well-planned and the accommodations were excellent. Great team-building experience.",
+        comment:
+          "Fantastic retreat! The activities were well-planned and the accommodations were excellent. Great team-building experience.",
         date: "Sep 12, 2023",
         helpful: 5,
       },
@@ -55,7 +57,8 @@ export function ReviewsList({ type }: ReviewsListProps) {
         organizerAvatar: "/placeholder.svg?height=40&width=40&text=EW",
         organizerInitials: "EW",
         rating: 3,
-        comment: "The content was good, but the workshop felt rushed. Would have preferred more hands-on time with the tools.",
+        comment:
+          "The content was good, but the workshop felt rushed. Would have preferred more hands-on time with the tools.",
         date: "Aug 15, 2023",
         helpful: 2,
       },
@@ -86,15 +89,57 @@ export function ReviewsList({ type }: ReviewsListProps) {
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage 
-                      src={type === "received" ? review.reviewerAvatar : review.organizerAvatar} 
-                      alt={type === "received" ? review.reviewer : review.organizer} 
+                    <AvatarImage
+                      src={
+                        type === "received"
+                          ? review.reviewerAvatar
+                          : review.organizerAvatar
+                      }
+                      alt={
+                        type === "received"
+                          ? review.reviewer
+                          : review.organizer
+                      }
                     />
-                    <AvatarFallback>{type === "received" ? review.reviewerInitials : review.organizerInitials}</AvatarFallback>
+                    <AvatarFallback>
+                      {type === "received"
+                        ? review.reviewerInitials
+                        : review.organizerInitials}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-medium">{type === "received" ? review.reviewer : review.organizer}</p>
-                    <div className="flex items-center gap-2">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          \
+                    <p className="font-medium">
+                      {type === "received"
+                        ? review.reviewer
+                        : review.organizer}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {review.eventName}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <span
+                      key={i}
+                      className={
+                        i < review.rating ? "text-yellow-500" : "text-gray-300"
+                      }
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <p className="text-sm">{review.comment}</p>
+              <div className="text-sm text-muted-foreground flex justify-between">
+                <span>{review.date}</span>
+                <span>{review.helpful} helpful</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+}
