@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Calendar, Users, MessageSquare, Star, Settings, LogOut, ChevronRight } from "lucide-react"
+import { LayoutDashboard, Calendar, Users, MessageSquare, Star, Settings, LogOut, ChevronRight, CalendarPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -19,6 +19,12 @@ export function DashboardSidebar() {
       icon: LayoutDashboard,
       href: "/dashboard",
       color: "text-sky-500",
+    },
+    {
+      label: "Create Event",
+      icon: CalendarPlus,
+      href: "/dashboard/create-event",
+      color: "text-violet-500",
     },
     {
       label: "My Events",
