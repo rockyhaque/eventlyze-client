@@ -11,14 +11,10 @@ import {
   User,
   Mail,
   Lock,
-  Eye,
-  EyeOff,
   Github,
   Twitter,
-  ChromeIcon as Google,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
@@ -29,8 +25,14 @@ import { signupSchema } from "@/components/modules/Auth/signUp/signupValidation"
 import { Form } from "@/components/ui/form";
 import EFormInput from "@/components/modules/Shared/Form/EFormInput";
 import EFormSelect from "@/components/modules/Shared/Form/EFormSelect";
+
+
+import GoogleLoginBtn from "@/components/modules/Shared/SocialLogin/GoogleLoginBtn";
+import { useState } from "react";
+import useImageUploader from "@/components/utils/useImageUploader";
+import EFormImageUpload from "@/components/modules/Shared/Form/EFormImageUpload";
 import { signUpUser } from "@/services/AuthServices";
-import EFormFileInput from "@/components/modules/Shared/Form/EFormFileInput";
+import { toast } from "sonner";
 
 const genderOptions = [
   { value: "MALE", label: "MALE" },
@@ -38,6 +40,8 @@ const genderOptions = [
 ];
 
 export default function SignupPage() {
+  const { uploadImagesToCloudinary, isUploading } = useImageUploader();
+
   const form = useForm({
     resolver: zodResolver(signupSchema),
   });
@@ -45,23 +49,30 @@ export default function SignupPage() {
     formState: { isSubmitting },
   } = form;
 
+  const [profileImageUrl, setProfileImageUrl] = useState<File | File[]>([]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const userData = {
-        password: data.password,
-        user: {
-          name: data.name,
-          email: data.email,
-          contactNumber: data.contactNumber,
-          gender: data.gender,
-        },
+      // Upload the image and get the URL
+      const uploadedImageUrl = await uploadImagesToCloudinary(
+        profileImageUrl,
+        false
+      );
+
+      const formData = {
+        ...data,
+        photo: uploadedImageUrl, // Add the uploaded image URL
       };
 
-      const res = await signUpUser(userData);
 
-      console.log(res);
-    } catch (error) {
+      const result = await signUpUser(formData);
+
+      if (result?.success) {
+        toast.success(result.message || "User signed up successfully!");
+      }
+
+    } catch (error:any) {
+      toast.error(error.message || "Error signing up. Please try again.");
       console.log(error);
     }
   };
@@ -127,77 +138,6 @@ export default function SignupPage() {
                 <TabsTrigger value="social">Social</TabsTrigger>
               </TabsList>
               <TabsContent value="email" className="mt-4">
-                {/* <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <Input id="name" placeholder="John Doe" className="pl-10" required />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <Input
-                          id="email"
-                          placeholder="name@example.com"
-                          type="email"
-                          autoCapitalize="none"
-                          autoComplete="email"
-                          autoCorrect="off"
-                          className="pl-10"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <Input
-                          id="password"
-                          type={showPassword ? "text" : "password"}
-                          className="pl-10 pr-10"
-                          required
-                        />
-                        <button
-                          type="button"
-                          className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                          <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
-                        </button>
-                      </div>
-                      <p className="text-xs text-muted-foreground">Password must be at least 8 characters long</p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="terms" required />
-                      <Label htmlFor="terms" className="text-sm font-normal">
-                        I agree to the{" "}
-                        <Link href="/terms" className="text-primary underline-offset-4 hover:underline">
-                          Terms of Service
-                        </Link>{" "}
-                        and{" "}
-                        <Link href="/privacy" className="text-primary underline-offset-4 hover:underline">
-                          Privacy Policy
-                        </Link>
-                      </Label>
-                    </div>
-                  </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? (
-                      <div className="flex items-center gap-2">
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                        <span>Creating account...</span>
-                      </div>
-                    ) : (
-                      <span>Create Account</span>
-                    )}
-                  </Button>
-                </form> */}
 
                 <Form {...form}>
                   <form
@@ -268,15 +208,14 @@ export default function SignupPage() {
                         />
                       </div>
 
-                      {/* input for profile */}
-                      <div className="space-y-2">
-                        <EFormFileInput
-                          name="photo"
-                          label="Profile Picture"
-                          control={form.control}
-                          required={false}
-                        />
-                      </div>
+
+                      <EFormImageUpload
+                        control={form.control}
+                        name="photo"
+                        label="Profile Image"
+                        multiple={false}
+                        onImageUpload={setProfileImageUrl}
+                      />
 
                       <div className="flex items-center space-x-2">
                         <Checkbox id="terms" required />
@@ -317,13 +256,7 @@ export default function SignupPage() {
               </TabsContent>
               <TabsContent value="social" className="mt-4 space-y-4">
                 <div className="grid gap-3">
-                  <Button
-                    variant="outline"
-                    className="h-11 w-full gap-2 bg-white text-black hover:bg-white/90 hover:text-black"
-                  >
-                    <Google className="h-5 w-5" />
-                    <span>Sign up with Google</span>
-                  </Button>
+                  <GoogleLoginBtn />
                   <Button
                     variant="outline"
                     className="h-11 w-full gap-2 bg-[#1DA1F2] text-white hover:bg-[#1DA1F2]/90 hover:text-white"
