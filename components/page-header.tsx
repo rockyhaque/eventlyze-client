@@ -1,9 +1,11 @@
 import { cn } from "@/lib/utils"
 
 interface PageHeaderProps {
-  title: string
+  title?: string
   description?: string
   className?: string
+  heading?: string
+  subheading?: string
 }
 
 export function PageHeader({ title, description, className }: PageHeaderProps) {

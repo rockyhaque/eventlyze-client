@@ -1,7 +1,7 @@
 import { DashboardHeader } from "@/components/dashboard-header"
 import { DashboardStats } from "@/components/dashboard-stats"
-import { UpcomingEvents } from "@/components/upcoming-events"
 import { RecentInvitations } from "@/components/recent-invitations"
+import { RecentSubscriber } from "@/components/recent-subscriber"
 
 export default function DashboardPage() {
   return (
@@ -9,8 +9,8 @@ export default function DashboardPage() {
       <DashboardHeader />
       <DashboardStats />
       <div className="grid gap-8 md:grid-cols-2">
-        <UpcomingEvents />
         <RecentInvitations />
+        <RecentSubscriber/>
       </div>
     </div>
   )
