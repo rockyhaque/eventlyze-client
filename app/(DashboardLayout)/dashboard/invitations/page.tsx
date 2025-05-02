@@ -6,8 +6,8 @@ import { InvitationsList } from "@/components/invitations-list"
 
 export default function InvitationsPage() {
   return (
-    <div className="flex flex-col gap-8">
-      <PageHeader heading="Invitations" subheading="Manage event invitations you've received" />
+    <div>
+      <PageHeader title="Invitations" description="Manage event invitations you've received" />
 
       <Tabs defaultValue="pending" className="w-full">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

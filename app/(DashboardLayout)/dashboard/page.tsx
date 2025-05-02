@@ -5,7 +5,7 @@ import { RecentSubscriber } from "@/components/recent-subscriber"
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-8">
+    <div>
       <DashboardHeader />
       <DashboardStats />
       <div className="grid gap-8 md:grid-cols-2">

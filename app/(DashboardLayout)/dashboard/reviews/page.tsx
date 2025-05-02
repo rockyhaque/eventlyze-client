@@ -4,8 +4,8 @@ import { ReviewsList } from "@/components/reviews-list"
 
 export default function ReviewsPage() {
   return (
-    <div className="flex flex-col gap-8">
-      <PageHeader heading="Reviews" subheading="Manage reviews for your events and your reviews of other events" />
+    <div>
+      <PageHeader title="Reviews" description="Manage reviews for your events and your reviews of other events" />
 
       <Tabs defaultValue="received" className="w-full">
         <TabsList>

@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { PageHeader } from "@/components/page-header"
 
 export default function CreateEventPage() {
   const [activeTab, setActiveTab] = useState("details")
@@ -27,10 +28,9 @@ export default function CreateEventPage() {
   return (
     <>
      
-      <div className="flex-1 p-6 md:p-8 overflow-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold">Create Event</h1>
-          <Button variant="outline">Save as Draft</Button>
+      <div className="flex-1 overflow-auto">
+        <div className="flex items-center justify-between">
+          <PageHeader title="Create Event" description="Plan an event to connect, socialize, or just relax together"/>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

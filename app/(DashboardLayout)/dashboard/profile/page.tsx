@@ -9,8 +9,8 @@ import { ProfileEvents } from "@/components/profile-events"
 
 export default function ProfilePage() {
   return (
-    <div className="flex flex-col gap-8">
-      <PageHeader heading="My Profile" subheading="View and manage your public profile" />
+    <div>
+      <PageHeader title="My Profile" description="View and manage your public profile" />
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-1">

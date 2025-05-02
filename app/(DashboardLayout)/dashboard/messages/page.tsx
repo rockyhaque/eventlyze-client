@@ -7,9 +7,9 @@ import { Plus, Search } from "lucide-react"
 
 export default function MessagesPage() {
   return (
-    <div className="flex flex-col gap-8">
+    <div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <PageHeader heading="Messages" subheading="Communicate with event organizers and attendees" />
+        <PageHeader title="Messages" description="Communicate with event organizers and attendees" />
         <Button className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           New Message
