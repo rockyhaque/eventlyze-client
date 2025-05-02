@@ -1,7 +1,4 @@
 "use client";
-
-import type React from "react";
-
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -17,60 +14,34 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "@/components/modules/Auth/signUp/signupValidation";
 import { Form } from "@/components/ui/form";
 import EFormInput from "@/components/modules/Shared/Form/EFormInput";
-import EFormSelect from "@/components/modules/Shared/Form/EFormSelect";
-
-
 import GoogleLoginBtn from "@/components/modules/Shared/SocialLogin/GoogleLoginBtn";
-import { useState } from "react";
-import useImageUploader from "@/components/utils/useImageUploader";
-import EFormImageUpload from "@/components/modules/Shared/Form/EFormImageUpload";
 import { signUpUser } from "@/services/AuthServices";
 import { toast } from "sonner";
 
-const genderOptions = [
-  { value: "MALE", label: "MALE" },
-  { value: "FEMALE", label: "FEMALE" },
-];
-
 export default function SignupPage() {
-  const { uploadImagesToCloudinary, isUploading } = useImageUploader();
+  const form = useForm({resolver: zodResolver(signupSchema),  defaultValues: {
+    name: "",
+    email: "",
+    password: "",
+  },});
 
-  const form = useForm({
-    resolver: zodResolver(signupSchema),
-  });
-  const {
-    formState: { isSubmitting },
-  } = form;
-
-  const [profileImageUrl, setProfileImageUrl] = useState<File | File[]>([]);
-
+  const {formState: { isSubmitting }} = form;
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      // Upload the image and get the URL
-      const uploadedImageUrl = await uploadImagesToCloudinary(
-        profileImageUrl,
-        false
-      );
-
       const formData = {
         ...data,
-        photo: uploadedImageUrl, // Add the uploaded image URL
       };
-
-
       const result = await signUpUser(formData);
-
       if (result?.success) {
         toast.success(result.message || "User signed up successfully!");
+        form.reset()
       }
-
     } catch (error:any) {
       toast.error(error.message || "Error signing up. Please try again.");
       console.log(error);
@@ -96,7 +67,6 @@ export default function SignupPage() {
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/50 to-transparent"></div>
-
           <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
               <Calendar className="h-6 w-6 text-white" />
@@ -131,14 +101,12 @@ export default function SignupPage() {
                 Sign up to start creating and joining events
               </p>
             </div>
-
             <Tabs defaultValue="email" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="email">Email</TabsTrigger>
                 <TabsTrigger value="social">Social</TabsTrigger>
               </TabsList>
               <TabsContent value="email" className="mt-4">
-
                 <Form {...form}>
                   <form
                     onSubmit={form.handleSubmit(onSubmit)}
@@ -157,20 +125,6 @@ export default function SignupPage() {
                           required={true}
                         />
                       </div>
-
-                      {/* input for contact contactNumber */}
-                      <div className="space-y-2">
-                        <EFormInput
-                          name="contactNumber"
-                          label="Contact Number"
-                          placeholder="Your Contact Number"
-                          type="text"
-                          control={form.control}
-                          icon={<User size={20} />}
-                          required={true}
-                        />
-                      </div>
-
                       {/*  input for email */}
                       <div className="space-y-2">
                         <EFormInput
@@ -183,7 +137,6 @@ export default function SignupPage() {
                           required={true}
                         />
                       </div>
-
                       {/*  input for password */}
                       <div className="space-y-2">
                         <EFormInput
@@ -196,27 +149,6 @@ export default function SignupPage() {
                           required={true}
                         />
                       </div>
-
-                      {/* select for gender */}
-                      <div className="space-y-2">
-                        <EFormSelect
-                          name="gender"
-                          label="Select Gender"
-                          control={form.control}
-                          options={genderOptions}
-                          // multiple is false by default
-                        />
-                      </div>
-
-
-                      <EFormImageUpload
-                        control={form.control}
-                        name="photo"
-                        label="Profile Image"
-                        multiple={false}
-                        onImageUpload={setProfileImageUrl}
-                      />
-
                       <div className="flex items-center space-x-2">
                         <Checkbox id="terms" required />
                         <Label htmlFor="terms" className="text-sm font-normal">
@@ -290,7 +222,6 @@ export default function SignupPage() {
                 </div>
               </TabsContent>
             </Tabs>
-
             <p className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}
               <Link
@@ -300,27 +231,6 @@ export default function SignupPage() {
                 Sign in
               </Link>
             </p>
-
-            <div className="relative mt-4">
-              <div className="absolute inset-0 flex items-center">
-                <Separator className="w-full" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">
-                  Join as an organizer
-                </span>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <p className="mb-2 text-sm text-muted-foreground">
-                Want to host events on our platform?
-              </p>
-              <Button variant="outline" className="gap-2">
-                <span>Register as Organizer</span>
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
           </div>
         </motion.div>
       </div>
