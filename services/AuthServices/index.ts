@@ -1,48 +1,26 @@
 "use server";
 
+import app_axios from "@/lib/axios";
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API;
 
 export const signUpUser = async (userData: FieldValues) => {
-  if (!userData || typeof userData !== "object") {
-    console.error("Invalid userData:", userData);
-    throw new Error("userData must be a valid object");
+  try {
+    const res = await app_axios.post("/user/create-user", userData);
+    return res.data;
+  } catch (error: any) {
+    console.error("Signup failed:", error);
+    const message = error?.response?.data?.message || "Something went wrong during sign up!";
+    throw new Error(message);
   }
 
-  if (!userData) {
-    throw new Error("userData is undefined");
-  }
-
-  const res = await fetch(`${baseUrl}/user/create-user`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  });
-  const userInfo = await res.json();
-
-
-  return userInfo;
 };
 
 export const signInUser = async (userData: FieldValues) => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-
-    const result = await res.json();
-
-    if (!res.ok) {
-      throw new Error(result.message || "Something went wrong!");
-    }
+    const res = await app_axios.post("/auth/login", userData);
+    const result = res.data;
 
     console.log(result);
 
@@ -52,7 +30,9 @@ export const signInUser = async (userData: FieldValues) => {
 
     return result;
   } catch (error: any) {
-    console.log(error);
-    return Error(error);
+    console.error(error);
+
+    const message = error?.response?.data?.message || "Something went wrong!";
+    return new Error(message);
   }
 };

@@ -1,8 +1,5 @@
 "use client";
-
 import type React from "react";
-
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -11,35 +8,25 @@ import {
   ArrowRight,
   Mail,
   Lock,
-  Eye,
-  EyeOff,
-  Github,
-  Twitter,
   ChromeIcon as Google,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
 import { Form } from "@/components/ui/form";
-
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import EFormInput from "@/components/modules/Shared/Form/EFormInput";
 import { loginSchema } from "@/components/modules/Auth/login/loginValidation";
 import { signInUser } from "@/services/AuthServices";
 import { toast } from "sonner";
+import {useRouter} from "next/navigation"
 
 export default function LoginPage() {
+  const router = useRouter()
   const form = useForm({
     resolver: zodResolver(loginSchema),
   });
-
-  // const searchParams = useSearchParams();
-  // const redirect = searchParams.get("redirectPath");
-  // const router = useRouter();
-
   const {
     formState: { isSubmitting },
   } = form;
@@ -47,11 +34,12 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await signInUser(data);
-
-      if (!res?.success) {
-        toast.error(res.message || "Login failed. Please try again.");
-      } else {
+      console.log(res)
+      if (res.success) {
         toast.success("Login successful!");
+        router.push("/")
+      } else {
+        toast.error(res.message || "Login failed. Please try again.");
       }
     } catch (error: any) {
       toast.error(error.message || "Login failed. Please try again.");
@@ -78,7 +66,6 @@ export default function LoginPage() {
               </p>
             </div>
 
-            {/* update by sohel rana */}
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -99,7 +86,7 @@ export default function LoginPage() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="password">Password</Label>
+                  
                       <Link
                         href="/forgot-password"
                         className="text-xs text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
@@ -109,7 +96,6 @@ export default function LoginPage() {
                     </div>
 
                     {/* Form input */}
-
                     <EFormInput
                       name="password"
                       label="Password"
@@ -143,32 +129,6 @@ export default function LoginPage() {
                 </Button>
               </form>
             </Form>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <Separator className="w-full" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              <Button variant="outline" className="h-10 w-full">
-                <Github className="h-4 w-4" />
-                <span className="sr-only">GitHub</span>
-              </Button>
-              <Button variant="outline" className="h-10 w-full">
-                <Google className="h-4 w-4" />
-                <span className="sr-only">Google</span>
-              </Button>
-              <Button variant="outline" className="h-10 w-full">
-                <Twitter className="h-4 w-4" />
-                <span className="sr-only">Twitter</span>
-              </Button>
-            </div>
 
             <p className="text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{" "}
