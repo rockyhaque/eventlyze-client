@@ -27,7 +27,6 @@ const EFormFileInput = ({
       <FormField
         control={control}
         name={name}
-        // rules={{ required: required ? "This field is required" : false }}
         render={({ field }) => (
           <FormItem>
             <FormLabel>{label}</FormLabel>

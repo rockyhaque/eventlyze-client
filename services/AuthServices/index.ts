@@ -11,9 +11,9 @@ export const signUpUser = async (userData: FieldValues) => {
     throw new Error("userData must be a valid object");
   }
 
-  console.log(userData);
+  // console.log(userData);
 
-  console.log({ baseUrl });
+  // console.log({ baseUrl });
 
   if (!userData) {
     throw new Error("userData is undefined");
@@ -23,13 +23,13 @@ export const signUpUser = async (userData: FieldValues) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Accept: "application/json",
+      // "Content-Type": "multipart/form-data",
+      // Accept: "application/json",
     },
     body: JSON.stringify(userData),
   });
   const userInfo = await res.json();
 
-  console.log(userInfo);
 
   return userInfo;
 };
@@ -50,7 +50,7 @@ export const signInUser = async (userData: FieldValues) => {
       throw new Error(result.message || "Something went wrong!");
     }
 
-    console.log(result)
+    console.log(result);
 
     if (result?.success) {
       (await cookies()).set("accessToken", result?.data?.accessToken);
