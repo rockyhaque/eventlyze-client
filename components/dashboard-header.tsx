@@ -1,5 +1,6 @@
 import { Bell, Calendar, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export function DashboardHeader() {
   return (
@@ -23,7 +24,9 @@ export function DashboardHeader() {
           <Settings className="h-4 w-4" />
           <span className="sr-only">Settings</span>
         </Button>
-        <Button>Create Event</Button>
+        <Button>
+          <Link href="/dashboard/create-event">Create Event</Link>
+        </Button>
       </div>
     </div>
   )
