@@ -1,8 +1,5 @@
 "use client";
-
 import type React from "react";
-
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -11,8 +8,6 @@ import {
   ArrowRight,
   Mail,
   Lock,
-  Eye,
-  EyeOff,
   Github,
   Twitter,
   ChromeIcon as Google,
@@ -22,10 +17,8 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Form } from "@/components/ui/form";
-
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import EFormInput from "@/components/modules/Shared/Form/EFormInput";
 import { loginSchema } from "@/components/modules/Auth/login/loginValidation";
 import { signInUser } from "@/services/AuthServices";
@@ -35,11 +28,6 @@ export default function LoginPage() {
   const form = useForm({
     resolver: zodResolver(loginSchema),
   });
-
-  // const searchParams = useSearchParams();
-  // const redirect = searchParams.get("redirectPath");
-  // const router = useRouter();
-
   const {
     formState: { isSubmitting },
   } = form;
