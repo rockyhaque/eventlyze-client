@@ -184,7 +184,7 @@ export function DashboardEvents({ type }: DashboardEventsProps) {
                 <Link href={`/events/${event.id}`}>View</Link>
               </Button>
               <Button size="sm" className="flex-1" asChild>
-                <Link href={`/dashboard/events/${event.id}`}>Manage</Link>
+                <Link href={`/dashboard/events/edit/${event.id}`}>Manage</Link>
               </Button>
             </div>
           </CardContent>
