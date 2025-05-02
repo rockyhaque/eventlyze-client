@@ -1,89 +1,71 @@
 "use client";
 
-import { Controller, Control } from "react-hook-form";
-import Select, { MultiValue, SingleValue, ActionMeta } from "react-select";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Control } from "react-hook-form";
 
-interface OptionType {
-  value: string;
+interface Option {
   label: string;
+  value: string;
 }
 
-interface IFormSelectProps {
+interface EFormSelectProps {
   name: string;
   label?: string;
+  placeholder?: string;
   control: Control<any>;
-  options: OptionType[];
-  multiple?: boolean;
+  options: Option[];
+  required?: boolean;
 }
 
 const EFormSelect = ({
   name,
   label,
+  placeholder = "Select an option",
   control,
   options,
-  multiple = false,
-}: IFormSelectProps) => {
+  required = true,
+}: EFormSelectProps) => {
   return (
-    <Controller
+    <FormField
       control={control}
       name={name}
+      rules={{ required: required ? "This field is required" : false }}
       render={({ field }) => (
-        <div className="w-full ">
-          {label && <label>{label}</label>}
+        <FormItem>
+          {label && <FormLabel>{label}</FormLabel>}
           <Select
-            {...field}
-            options={options}
-            isMulti={multiple}
-            className="mt-1 "
-            onChange={(
-              newValue: MultiValue<OptionType> | SingleValue<OptionType>,
-              _actionMeta: ActionMeta<OptionType>
-            ) => {
-              field.onChange(
-                multiple
-                  ? (newValue as MultiValue<OptionType>)?.map((s) => s.value)
-                  : (newValue as SingleValue<OptionType>)?.value
-              );
-            }}
-            value={
-              multiple
-                ? options.filter((option) =>
-                    field.value?.includes(option.value)
-                  )
-                : options.find((option) => option.value === field.value) || null
-            }
-            styles={{
-              control: (base) => ({
-                ...base,
-                backgroundColor: "#09090B",
-                color: "#fff",
-                borderColor: "#444",
-              }),
-              singleValue: (base) => ({
-                ...base,
-                color: "#fff",
-              }),
-              menu: (base) => ({
-                ...base,
-                backgroundColor: "#09090B",
-              }),
-              option: (base, { isFocused }) => ({
-                ...base,
-                backgroundColor: isFocused ? "#333" : "#09090B",
-                color: "#fff",
-                cursor: "pointer",
-              }),
-              input: (base) => ({
-                ...base,
-                color: "#fff",
-              }),
-              placeholder: (base) => ({
-                ...base,
-                color: "#aaa",
-              }),
-            }}
-          />
-        </div>
+            onValueChange={field.onChange}
+            value={field.value}
+            // defaultValue={field.value}
+          >
+            <FormControl>
+              <SelectTrigger className="rounded-md">
+                <SelectValue placeholder={placeholder} />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              {options.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <FormMessage />
+        </FormItem>
       )}
     />
   );
