@@ -1,11 +1,10 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { motion } from "framer-motion"
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import {
   Calendar,
   ArrowRight,
@@ -17,27 +16,55 @@ import {
   Github,
   Twitter,
   ChromeIcon as Google,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupSchema } from "@/components/modules/Auth/signUp/signupValidation";
+import { Form } from "@/components/ui/form";
+import EFormInput from "@/components/modules/Shared/Form/EFormInput";
+import EFormSelect from "@/components/modules/Shared/Form/EFormSelect";
+import { signUpUser } from "@/services/AuthServices";
+import EFormFileInput from "@/components/modules/Shared/Form/EFormFileInput";
+
+const genderOptions = [
+  { value: "MALE", label: "MALE" },
+  { value: "FEMALE", label: "FEMALE" },
+];
 
 export default function SignupPage() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const form = useForm({
+    resolver: zodResolver(signupSchema),
+  });
+  const {
+    formState: { isSubmitting },
+  } = form;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false)
-      window.location.href = "/dashboard"
-    }, 1500)
-  }
+
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    try {
+      const userData = {
+        password: data.password,
+        user: {
+          name: data.name,
+          email: data.email,
+          contactNumber: data.contactNumber,
+          gender: data.gender,
+        },
+      };
+
+      const res = await signUpUser(userData);
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="container flex min-h-[calc(100vh-4rem)] items-center py-12">
@@ -63,9 +90,12 @@ export default function SignupPage() {
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
               <Calendar className="h-6 w-6 text-white" />
             </div>
-            <h2 className="mb-2 font-display text-2xl font-bold">Create & Join Events</h2>
+            <h2 className="mb-2 font-display text-2xl font-bold">
+              Create & Join Events
+            </h2>
             <p className="mb-4 max-w-md text-sm text-white/80">
-              Sign up today to create your own events or join thousands of exciting events happening around you.
+              Sign up today to create your own events or join thousands of
+              exciting events happening around you.
             </p>
             <Button variant="secondary" className="gap-2">
               <span>Learn More</span>
@@ -83,8 +113,12 @@ export default function SignupPage() {
         >
           <div className="mx-auto flex w-full max-w-md flex-col justify-center space-y-6">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="font-display text-3xl font-bold tracking-tight">Create an account</h1>
-              <p className="text-muted-foreground">Sign up to start creating and joining events</p>
+              <h1 className="font-display text-3xl font-bold tracking-tight">
+                Create an account
+              </h1>
+              <p className="text-muted-foreground">
+                Sign up to start creating and joining events
+              </p>
             </div>
 
             <Tabs defaultValue="email" className="w-full">
@@ -93,7 +127,7 @@ export default function SignupPage() {
                 <TabsTrigger value="social">Social</TabsTrigger>
               </TabsList>
               <TabsContent value="email" className="mt-4">
-                <form onSubmit={handleSubmit} className="space-y-6">
+                {/* <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="name">Full Name</Label>
@@ -163,7 +197,123 @@ export default function SignupPage() {
                       <span>Create Account</span>
                     )}
                   </Button>
-                </form>
+                </form> */}
+
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
+                  >
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        {/* input for name */}
+                        <EFormInput
+                          name="name"
+                          label="Full Name"
+                          placeholder="Your Name"
+                          type="text"
+                          control={form.control}
+                          icon={<User size={20} />}
+                          required={true}
+                        />
+                      </div>
+
+                      {/* input for contact contactNumber */}
+                      <div className="space-y-2">
+                        <EFormInput
+                          name="contactNumber"
+                          label="Contact Number"
+                          placeholder="Your Contact Number"
+                          type="text"
+                          control={form.control}
+                          icon={<User size={20} />}
+                          required={true}
+                        />
+                      </div>
+
+                      {/*  input for email */}
+                      <div className="space-y-2">
+                        <EFormInput
+                          name="email"
+                          label="Email"
+                          placeholder="Your Email"
+                          type="text"
+                          control={form.control}
+                          icon={<Mail size={20} />}
+                          required={true}
+                        />
+                      </div>
+
+                      {/*  input for password */}
+                      <div className="space-y-2">
+                        <EFormInput
+                          name="password"
+                          label="Password"
+                          placeholder="password"
+                          type="password"
+                          control={form.control}
+                          icon={<Lock size={20} />}
+                          required={true}
+                        />
+                      </div>
+
+                      {/* select for gender */}
+                      <div className="space-y-2">
+                        <EFormSelect
+                          name="gender"
+                          label="Select Gender"
+                          control={form.control}
+                          options={genderOptions}
+                          // multiple is false by default
+                        />
+                      </div>
+
+                      {/* input for profile */}
+                      <div className="space-y-2">
+                        <EFormFileInput
+                          name="photo"
+                          label="Profile Picture"
+                          control={form.control}
+                          required={false}
+                        />
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="terms" required />
+                        <Label htmlFor="terms" className="text-sm font-normal">
+                          I agree to the{" "}
+                          <Link
+                            href="/terms"
+                            className="text-primary underline-offset-4 hover:underline"
+                          >
+                            Terms of Service
+                          </Link>{" "}
+                          and{" "}
+                          <Link
+                            href="/privacy"
+                            className="text-primary underline-offset-4 hover:underline"
+                          >
+                            Privacy Policy
+                          </Link>
+                        </Label>
+                      </div>
+                    </div>
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center gap-2">
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                          <span>Signing in...</span>
+                        </div>
+                      ) : (
+                        <span>Sign Up</span>
+                      )}
+                    </Button>
+                  </form>
+                </Form>
               </TabsContent>
               <TabsContent value="social" className="mt-4 space-y-4">
                 <div className="grid gap-3">
@@ -191,11 +341,17 @@ export default function SignupPage() {
                 </div>
                 <div className="text-center text-xs text-muted-foreground">
                   By signing up with social login, you agree to our{" "}
-                  <Link href="/terms" className="text-primary underline-offset-4 hover:underline">
+                  <Link
+                    href="/terms"
+                    className="text-primary underline-offset-4 hover:underline"
+                  >
                     Terms of Service
                   </Link>{" "}
                   and{" "}
-                  <Link href="/privacy" className="text-primary underline-offset-4 hover:underline">
+                  <Link
+                    href="/privacy"
+                    className="text-primary underline-offset-4 hover:underline"
+                  >
                     Privacy Policy
                   </Link>
                 </div>
@@ -204,7 +360,10 @@ export default function SignupPage() {
 
             <p className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link href="/login" className="font-medium text-primary underline-offset-4 hover:underline">
+              <Link
+                href="/login"
+                className="font-medium text-primary underline-offset-4 hover:underline"
+              >
                 Sign in
               </Link>
             </p>
@@ -214,12 +373,16 @@ export default function SignupPage() {
                 <Separator className="w-full" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Join as an organizer</span>
+                <span className="bg-card px-2 text-muted-foreground">
+                  Join as an organizer
+                </span>
               </div>
             </div>
 
             <div className="text-center">
-              <p className="mb-2 text-sm text-muted-foreground">Want to host events on our platform?</p>
+              <p className="mb-2 text-sm text-muted-foreground">
+                Want to host events on our platform?
+              </p>
               <Button variant="outline" className="gap-2">
                 <span>Register as Organizer</span>
                 <ArrowRight className="h-4 w-4" />
@@ -229,5 +392,5 @@ export default function SignupPage() {
         </motion.div>
       </div>
     </div>
-  )
+  );
 }
