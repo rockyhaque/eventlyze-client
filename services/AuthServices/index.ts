@@ -11,10 +11,6 @@ export const signUpUser = async (userData: FieldValues) => {
     throw new Error("userData must be a valid object");
   }
 
-  // console.log(userData);
-
-  // console.log({ baseUrl });
-
   if (!userData) {
     throw new Error("userData is undefined");
   }
@@ -23,8 +19,6 @@ export const signUpUser = async (userData: FieldValues) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // "Content-Type": "multipart/form-data",
-      // Accept: "application/json",
     },
     body: JSON.stringify(userData),
   });

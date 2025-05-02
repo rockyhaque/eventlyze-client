@@ -1,5 +1,6 @@
 import type React from "react"
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
+import { Toaster } from "@/components/ui/toaster"
 
 export default function DashboardLayout({
   children,
@@ -12,6 +13,7 @@ export default function DashboardLayout({
         <DashboardSidebar />
       </div>
       <main className="flex w-full flex-col overflow-hidden p-6">{children}</main>
+      <Toaster />
     </div>
   )
 }
