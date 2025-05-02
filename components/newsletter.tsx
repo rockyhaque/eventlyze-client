@@ -19,7 +19,6 @@ export function Newsletter() {
     if (email) {
       try {
         const result = await addNewsLetter(email);
-        console.log(result);
 
         if (result.success) {
           setIsSubmitted(true);
