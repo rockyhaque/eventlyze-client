@@ -14,6 +14,7 @@ export const signUpUser = async (userData: FieldValues) => {
     const message = error?.response?.data?.message || "Something went wrong during sign up!";
     throw new Error(message);
   }
+
 };
 
 export const signInUser = async (userData: FieldValues) => {
