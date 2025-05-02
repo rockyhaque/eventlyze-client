@@ -2,9 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
 import { motion } from "framer-motion"
-import { Star, Calendar, Users, ArrowRight, MapPin } from "lucide-react"
+import { Star, Calendar, Users, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -189,10 +188,6 @@ export function FeaturedOrganizers() {
                             <span>{organizer.eventCount} events</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Users className="h-3 w-3" />
-                            <span>{organizer.followerCount.toLocaleString()} followers</span>
-                          </div>
-                          <div className="flex items-center gap-1">
                             <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                             <span>{organizer.rating}</span>
                           </div>
@@ -241,26 +236,10 @@ export function FeaturedOrganizers() {
                         </Button>
                       </div>
                     </div>
-
-                    <div className="mt-6 flex justify-between">
-                      <Button variant="outline" className="">
-                        View All Events
-                      </Button>
-                      <Button className="">Follow Organizer</Button>
-                    </div>
                   </div>
                 </motion.div>
               ))}
           </div>
-        </div>
-
-        <div className="mt-10 text-center">
-          <Button asChild className="">
-            <Link href="/organizers">
-              View All Organizers
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
         </div>
       </div>
     </section>

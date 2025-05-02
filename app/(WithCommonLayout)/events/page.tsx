@@ -3,10 +3,9 @@ import { EventsGrid } from "@/components/events-grid"
 import { PageHeader } from "@/components/page-header"
 import { EventsHero } from "@/components/events-hero"
 import { EventCategories } from "@/components/event-categories"
-import { EventsMap } from "@/components/events-map"
-import { EventsNewsletter } from "@/components/events-newsletter"
 import { FeaturedOrganizers } from "@/components/featured-organizers"
 import { UpcomingEvents } from "@/components/upcoming-events"
+import { Newsletter } from "@/components/newsletter"
 
 export default function EventsPage() {
   return (
@@ -19,9 +18,8 @@ export default function EventsPage() {
       </div>
       <EventCategories />
       <UpcomingEvents />
-      <EventsMap />
       <FeaturedOrganizers />
-      <EventsNewsletter />
+      <Newsletter />
     </div>
   )
 }
