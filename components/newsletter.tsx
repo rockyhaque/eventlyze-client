@@ -47,6 +47,8 @@ export function Newsletter() {
           ) : (
             <form onSubmit={handleSubmit} className="mt-8">
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
+
+                {/* Inpute Email */}
                 <Input
                   type="email"
                   placeholder="Enter your email"
@@ -55,9 +57,11 @@ export function Newsletter() {
                   className="flex-1 h-auto max-w-[300px]"
                   required
                 />
+
                 <Button type="submit" size="lg">
                   Subscribe
                 </Button>
+
               </div>
               <p className="mt-2 text-center text-xs text-muted-foreground">
                 By subscribing, you agree to our{" "}
