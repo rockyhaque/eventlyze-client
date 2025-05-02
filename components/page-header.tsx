@@ -4,8 +4,6 @@ interface PageHeaderProps {
   title?: string
   description?: string
   className?: string
-  heading?: string
-  subheading?: string
 }
 
 export function PageHeader({ title, description, className }: PageHeaderProps) {

@@ -9,8 +9,8 @@ import { Switch } from "@/components/ui/switch"
 
 export default function SettingsPage() {
   return (
-    <div className="flex flex-col gap-8">
-      <PageHeader heading="Settings" subheading="Manage your account settings and preferences" />
+    <div>
+      <PageHeader title="Settings" description="Manage your account settings and preferences" />
 
       <Tabs defaultValue="account" className="w-full">
         <TabsList className="grid w-full grid-cols-3 lg:w-auto">

@@ -6,9 +6,9 @@ import { DashboardEvents } from "@/components/dashboard-events"
 
 export default function EventsPage() {
   return (
-    <div className="flex flex-col gap-8">
+    <div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <PageHeader heading="My Events" subheading="Manage your created events and registrations" />
+        <PageHeader title="My Events" description="Manage your created events and registrations" />
         <Button className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Create Event
