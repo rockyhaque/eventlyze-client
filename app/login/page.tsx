@@ -1,31 +1,62 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { motion } from "framer-motion"
-import { Calendar, ArrowRight, Mail, Lock, Eye, EyeOff, Github, Twitter, ChromeIcon as Google } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Separator } from "@/components/ui/separator"
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import {
+  Calendar,
+  ArrowRight,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Github,
+  Twitter,
+  ChromeIcon as Google,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
+import { Form } from "@/components/ui/form";
+
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import EFormInput from "@/components/modules/Shared/Form/EFormInput";
+import { loginSchema } from "@/components/modules/Auth/login/loginValidation";
+import { signInUser } from "@/services/AuthServices";
+import { toast } from "sonner";
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const form = useForm({
+    resolver: zodResolver(loginSchema),
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false)
-      window.location.href = "/dashboard"
-    }, 1500)
-  }
+  // const searchParams = useSearchParams();
+  // const redirect = searchParams.get("redirectPath");
+  // const router = useRouter();
+
+  const {
+    formState: { isSubmitting },
+  } = form;
+
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    try {
+      const res = await signInUser(data);
+
+      if (!res?.success) {
+        toast.error(res.message || "Login failed. Please try again.");
+      } else {
+        toast.success("Login successful!");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Login failed. Please try again.");
+    }
+  };
 
   return (
     <div className="container flex min-h-[calc(100vh-4rem)] items-center py-12">
@@ -39,76 +70,88 @@ export default function LoginPage() {
         >
           <div className="mx-auto flex w-full max-w-md flex-col justify-center space-y-6">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="font-display text-3xl font-bold tracking-tight">Welcome back</h1>
-              <p className="text-muted-foreground">Enter your credentials to access your account</p>
+              <h1 className="font-display text-3xl font-bold tracking-tight">
+                Welcome back
+              </h1>
+              <p className="text-muted-foreground">
+                Enter your credentials to access your account
+              </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input
-                      id="email"
+            {/* update by sohel rana */}
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    {/* Form input */}
+                    <EFormInput
+                      name="email"
+                      label="Username"
                       placeholder="name@example.com"
-                      type="email"
-                      autoCapitalize="none"
-                      autoComplete="email"
-                      autoCorrect="off"
-                      className="pl-10"
-                      required
+                      type="text"
+                      control={form.control}
+                      icon={<Mail size={20} />}
+                      required={true}
                     />
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
-                    <Link
-                      href="/forgot-password"
-                      className="text-xs text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
-                    >
-                      Forgot password?
-                    </Link>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="password">Password</Label>
+                      <Link
+                        href="/forgot-password"
+                        className="text-xs text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
+
+                    {/* Form input */}
+
+                    <EFormInput
+                      name="password"
+                      label="Password"
+                      placeholder="password"
+                      type="password"
+                      control={form.control}
+                      icon={<Lock size={20} />}
+                      required={true}
+                    />
                   </div>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input id="password" type={showPassword ? "text" : "password"} className="pl-10 pr-10" required />
-                    <button
-                      type="button"
-                      className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
-                    </button>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="remember" />
+                    <Label htmlFor="remember" className="text-sm font-normal">
+                      Remember me for 30 days
+                    </Label>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="remember" />
-                  <Label htmlFor="remember" className="text-sm font-normal">
-                    Remember me for 30 days
-                  </Label>
-                </div>
-              </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
-                  <div className="flex items-center gap-2">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                    <span>Logging in...</span>
-                  </div>
-                ) : (
-                  <span>Sign In</span>
-                )}
-              </Button>
-            </form>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      <span>Logging in...</span>
+                    </div>
+                  ) : (
+                    <span>Sign In</span>
+                  )}
+                </Button>
+              </form>
+            </Form>
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <Separator className="w-full" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-card px-2 text-muted-foreground">
+                  Or continue with
+                </span>
               </div>
             </div>
 
@@ -129,7 +172,10 @@ export default function LoginPage() {
 
             <p className="text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{" "}
-              <Link href="/signup" className="font-medium text-primary underline-offset-4 hover:underline">
+              <Link
+                href="/signup"
+                className="font-medium text-primary underline-offset-4 hover:underline"
+              >
                 Sign up
               </Link>
             </p>
@@ -157,9 +203,12 @@ export default function LoginPage() {
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary">
               <Calendar className="h-6 w-6 text-white" />
             </div>
-            <h2 className="mb-2 font-display text-2xl font-bold">Discover Amazing Events</h2>
+            <h2 className="mb-2 font-display text-2xl font-bold">
+              Discover Amazing Events
+            </h2>
             <p className="mb-4 max-w-md text-sm text-white/80">
-              Join thousands of event enthusiasts and create unforgettable memories with Eventify.
+              Join thousands of event enthusiasts and create unforgettable
+              memories with Eventify.
             </p>
             <Button variant="secondary" className="gap-2">
               <span>Explore Events</span>
@@ -169,5 +218,5 @@ export default function LoginPage() {
         </motion.div>
       </div>
     </div>
-  )
+  );
 }
