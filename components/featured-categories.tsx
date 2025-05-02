@@ -144,6 +144,7 @@ function GridView({
   setActiveCategory: (id: number | null) => void
   controls: any
 }) {
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
   return (
     <motion.div
       initial="hidden"
@@ -169,12 +170,19 @@ function GridView({
           }}
           whileHover={{ y: -10, transition: { duration: 0.3 } }}
           className="group relative"
+
         >
           <Link
             href={`/events?category=${category.name}`}
             className="block h-full overflow-hidden rounded-xl transition-all duration-300"
             onMouseEnter={() => setActiveCategory(category.id)}
             onMouseLeave={() => setActiveCategory(null)}
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect()
+              const x = e.clientX - rect.left
+              const y = e.clientY - rect.top
+              setCursorPos({ x: e.clientX, y: e.clientY })
+            }}
           >
             <div className="relative aspect-[4/3] w-full overflow-hidden">
               <Image
@@ -190,16 +198,6 @@ function GridView({
                 <category.icon className="mb-3 h-10 w-10" />
                 <h3 className="text-center font-display text-2xl font-bold">{category.name}</h3>
                 <p className="mt-2 text-center text-sm">{category.count} events</p>
-
-                <div
-                  className={cn(
-                    "mt-4 flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-xs font-medium backdrop-blur-sm transition-opacity",
-                    activeCategory === category.id ? "opacity-100" : "opacity-0",
-                  )}
-                >
-                  <span>View Events</span>
-                  <ArrowRight className="h-3 w-3" />
-                </div>
               </div>
 
               {category.trending && (
@@ -211,6 +209,24 @@ function GridView({
           </Link>
         </motion.div>
       ))}
+      {/* Floating Cursor Label - only one rendered outside map */}
+      <AnimatePresence>
+        {activeCategory !== null && (
+          <motion.div
+            className="pointer-events-none fixed z-50 flex h-16 w-16  items-center justify-center rounded-full bg-white/10 text-center backdrop-blur-xl shadow-sm text-xs font-bold text-white"
+            style={{
+              top: cursorPos.y - 40,
+              left: cursorPos.x - 40,
+            }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          >
+            View Events
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }

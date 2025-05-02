@@ -271,7 +271,7 @@ const eventsByMonth = sortedEvents.reduce(
 const categories = Array.from(new Set(events.map((event) => event.category)))
 
 export function UpcomingEvents() {
-  const [viewMode, setViewMode] = useState<"timeline" | "grid" | "map">("timeline")
+  const [viewMode, setViewMode] = useState<"timeline" | "grid">("timeline")
   const [activeFilters, setActiveFilters] = useState<string[]>([])
   const [showFilters, setShowFilters] = useState(false)
   const [priceRange, setPriceRange] = useState([0, 500])
@@ -355,10 +355,10 @@ export function UpcomingEvents() {
             <Tabs
               defaultValue="timeline"
               value={viewMode}
-              onValueChange={(value) => setViewMode(value as "timeline" | "grid" | "map")}
+              onValueChange={(value) => setViewMode(value as "timeline" | "grid")}
               className="w-full sm:w-auto"
             >
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="timeline" className="flex items-center gap-1">
                   <CalendarDays className="h-4 w-4" />
                   <span className="hidden sm:inline">Timeline</span>
@@ -367,10 +367,7 @@ export function UpcomingEvents() {
                   <LayoutGrid className="h-4 w-4" />
                   <span className="hidden sm:inline">Grid</span>
                 </TabsTrigger>
-                <TabsTrigger value="map" className="flex items-center gap-1">
-                  <Map className="h-4 w-4" />
-                  <span className="hidden sm:inline">Map</span>
-                </TabsTrigger>
+                
               </TabsList>
             </Tabs>
 
@@ -393,7 +390,7 @@ export function UpcomingEvents() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="mb-8 overflow-hidden"
+              className="my-8 overflow-hidden"
             >
               <div className="rounded-xl border bg-card p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -485,19 +482,7 @@ export function UpcomingEvents() {
             <GridView key="grid" events={filteredEvents} favorites={favorites} toggleFavorite={toggleFavorite} />
           )}
 
-          {viewMode === "map" && (
-            <MapView key="map" events={filteredEvents} favorites={favorites} toggleFavorite={toggleFavorite} />
-          )}
         </AnimatePresence>
-
-        <div className="mt-10 flex justify-center">
-          <Button size="lg" asChild className="gap-2">
-            <Link href="/events">
-              View All Events
-              <ChevronDown className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
       </div>
     </section>
   )
@@ -531,20 +516,19 @@ function TimelineView({
       {/* Timeline content */}
       <div
         ref={containerRef}
-        className="relative max-h-[600px] overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-muted"
+        className="relative max-h-[600px] overflow-y-auto px-4 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-muted mt-10"
       >
-        <motion.div style={{ y: timelineParallax }} className="pb-10">
+        <motion.div >
           {Object.entries(eventsByMonth).length > 0 ? (
-            Object.entries(eventsByMonth).map(([month, monthEvents], monthIndex) => (
+            Object.entries(eventsByMonth).map(([month, monthEvents]) => (
               <div key={month} className="relative">
                 {/* Month marker */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: monthIndex * 0.1 }}
-                  className="sticky top-0 z-10 mb-6 flex items-center justify-center md:justify-start"
+                  className="sticky top-2 z-10 mb-6 flex items-center justify-center"
                 >
-                  <div className="flex h-10 items-center rounded-full bg-primary px-4 text-primary-foreground md:ml-[calc(50%-5rem)]">
+                  <div className="flex h-10 items-center justify-center rounded-full bg-primary px-4 text-primary-foreground">
                     <Calendar className="mr-2 h-4 w-4" />
                     <span className="font-display font-bold">{month}</span>
                   </div>
@@ -554,34 +538,31 @@ function TimelineView({
                 {monthEvents.map((event, eventIndex) => {
                   const isEven = eventIndex % 2 === 0
                   const date = new Date(event.date)
-                  const day = date.getDate()
                   const dayName = date.toLocaleDateString("en-US", { weekday: "short" })
+                  const isLast = eventIndex === monthEvents.length - 1
 
                   return (
                     <motion.div
                       key={event.id}
                       initial={{ opacity: 0, x: isEven ? -20 : 20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: eventIndex * 0.05 + monthIndex * 0.1 }}
                       className={cn(
-                        "relative mb-8 flex",
+                        "relative flex mb-8 pb-10",
                         isEven ? "md:flex-row" : "flex-row-reverse md:flex-row-reverse",
+                        isLast && "mb-0 pb-8"
                       )}
                     >
-                      {/* Date bubble */}
-                      <div className="absolute left-0 z-10 flex h-8 w-8 items-center justify-center rounded-full border-4 border-background bg-card text-xs font-bold md:left-1/2 md:-ml-4">
-                        {day}
-                      </div>
+                
 
                       {/* Event card */}
                       <div
                         className={cn(
-                          "relative ml-12 w-full rounded-xl border bg-card shadow-sm transition-all hover:shadow-md md:w-[calc(50%-2rem)]",
+                          "relative w-full rounded-xl border bg-card shadow-sm transition-all hover:shadow-md",
                           isEven ? "md:mr-auto" : "md:ml-auto",
                         )}
                       >
                         <Link href={`/events/${event.id}`} className="block">
-                          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-xl">
+                          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-xl max-h-[300px]">
                             <Image
                               src={event.image || "/placeholder.svg"}
                               alt={event.title}
@@ -777,110 +758,6 @@ function GridView({
           </div>
         </div>
       )}
-    </motion.div>
-  )
-}
-
-// Map View Component
-function MapView({
-  events,
-  favorites,
-  toggleFavorite,
-}: {
-  events: typeof sortedEvents
-  favorites: number[]
-  toggleFavorite: (id: number, e: React.MouseEvent) => void
-}) {
-  const [selectedEvent, setSelectedEvent] = useState<(typeof events)[0] | null>(null)
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="relative"
-    >
-      <div className="grid gap-6 md:grid-cols-[1fr_2fr] lg:grid-cols-[300px_1fr]">
-        {/* Event list sidebar */}
-        <div className="max-h-[600px] overflow-y-auto rounded-xl border bg-card p-4 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-muted">
-          <h3 className="mb-4 font-display text-lg font-bold">Event Locations</h3>
-
-          {events.length > 0 ? (
-            <div className="space-y-3">
-              {events.map((event) => (
-                <motion.div
-                  key={event.id}
-                  whileHover={{ x: 5 }}
-                  className={cn(
-                    "cursor-pointer rounded-lg border p-3 transition-all hover:border-primary",
-                    selectedEvent?.id === event.id && "border-primary bg-primary/5",
-                  )}
-                  onClick={() => setSelectedEvent(event)}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="relative h-12 w-12 overflow-hidden rounded-md">
-                      <Image
-                        src={event.image || "/placeholder.svg"}
-                        alt={event.title}
-                        width={48}
-                        height={48}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="truncate font-medium">{event.title}</h4>
-                      <p className="text-xs text-muted-foreground truncate">{event.location}</p>
-                    </div>
-                    <button
-                      onClick={(e) => toggleFavorite(event.id, e)}
-                      className={cn(
-                        "flex h-8 w-8 items-center justify-center rounded-full hover:bg-muted",
-                        favorites.includes(event.id) && "text-red-500",
-                      )}
-                    >
-                      <Heart className={cn("h-4 w-4", favorites.includes(event.id) && "fill-current")} />
-                    </button>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex h-40 items-center justify-center text-center">
-              <p className="text-muted-foreground">No events match your filters</p>
-            </div>
-          )}
-        </div>
-
-        {/* Map view */}
-        <div className="relative h-[600px] overflow-hidden rounded-xl border bg-muted">
-          {/* This would be replaced with an actual map component in a real implementation */}
-          <div className="absolute inset-0 flex items-center justify-center bg-muted p-6 text-center">
-            <div>
-              <MapPin className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-              <h3 className="mb-2 font-display text-xl font-bold">Interactive Map</h3>
-              <p className="mb-4 text-muted-foreground">
-                This would be an interactive map showing event locations.
-                <br />
-                In a real implementation, this would use a mapping library like Google Maps, Mapbox, or Leaflet.
-              </p>
-              {selectedEvent && (
-                <div className="mx-auto max-w-md rounded-lg bg-card p-4 shadow-lg">
-                  <h4 className="font-display text-lg font-bold">{selectedEvent.title}</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {selectedEvent.venue}, {selectedEvent.location}
-                  </p>
-                  <div className="mt-2 flex justify-end">
-                    <Button size="sm" asChild className="">
-                      <Link href={`/events/${selectedEvent.id}`}>View Details</Link>
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
     </motion.div>
   )
 }

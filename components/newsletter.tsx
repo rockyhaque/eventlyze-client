@@ -46,13 +46,13 @@ export function Newsletter() {
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="mt-8">
-              <div className="flex flex-col gap-4 sm:flex-row">
+              <div className="flex flex-col justify-center gap-4 sm:flex-row">
                 <Input
                   type="email"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1"
+                  className="flex-1 h-auto max-w-[300px]"
                   required
                 />
                 <Button type="submit" size="lg">

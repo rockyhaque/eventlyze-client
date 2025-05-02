@@ -8,13 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Calendar, MapPin, ArrowRight } from "lucide-react"
 
 export function HeroSection() {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) return null
 
   return (
     <section className="relative overflow-hidden pt-16 md:pt-24">
@@ -132,7 +125,7 @@ export function HeroSection() {
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg">
               <div className="text-center">
                 <div className="font-display text-xl font-bold text-primary">15</div>
-                <div className="text-xs font-medium">June</div>
+                <div className="text-xs font-medium text-primary">June</div>
               </div>
             </div>
           </div>
