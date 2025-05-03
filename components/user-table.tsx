@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Edit, MoreHorizontal, Shield, Trash2, User } from 'lucide-react'
+import { Edit, MoreHorizontal, Trash2 } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,79 +29,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { IUser } from "@/app/(DashboardLayout)/dashboard/manage-users/page"
 
 interface UserTableProps {
   searchQuery: string
   roleFilter: string
   onEdit: (user: any) => void
+  users: IUser[]
 }
 
-export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
-  const [users, setUsers] = useState([
-    {
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      role: "admin",
-      status: "active",
-      lastLogin: "2023-05-01T10:30:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=JD",
-    },
-    {
-      id: "2",
-      name: "Jane Smith",
-      email: "jane@example.com",
-      role: "organizer",
-      status: "active",
-      lastLogin: "2023-05-02T14:20:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=JS",
-    },
-    {
-      id: "3",
-      name: "Robert Johnson",
-      email: "robert@example.com",
-      role: "attendee",
-      status: "inactive",
-      lastLogin: "2023-04-15T09:45:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=RJ",
-    },
-    {
-      id: "4",
-      name: "Emily Davis",
-      email: "emily@example.com",
-      role: "organizer",
-      status: "active",
-      lastLogin: "2023-05-03T11:10:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=ED",
-    },
-    {
-      id: "5",
-      name: "Michael Wilson",
-      email: "michael@example.com",
-      role: "attendee",
-      status: "active",
-      lastLogin: "2023-05-01T16:40:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=MW",
-    },
-    {
-      id: "6",
-      name: "Sarah Brown",
-      email: "sarah@example.com",
-      role: "admin",
-      status: "active",
-      lastLogin: "2023-05-03T08:15:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=SB",
-    },
-    {
-      id: "7",
-      name: "David Miller",
-      email: "david@example.com",
-      role: "attendee",
-      status: "inactive",
-      lastLogin: "2023-04-10T13:25:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=DM",
-    },
-  ])
+export function UserTable({ searchQuery, roleFilter, onEdit, users }: UserTableProps) {
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [userToDelete, setUserToDelete] = useState<string | null>(null)
@@ -113,14 +50,14 @@ export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
 
   const handleConfirmDelete = () => {
     if (userToDelete) {
-      setUsers(users.filter(user => user.id !== userToDelete))
+      // setUsers(users.filter(user => user.id !== userToDelete))
       setUserToDelete(null)
       setDeleteDialogOpen(false)
     }
   }
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+  const filteredUsers = users.filter((user:IUser) => {
+    const matchesSearch = user?.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          user.email.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesRole = roleFilter === "all" || user.role === roleFilter
     return matchesSearch && matchesRole
@@ -168,7 +105,7 @@ export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
               <TableHead>User</TableHead>
               <TableHead>Role</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Last Login</TableHead>
+              <TableHead>Joined</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -180,15 +117,13 @@ export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
                 </TableCell>
               </TableRow>
             ) : (
-              filteredUsers.map((user) => (
+              filteredUsers.map((user:IUser) => (
                 <TableRow key={user.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="h-8 w-8 border border-border">
-                        <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
-                        <AvatarFallback>
-                          {user.name.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
+                        <AvatarImage src={user.photo || "/placeholder.svg"} alt={user.name || ""} />
+                 
                       </Avatar>
                       <div>
                         <p className="font-medium">{user.name}</p>
@@ -198,7 +133,7 @@ export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
                   </TableCell>
                   <TableCell>{getRoleBadge(user.role)}</TableCell>
                   <TableCell>{getStatusBadge(user.status)}</TableCell>
-                  <TableCell>{formatDate(user.lastLogin)}</TableCell>
+                  <TableCell>{formatDate(user.createdAt)}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

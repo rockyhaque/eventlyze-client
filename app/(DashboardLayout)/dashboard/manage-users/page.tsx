@@ -1,18 +1,35 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { UserTable } from "@/components/user-table"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, UserPlus } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { UserDialog } from "@/components/user-dialog"
+import { getAllUser } from "@/services/UserServices"
+export interface IUser {
+  id: string
+  name: string | null
+  email: string
+  password: string
+  needPasswordChange: boolean
+  contactNumber: string | null
+  role: "ADMIN" | "ORGANIZER" | "ATTENDEE" | "USER"
+  gender: "MALE" | "FEMALE" | "OTHER" | null 
+  photo: string | null
+  status: "ACTIVE" | "INACTIVE" | "BLOCKED" 
+  createdAt: string
+  updatedAt: string
+}
 
 export default function UsersPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [roleFilter, setRoleFilter] = useState("all")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingUser, setEditingUser] = useState<any>(null)
+  const [users, setUsers] = useState<IUser[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleOpenDialog = (user?: any) => {
     setEditingUser(user || null)
@@ -24,6 +41,21 @@ export default function UsersPage() {
     setEditingUser(null)
   }
 
+  useEffect(() => {
+    const getUsers = async () => {
+      setIsLoading(true)
+      try {
+        const result = await getAllUser()
+        setUsers(result.data)
+      } catch (error) {
+        console.error("Error fetching users:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    getUsers()
+  }, [])
   return (
     <>
 
@@ -65,7 +97,14 @@ export default function UsersPage() {
           </Select>
         </div>
 
-        <UserTable searchQuery={searchQuery} roleFilter={roleFilter} onEdit={handleOpenDialog} />
+
+        {isLoading ? (
+        <div className="flex justify-center items-center">
+          <p>Loading...</p>
+        </div>
+      ) : (
+        <UserTable searchQuery={searchQuery} roleFilter={roleFilter} onEdit={handleOpenDialog} users={users} />
+      )}
 
         <UserDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} user={editingUser} onClose={handleCloseDialog} />
       </div>
