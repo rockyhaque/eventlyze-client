@@ -5,9 +5,9 @@ import { FieldValues } from "react-hook-form";
 export const createEvent = async (eventData: FieldValues) => {
   try {
     console.log("event data", eventData)
-    // const res = await app_axios.post("/event", eventData);
-    // console.log(res);
-    // return res.data;
+    const res = await app_axios.post("/event", eventData);
+    console.log(res);
+    return res.data;
   } catch (error: any) {
     console.log("error while creating event", error);
     const message =

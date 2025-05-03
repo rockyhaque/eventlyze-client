@@ -93,12 +93,17 @@ export default function CreateEventPage() {
         price: Number(data.price),
         seat: Number(data.seat),
         quantity: Number(data.quantity),
+        isPaid: Boolean(data.isPaid), 
+        isPublic: Boolean(data.isPublic),
+        status: "UPCOMING"
       };
 
+      console.log("result", formData)
       const result = await createEvent(formData);
       result?.success ? toast.success(result.message) : toast.error(result?.message);
     } catch (error: any) {
       toast.error(error.message);
+      console.log(error)
     }
   };
 
