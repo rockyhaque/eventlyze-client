@@ -2,22 +2,14 @@
 
 "use server"
 
-import { revalidateTag } from "next/cache";
+import app_axios from "@/lib/axios";
 
 // add Newsletter
 export const addNewsLetter = async (email: string): Promise<any> => {
-
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/subscribe`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email }),
-        });
-
-        revalidateTag("Subscribe");
-        return res.json();
+        const res = await app_axios.post("/subscribe", {email});
+        return res.data;
+        
     } catch (error: any) {
         return { success: false, message: error.message };
     }
