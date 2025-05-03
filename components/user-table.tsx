@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Edit, MoreHorizontal, Trash2 } from 'lucide-react'
+import { ArrowUpDownIcon, Edit, MoreHorizontal, Trash2 } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,11 +30,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { IUser } from "@/app/(DashboardLayout)/dashboard/manage-users/page"
+import { softDeleteUser } from "@/services/UserServices"
+import { toast } from "sonner"
 
 interface UserTableProps {
   searchQuery: string
   roleFilter: string
-  onEdit: (user: any) => void
+  onEdit: (user: IUser, actionType: "role" | "status" | null) => void
   users: IUser[]
 }
 
@@ -48,14 +50,21 @@ export function UserTable({ searchQuery, roleFilter, onEdit, users }: UserTableP
     setDeleteDialogOpen(true)
   }
 
-  const handleConfirmDelete = () => {
-    if (userToDelete) {
-      // setUsers(users.filter(user => user.id !== userToDelete))
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) return
+  
+    try {
+      await softDeleteUser(userToDelete, { status: "DELETED" })
+      toast.success(`User deleted successfully.`)
+    } catch (error) {
+      console.error("Error deleting user:", error)
+      toast.error(`Failed to delete user.`)
+    } finally {
       setUserToDelete(null)
       setDeleteDialogOpen(false)
     }
   }
-
+  
   const filteredUsers = users.filter((user:IUser) => {
     const matchesSearch = user?.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          user.email.toLowerCase().includes(searchQuery.toLowerCase())
@@ -76,9 +85,9 @@ export function UserTable({ searchQuery, roleFilter, onEdit, users }: UserTableP
 
   const getRoleBadge = (role: string) => {
     switch (role) {
-      case "admin":
+      case "ADMIN":
         return <Badge className="bg-primary">{role}</Badge>
-      case "organizer":
+      case "USER":
         return <Badge className="bg-secondary">{role}</Badge>
       default:
         return <Badge variant="outline">{role}</Badge>
@@ -87,10 +96,14 @@ export function UserTable({ searchQuery, roleFilter, onEdit, users }: UserTableP
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "active":
+      case "ACTIVE":
         return <Badge variant="outline" className="text-green-500 border-green-500 bg-green-500/10">{status}</Badge>
-      case "inactive":
+      case "INACTIVE":
         return <Badge variant="outline" className="text-amber-500 border-amber-500 bg-amber-500/10">{status}</Badge>
+      case "BLOCKED":
+        return <Badge variant="outline" className="text-yellow-300 border-yellow-300 bg-amber-500/10">{status}</Badge>
+      case "DELETED":
+        return <Badge variant="outline" className="text-red-500 border-red-500 bg-amber-500/10">{status}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -143,9 +156,13 @@ export function UserTable({ searchQuery, roleFilter, onEdit, users }: UserTableP
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onEdit(user)}>
+                        <DropdownMenuItem onClick={() => onEdit(user, "status")}>
                           <Edit className="mr-2 h-4 w-4" />
-                          <span>Edit</span>
+                          <span>Update Status</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onEdit(user, "role")}>
+                          <ArrowUpDownIcon className="mr-2 h-4 w-4" />
+                          <span>Change Role</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleDeleteClick(user.id)} className="text-destructive focus:text-destructive">
                           <Trash2 className="mr-2 h-4 w-4" />

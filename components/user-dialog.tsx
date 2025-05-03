@@ -12,57 +12,58 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { IUser } from "@/app/(DashboardLayout)/dashboard/manage-users/page"
+import { updatedUserStatus, updatedUserRole } from "@/services/UserServices"
+import { toast } from "sonner"
 
 interface UserDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  user: any | null
+  user: IUser
+  action: "status" | "role" | null
   onClose: () => void
 }
 
-export function UserDialog({ open, onOpenChange, user, onClose }: UserDialogProps) {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    role: "attendee",
-    status: false,
-  })
+export function UserDialog({ open, onOpenChange, user, onClose, action }: UserDialogProps) {
+
+  const [status, setStatus] = useState("ACTIVE")
+  const [role, setRole] = useState("USER")
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (user) {
-      setFormData({
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        status: user.status === "active",
-      })
-    } else {
-      setFormData({
-        name: "",
-        email: "",
-        role: "attendee",
-        status: true,
-      })
+      setStatus(user.status || "ACTIVE")
+      setRole(user.role || "USER")
     }
   }, [user])
 
-  const handleChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Here you would typically save the user data
-    console.log("Saving user:", {
-      ...formData,
-      status: formData.status ? "active" : "inactive"
-    })
-    onClose()
+
+    setLoading(true)
+
+    try {
+      if (action === "status") {
+        await updatedUserStatus(user.id, status)
+        toast.success(`User status updated to "${status}".`)
+      } else if (action === "role") {
+        await updatedUserRole(user.id, role)
+        toast.success(`User role updated to "${role}".`)
+      }
+      onClose()
+    } catch (error) {
+      toast.error("There was a problem updating the user.")
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -70,74 +71,65 @@ export function UserDialog({ open, onOpenChange, user, onClose }: UserDialogProp
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{user ? "Edit User" : "Add New User"}</DialogTitle>
+            <DialogTitle>Update User</DialogTitle>
             <DialogDescription>
-              {user 
-                ? "Update user details and permissions." 
-                : "Fill in the information for the new user."}
+              Update user {action === "status" ? "status" : "role"}.
             </DialogDescription>
           </DialogHeader>
+
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => handleChange("name", e.target.value)}
-                placeholder="Enter full name"
-                className="rounded-md"
-                required
-              />
+              <Input id="name" value={user?.name || ""} disabled />
             </div>
+
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-                placeholder="Enter email address"
-                className="rounded-md"
-                required
-              />
+              <Input id="email" value={user?.email || ""} disabled />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="role">Role</Label>
-              <Select
-                value={formData.role}
-                onValueChange={(value) => handleChange("role", value)}
-              >
-                <SelectTrigger id="role" className="rounded-md">
-                  <SelectValue placeholder="Select role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="organizer">Organizer</SelectItem>
-                  <SelectItem value="attendee">Attendee</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex items-center gap-2">
-              <Label htmlFor="status">Active Status</Label>
-              <Switch
-                id="status"
-                checked={formData.status}
-                onCheckedChange={(checked) => handleChange("status", checked)}
-              />
-              <span className="text-sm text-muted-foreground ml-2">
-                {formData.status ? "Active" : "Inactive"}
-              </span>
-            </div>
+
+            {action === "role" && (
+              <div className="grid gap-2">
+                <Label htmlFor="role">Role</Label>
+                <Select value={role} onValueChange={setRole}>
+                  <SelectTrigger id="role" className="rounded-md">
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ADMIN">Admin</SelectItem>
+                    <SelectItem value="USER">User</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {action === "status" && (
+              <div className="grid gap-2">
+                <Label htmlFor="status">Status</Label>
+                <Select value={status} onValueChange={setStatus}>
+                  <SelectTrigger id="status" className="rounded-md">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ACTIVE">Active</SelectItem>
+                    <SelectItem value="BLOCKED">Blocked</SelectItem>
+                    <SelectItem value="INACTIVE">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </div>
+
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button 
+            <Button
               type="submit"
               className="rounded-md bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
+              disabled={loading}
             >
-              {user ? "Save Changes" : "Create User"}
+              {loading ? "Saving..." : "Save Changes"}
             </Button>
           </DialogFooter>
         </form>
