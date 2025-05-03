@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Edit, MoreHorizontal, Shield, Trash2, User } from 'lucide-react'
+import { ArrowUpDownIcon, Edit, MoreHorizontal, Trash2 } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,79 +29,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { IUser } from "@/app/(DashboardLayout)/dashboard/manage-users/page"
+import { softDeleteUser } from "@/services/UserServices"
+import { toast } from "sonner"
 
 interface UserTableProps {
   searchQuery: string
   roleFilter: string
-  onEdit: (user: any) => void
+  onEdit: (user: IUser, actionType: "role" | "status" | null) => void
+  users: IUser[]
 }
 
-export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
-  const [users, setUsers] = useState([
-    {
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      role: "admin",
-      status: "active",
-      lastLogin: "2023-05-01T10:30:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=JD",
-    },
-    {
-      id: "2",
-      name: "Jane Smith",
-      email: "jane@example.com",
-      role: "organizer",
-      status: "active",
-      lastLogin: "2023-05-02T14:20:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=JS",
-    },
-    {
-      id: "3",
-      name: "Robert Johnson",
-      email: "robert@example.com",
-      role: "attendee",
-      status: "inactive",
-      lastLogin: "2023-04-15T09:45:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=RJ",
-    },
-    {
-      id: "4",
-      name: "Emily Davis",
-      email: "emily@example.com",
-      role: "organizer",
-      status: "active",
-      lastLogin: "2023-05-03T11:10:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=ED",
-    },
-    {
-      id: "5",
-      name: "Michael Wilson",
-      email: "michael@example.com",
-      role: "attendee",
-      status: "active",
-      lastLogin: "2023-05-01T16:40:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=MW",
-    },
-    {
-      id: "6",
-      name: "Sarah Brown",
-      email: "sarah@example.com",
-      role: "admin",
-      status: "active",
-      lastLogin: "2023-05-03T08:15:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=SB",
-    },
-    {
-      id: "7",
-      name: "David Miller",
-      email: "david@example.com",
-      role: "attendee",
-      status: "inactive",
-      lastLogin: "2023-04-10T13:25:00",
-      avatar: "/placeholder.svg?height=40&width=40&text=DM",
-    },
-  ])
+export function UserTable({ searchQuery, roleFilter, onEdit, users }: UserTableProps) {
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [userToDelete, setUserToDelete] = useState<string | null>(null)
@@ -111,16 +50,23 @@ export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
     setDeleteDialogOpen(true)
   }
 
-  const handleConfirmDelete = () => {
-    if (userToDelete) {
-      setUsers(users.filter(user => user.id !== userToDelete))
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) return
+  
+    try {
+      await softDeleteUser(userToDelete, { status: "DELETED" })
+      toast.success(`User deleted successfully.`)
+    } catch (error) {
+      console.error("Error deleting user:", error)
+      toast.error(`Failed to delete user.`)
+    } finally {
       setUserToDelete(null)
       setDeleteDialogOpen(false)
     }
   }
-
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+  
+  const filteredUsers = users.filter((user:IUser) => {
+    const matchesSearch = user?.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          user.email.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesRole = roleFilter === "all" || user.role === roleFilter
     return matchesSearch && matchesRole
@@ -139,9 +85,9 @@ export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
 
   const getRoleBadge = (role: string) => {
     switch (role) {
-      case "admin":
+      case "ADMIN":
         return <Badge className="bg-primary">{role}</Badge>
-      case "organizer":
+      case "USER":
         return <Badge className="bg-secondary">{role}</Badge>
       default:
         return <Badge variant="outline">{role}</Badge>
@@ -150,10 +96,14 @@ export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "active":
+      case "ACTIVE":
         return <Badge variant="outline" className="text-green-500 border-green-500 bg-green-500/10">{status}</Badge>
-      case "inactive":
+      case "INACTIVE":
         return <Badge variant="outline" className="text-amber-500 border-amber-500 bg-amber-500/10">{status}</Badge>
+      case "BLOCKED":
+        return <Badge variant="outline" className="text-yellow-300 border-yellow-300 bg-amber-500/10">{status}</Badge>
+      case "DELETED":
+        return <Badge variant="outline" className="text-red-500 border-red-500 bg-amber-500/10">{status}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -168,7 +118,7 @@ export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
               <TableHead>User</TableHead>
               <TableHead>Role</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Last Login</TableHead>
+              <TableHead>Joined</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -180,15 +130,13 @@ export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
                 </TableCell>
               </TableRow>
             ) : (
-              filteredUsers.map((user) => (
+              filteredUsers.map((user:IUser) => (
                 <TableRow key={user.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="h-8 w-8 border border-border">
-                        <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
-                        <AvatarFallback>
-                          {user.name.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
+                        <AvatarImage src={user.photo || "/placeholder.svg"} alt={user.name || ""} />
+                 
                       </Avatar>
                       <div>
                         <p className="font-medium">{user.name}</p>
@@ -198,7 +146,7 @@ export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
                   </TableCell>
                   <TableCell>{getRoleBadge(user.role)}</TableCell>
                   <TableCell>{getStatusBadge(user.status)}</TableCell>
-                  <TableCell>{formatDate(user.lastLogin)}</TableCell>
+                  <TableCell>{formatDate(user.createdAt)}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -208,9 +156,13 @@ export function UserTable({ searchQuery, roleFilter, onEdit }: UserTableProps) {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onEdit(user)}>
+                        <DropdownMenuItem onClick={() => onEdit(user, "status")}>
                           <Edit className="mr-2 h-4 w-4" />
-                          <span>Edit</span>
+                          <span>Update Status</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onEdit(user, "role")}>
+                          <ArrowUpDownIcon className="mr-2 h-4 w-4" />
+                          <span>Change Role</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleDeleteClick(user.id)} className="text-destructive focus:text-destructive">
                           <Trash2 className="mr-2 h-4 w-4" />
