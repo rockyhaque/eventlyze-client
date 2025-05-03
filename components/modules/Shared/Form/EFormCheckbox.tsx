@@ -14,7 +14,7 @@ import { ReactNode } from "react";
 
 interface EFormCheckboxProps {
   name: string;
-  label?: string;
+  label?: any;
   description?: ReactNode;
   control: Control<any>;
   required?: boolean;

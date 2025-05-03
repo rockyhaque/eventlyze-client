@@ -1,14 +1,14 @@
 "use client";
 
 import { Controller, Control } from "react-hook-form";
-import Select, { MultiValue, SingleValue, ActionMeta } from "react-select";
+import Select, { MultiValue, SingleValue, ActionMeta, Props as SelectProps } from "react-select";
 
 interface OptionType {
   value: string;
   label: string;
 }
 
-interface IFormSelectProps {
+interface IFormSelectProps extends Partial<SelectProps<OptionType>> {
   name: string;
   label?: string;
   control: Control<any>;
@@ -22,19 +22,21 @@ const EFormSelect = ({
   control,
   options,
   multiple = false,
+  ...rest
 }: IFormSelectProps) => {
   return (
     <Controller
       control={control}
       name={name}
       render={({ field }) => (
-        <div className="w-full ">
+        <div className="w-full">
           {label && <label>{label}</label>}
           <Select
             {...field}
+            {...rest}
             options={options}
             isMulti={multiple}
-            className="mt-1 "
+            className="mt-1"
             onChange={(
               newValue: MultiValue<OptionType> | SingleValue<OptionType>,
               _actionMeta: ActionMeta<OptionType>

@@ -11,15 +11,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, InputHTMLAttributes, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface IFormImageUploadProps {
+interface IFormImageUploadProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "name" | "onChange"> {
   name: string;
   label?: string;
   control: any;
   multiple?: boolean;
-  onImageUpload: (files: File[] | File) => void; // Cloudinary URLs
+  onImageUpload: (files: File[] | File) => void;
 }
 
 const EFormImageUpload = ({
@@ -28,12 +29,13 @@ const EFormImageUpload = ({
   control,
   multiple = false,
   onImageUpload,
+  ...rest
 }: IFormImageUploadProps) => {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   useEffect(() => {
-    setPreviewImages([]); // For only client rendering purposes
+    setPreviewImages([]);
   }, []);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -54,17 +56,14 @@ const EFormImageUpload = ({
       newFiles.push(file);
     }
 
-    // Update preview images and selected files
     setPreviewImages((prev) =>
       multiple ? [...prev, ...newPreviewImages] : newPreviewImages
     );
     setSelectedFiles((prev) => (multiple ? [...prev, ...newFiles] : newFiles));
 
-    // Pass the new files directly to the onImageUpload callback
     onImageUpload(multiple ? [...selectedFiles, ...newFiles] : newFiles);
   };
 
-  // Remove Image from Preview
   const handleRemoveImage = (index: number) => {
     setPreviewImages((prev) => prev.filter((_, i) => i !== index));
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
@@ -76,16 +75,17 @@ const EFormImageUpload = ({
       name={name}
       render={() => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
             <Input
               type="file"
               accept="image/*"
               multiple={multiple}
               onChange={handleImageChange}
+              {...rest}
             />
           </FormControl>
-          {/* Preview Selected Images */}
+
           <div className="grid grid-cols-3 gap-3 mt-2">
             {previewImages.map((src, index) => (
               <div key={index} className="relative">
@@ -107,6 +107,7 @@ const EFormImageUpload = ({
               </div>
             ))}
           </div>
+
           <FormMessage />
         </FormItem>
       )}

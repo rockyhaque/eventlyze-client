@@ -9,17 +9,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Control } from "react-hook-form";
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, InputHTMLAttributes } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
-interface IconInputFieldProps {
+interface IconInputFieldProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "name"> {
   name: string;
   label?: string;
-  placeholder?: string;
-  type?: "text" | "password" | "number";
   control: Control<any>;
   icon?: ReactNode;
-  required?: boolean;
 }
 
 const EFormInput = ({
@@ -29,7 +27,8 @@ const EFormInput = ({
   type = "text",
   control,
   icon,
-  required = true,
+  required,
+  ...rest
 }: IconInputFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -50,7 +49,7 @@ const EFormInput = ({
         rules={{ required: required ? "This field is required" : false }}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>{label}</FormLabel>
+            {label && <FormLabel>{label}</FormLabel>}
             <FormControl>
               <div>
                 <Input
@@ -59,6 +58,7 @@ const EFormInput = ({
                   className={icon ? "pl-10 pt-4 pb-4" : ""}
                   required={required}
                   {...field}
+                  {...rest}
                 />
 
                 {type === "password" && (
