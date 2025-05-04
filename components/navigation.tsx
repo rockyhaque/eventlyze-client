@@ -1,52 +1,60 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Calendar, Menu, X, User, LogIn } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Calendar, Menu, X, User, LogIn } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Cookies from "js-cookie";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { cn } from "@/lib/utils"
-import { NotificationsPopover } from "@/components/notifications-popover"
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { NotificationsPopover } from "@/components/notifications-popover";
 
 export function Navigation() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const pathname = usePathname()
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const pathname = usePathname();
+  useEffect(() => {
+    const token = Cookies.get("accessToken");
+    setIsLoggedIn(!!token);
+  }, []);
 
-  const isLoggedIn = true // Replace with real auth check
-
+  const signOut = () => {
+    Cookies.remove("accessToken");
+    setIsLoggedIn(false);
+  }; // Replace with real auth check
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
+      setIsScrolled(window.scrollY > 10);
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = ""
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = ""
-    }
-  }, [isMobileMenuOpen])
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
 
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Events", href: "/events" },
     { name: "Create Event", href: "/create-event" },
     { name: "About", href: "/about" },
-  ]
+  ];
 
   return (
     <header
@@ -113,7 +121,9 @@ export function Navigation() {
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/settings">Settings</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Sign Out</DropdownMenuItem>
+                  <DropdownMenuItem onClick={signOut}>
+                    Sign Out
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
@@ -172,16 +182,13 @@ export function Navigation() {
                 href={item.href}
                 className={cn(
                   "flex h-12 items-center text-lg font-medium transition-colors hover:text-primary",
-                  pathname === item.href
-                    ? "text-primary"
-                    : "text-white"
+                  pathname === item.href ? "text-primary" : "text-white"
                 )}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
-
 
             {isLoggedIn ? (
               <>
@@ -235,5 +242,5 @@ export function Navigation() {
         </div>
       )}
     </header>
-  )
+  );
 }
