@@ -40,12 +40,13 @@ export function DashboardSidebar() {
   try {
     if (accessToken) {
       decoded = jwtDecode<CustomJwtPayload>(accessToken);
+      console.log(decoded);
       role = decoded?.role;
     }
   } catch (error) {
     console.error("Invalid token:", error);
   }
-
+// console.log(role);
   const routes = [
     {
       label: "Dashboard",
@@ -85,7 +86,7 @@ export function DashboardSidebar() {
       href: "/dashboard/reviews",
       color: "text-yellow-500",
     },
-    ...(role === "Admin"
+    ...(role === "ADMIN"
       ? [
           {
             label: "User Management",
