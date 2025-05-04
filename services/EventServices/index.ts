@@ -19,7 +19,7 @@ export const createEvent = async (eventData: FieldValues) => {
 
 export const getAllEvents = async () => {
   try {
-    const res = await app_axios.get("/events");
+    const res = await app_axios.get("/event/all-events");
     console.log(res);
     return res.data;
   } catch (error: any) {
@@ -34,7 +34,7 @@ export const getAllEvents = async () => {
 
 export const getSingleEvent = async (id: string) => {
   try {
-    const res = await app_axios.get(`/events/${id}`);
+    const res = await app_axios.get(`/event/${id}`);
     console.log(res);
     return res.data;
   } catch (error: any) {
@@ -49,7 +49,7 @@ export const getSingleEvent = async (id: string) => {
 
 export const updateEvent = async (id: string) => {
   try {
-    const res = await app_axios.put(`/events/${id}`);
+    const res = await app_axios.put(`/event/${id}`);
     console.log(res);
     return res.data;
   } catch (error: any) {
@@ -64,7 +64,7 @@ export const updateEvent = async (id: string) => {
 
 export const deleteEvent = async (id: string) => {
   try {
-    const res = await app_axios.delete(`/events/${id}`);
+    const res = await app_axios.delete(`/event/${id}`);
     console.log(res);
     return res.data;
   } catch (error: any) {
