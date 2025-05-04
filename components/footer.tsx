@@ -104,6 +104,7 @@ export function Footer() {
               </Link>
             </div>
           </div>
+          <div></div>
 
           <div>
             <h3 className="mb-4 text-sm font-medium">Company</h3>
@@ -113,42 +114,7 @@ export function Footer() {
                   About Us
                 </Link>
               </li>
-              <li>
-                <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
-                  Careers
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
-                  Press
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
-                  Blog
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="mb-4 text-sm font-medium">Support</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
-                  Help Center
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
-                  Safety Center
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
-                  Community Guidelines
-                </Link>
-              </li>
+              
               <li>
                 <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
                   Contact Us
@@ -156,6 +122,7 @@ export function Footer() {
               </li>
             </ul>
           </div>
+
 
           <div>
             <h3 className="mb-4 text-sm font-medium">Legal</h3>
@@ -175,11 +142,7 @@ export function Footer() {
                   Cookie Policy
                 </Link>
               </li>
-              <li>
-                <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
-                  Accessibility
-                </Link>
-              </li>
+             
             </ul>
           </div>
         </div>
@@ -197,9 +160,7 @@ export function Footer() {
             <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               Privacy
             </Link>
-            <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-              Cookies
-            </Link>
+           
           </div>
         </div>
       </div>
