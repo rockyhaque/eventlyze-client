@@ -20,7 +20,6 @@ export const createEvent = async (eventData: FieldValues) => {
 export const getAllEvents = async () => {
   try {
     const res = await app_axios.get("/event/all-events");
-    console.log(res);
     return res.data;
   } catch (error: any) {
     console.log("error while getting events", error);
