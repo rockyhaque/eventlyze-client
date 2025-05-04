@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   Calendar,
   Users,
-  MessageSquare,
   Star,
   Settings,
   LogOut,
@@ -46,7 +45,6 @@ export function DashboardSidebar() {
   } catch (error) {
     console.error("Invalid token:", error);
   }
-// console.log(role);
   const routes = [
     {
       label: "Dashboard",
