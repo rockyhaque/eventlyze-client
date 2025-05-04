@@ -12,7 +12,7 @@ export default async function EventsPage() {
     <div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <PageHeader title="My Events" description="Manage your created events and registrations" />
-        <Button size="sm" className="flex-1" asChild>
+        <Button size="sm" className="max-w-fit" asChild>
           <Link href="/dashboard/create-event" className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             Create Event
