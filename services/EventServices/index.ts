@@ -32,7 +32,7 @@ export const getAllEvents = async () => {
 export const getSingleEvent = async (id: string) => {
   try {
     const res = await app_axios.get(`/event/${id}`);
-
+    return res.data
   } catch (error: any) {
     console.log("error while getting single", error);
     const message =
@@ -42,10 +42,10 @@ export const getSingleEvent = async (id: string) => {
   }
 };
 
-export const updateEvent = async (id: string) => {
+export const updateEvent = async (id: string, data:any) => {
   try {
-    const res = await app_axios.put(`/event/${id}`);
-    console.log(res);
+    const res = await app_axios.put(`/event/${id}`,data );
+    console.log("Updated Response", res.data);
     return res.data;
   } catch (error: any) {
     console.log("error while updating event", error);
