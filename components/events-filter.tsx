@@ -15,6 +15,8 @@ import { cn } from "@/lib/utils"
 export function EventsFilter() {
   const [activeFilters, setActiveFilters] = useState<string[]>([])
   const [priceRange, setPriceRange] = useState([0, 500])
+  // const [hello, setHello] = useQueryState("hello", { defaultValue: "" });
+
 
   const eventTypes = [
     { id: "public-free", label: "Public Free" },

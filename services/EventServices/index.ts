@@ -4,7 +4,7 @@ import { FieldValues } from "react-hook-form";
 
 export const createEvent = async (eventData: FieldValues) => {
   try {
-    console.log("event data", eventData)
+    console.log("event data", eventData);
     const res = await app_axios.post("/event", eventData);
     console.log(res);
     return res.data;
@@ -19,11 +19,10 @@ export const createEvent = async (eventData: FieldValues) => {
 
 export const getAllEvents = async () => {
   try {
-    const res = await app_axios.get("/events");
-    console.log(res);
+    const res = await app_axios.get("/event/all-events");
     return res.data;
   } catch (error: any) {
-    console.log("error while getting events", error);
+    // console.log("error while getting events", error);
     const message =
       error?.response?.data?.message ||
       "Something went wrong while getting events!";
@@ -31,12 +30,10 @@ export const getAllEvents = async () => {
   }
 };
 
-
 export const getSingleEvent = async (id: string) => {
   try {
-    const res = await app_axios.get(`/events/${id}`);
-    console.log(res);
-    return res.data;
+    const res = await app_axios.get(`/event/${id}`);
+    return res.data?.data;
   } catch (error: any) {
     console.log("error while getting single", error);
     const message =
@@ -45,7 +42,6 @@ export const getSingleEvent = async (id: string) => {
     return new Error(message);
   }
 };
-
 
 export const updateEvent = async (id: string) => {
   try {
@@ -60,7 +56,6 @@ export const updateEvent = async (id: string) => {
     return new Error(message);
   }
 };
-
 
 export const deleteEvent = async (id: string) => {
   try {
