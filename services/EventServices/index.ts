@@ -69,3 +69,15 @@ export const deleteEvent = async (id: string) => {
     return new Error(message);
   }
 };
+
+export const getUser = async () => {
+  try {
+    const res = await app_axios.get("/user/me");
+    return res.data;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      "Something went wrong while getting user data!";
+    console.error(new Error(message));
+  }
+};
