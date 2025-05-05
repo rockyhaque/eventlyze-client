@@ -4,9 +4,9 @@ import { FieldValues } from "react-hook-form";
 
 export const createEvent = async (eventData: FieldValues) => {
   try {
-    console.log("event data", eventData)
+    console.log("event data before", eventData)
     const res = await app_axios.post("/event", eventData);
-    console.log(res);
+    console.log("res event crete", res);
     return res.data;
   } catch (error: any) {
     console.log("error while creating event", error);
@@ -20,7 +20,6 @@ export const createEvent = async (eventData: FieldValues) => {
 export const getAllEvents = async () => {
   try {
     const res = await app_axios.get("/event/all-events");
-    console.log(res);
     return res.data;
   } catch (error: any) {
     console.log("error while getting events", error);
@@ -35,7 +34,7 @@ export const getAllEvents = async () => {
 export const getSingleEvent = async (id: string) => {
   try {
     const res = await app_axios.get(`/event/${id}`);
-    console.log(res);
+    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.log("error while getting single", error);

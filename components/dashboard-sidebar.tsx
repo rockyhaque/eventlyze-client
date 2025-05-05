@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   Calendar,
   Users,
-  MessageSquare,
   Star,
   Settings,
   LogOut,
@@ -46,7 +45,6 @@ export function DashboardSidebar() {
   } catch (error) {
     console.error("Invalid token:", error);
   }
-// console.log(role);
   const routes = [
     {
       label: "Dashboard",
@@ -73,13 +71,13 @@ export function DashboardSidebar() {
       color: "text-pink-500",
       badge: 3,
     },
-    {
-      label: "Messages",
-      icon: MessageSquare,
-      href: "/dashboard/messages",
-      color: "text-orange-500",
-      badge: 5,
-    },
+    // {
+    //   label: "Messages",
+    //   icon: MessageSquare,
+    //   href: "/dashboard/messages",
+    //   color: "text-orange-500",
+    //   badge: 5,
+    // },
     {
       label: "Reviews",
       icon: Star,

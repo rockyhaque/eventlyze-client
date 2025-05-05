@@ -2,14 +2,7 @@
 import { useState, useEffect } from "react";
 import { Users, ArrowRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/page-header";
@@ -23,13 +16,10 @@ import EFormImageUpload from "@/components/modules/Shared/Form/EFormImageUpload"
 import EFormSelect from "@/components/modules/Shared/Form/EFormSelectMultiple";
 import EFormDateInput from "@/components/modules/Shared/Form/EFormDateInput";
 import EFormTimeInput from "@/components/modules/Shared/Form/EFormTimeInput";
-import {
-  categoryOptions,
-  eventTypeOptions,
-  tabs,
-} from "@/components/modules/Dashboard/CreateEvent/eventSelectOptions";
+import {categoryOptions, eventTypeOptions, tabs} from "@/components/modules/Dashboard/CreateEvent/eventSelectOptions";
 import EFormCheckbox from "@/components/modules/Shared/Form/EFormCheckbox";
 import { createEvent } from "@/services/EventServices";
+import { convertToISO } from "@/hooks/convertToDate";
 
 // Validation requirements for each tab
 const tabValidations = {
@@ -84,18 +74,20 @@ export default function CreateEventPage() {
       const uploadedImageUrl = await uploadImagesToCloudinary(eventImageUrl, false);
       
       const formData = {
-        ...data,
-        eventBanner: uploadedImageUrl,
-        registrationStart: `${data.registrationStartDate}:${data.registrationStartTime}`,
-        registrationEnd: `${data.registrationEndDate}:${data.registrationEndTime}`,
-        eventStartTime: `${data.eventStartDate}/${data.eventStartTime}`,
-        eventEndTime: `${data.eventEndDate}/${data.eventEndTime}`,
-        price: Number(data.price),
-        seat: Number(data.seat),
-        quantity: Number(data.quantity),
-        isPaid: Boolean(data.isPaid), 
-        isPublic: Boolean(data.isPublic),
-        status: "UPCOMING"
+          "title": data.title,
+          "description": data.description,
+          "isPublic": Boolean(data.isPublic),
+          "isPaid": Boolean(data.isPaid),
+          "price": Number(data.price),
+          "category": data.category,
+          "location": data.location,
+          "registrationStart":convertToISO(`${data.registrationStartDate}:${data.registrationStartTime}`),
+          "registrationEnd": convertToISO(`${data.registrationEndDate}:${data.registrationEndTime}`),
+          "eventStartTime": convertToISO(`${data.eventStartDate}/${data.eventStartTime}`),
+          "eventEndTime": convertToISO(`${data.eventEndDate}/${data.eventEndTime}`),
+          "seat": Number(data.seat),
+          "eventBanner":uploadedImageUrl,
+          "eventType": data.eventType,
       };
 
       console.log("result", formData)
@@ -103,7 +95,7 @@ export default function CreateEventPage() {
       result?.success ? toast.success(result.message) : toast.error(result?.message);
     } catch (error: any) {
       toast.error(error.message);
-      console.log(error)
+      console.log(error.message)
     }
   };
 
