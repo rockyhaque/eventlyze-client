@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   Calendar,
   Users,
-  MessageSquare,
   Star,
   Settings,
   LogOut,
@@ -40,12 +39,12 @@ export function DashboardSidebar() {
   try {
     if (accessToken) {
       decoded = jwtDecode<CustomJwtPayload>(accessToken);
+      console.log(decoded);
       role = decoded?.role;
     }
   } catch (error) {
     console.error("Invalid token:", error);
   }
-
   const routes = [
     {
       label: "Dashboard",
@@ -72,20 +71,20 @@ export function DashboardSidebar() {
       color: "text-pink-500",
       badge: 3,
     },
-    {
-      label: "Messages",
-      icon: MessageSquare,
-      href: "/dashboard/messages",
-      color: "text-orange-500",
-      badge: 5,
-    },
+    // {
+    //   label: "Messages",
+    //   icon: MessageSquare,
+    //   href: "/dashboard/messages",
+    //   color: "text-orange-500",
+    //   badge: 5,
+    // },
     {
       label: "Reviews",
       icon: Star,
       href: "/dashboard/reviews",
       color: "text-yellow-500",
     },
-    ...(role === "Admin"
+    ...(role === "ADMIN"
       ? [
           {
             label: "User Management",
