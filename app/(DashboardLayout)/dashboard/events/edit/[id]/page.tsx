@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Users, ArrowRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/page-header";
@@ -54,10 +54,10 @@ export default function EditEventPage() {
     const getEventData = async () => {
       try {
         const { data } = await getSingleEvent(eventId as string);
-         // Find the matching category option object
-         console.log("API Response:", data); // Debug log
-         console.log("Category Value:", data.category); // Debug log
-  
+        // Find the matching category option object
+        console.log("API Response:", data); // Debug log
+        console.log("Category Value:", data.category); // Debug log
+
         // Parse ISO dates to separate date/time components
         const parseDateTime = (isoString: string) => {
           const date = new Date(isoString);
@@ -66,7 +66,7 @@ export default function EditEventPage() {
             time: date.toTimeString().split(' ')[0].substring(0, 5)
           };
         };
-  
+
         // Set form values
         form.reset({
           ...data,
@@ -81,7 +81,7 @@ export default function EditEventPage() {
           eventEndDate: parseDateTime(data.eventEndTime).date,
           eventEndTime: parseDateTime(data.eventEndTime).time,
         });
-  
+
         // Set image URL state
         if (data.eventBanner) {
           setEventImageUrl(data.eventBanner);
@@ -90,7 +90,7 @@ export default function EditEventPage() {
         toast.error('Failed to load event data');
       }
     };
-  
+
     if (eventId) getEventData();
   }, [eventId, form]);
 
@@ -117,25 +117,33 @@ export default function EditEventPage() {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const uploadedImageUrl = eventImageUrl instanceof File 
+      const uploadedImageUrl = eventImageUrl instanceof File
         ? await uploadImagesToCloudinary([eventImageUrl], false)
         : eventImageUrl;
-  
+
       const formData = {
-        ...data,
-        eventBanner: uploadedImageUrl,
-        "registrationStart":convertToISO(`${data.registrationStartDate}:${data.registrationStartTime}`),
+        "title": data.title,
+        "description": data.description,
+        "isPublic": Boolean(data.isPublic),
+        "isPaid": Boolean(data.isPaid),
+        "price": Number(data.price),
+        "category": data.category,
+        "location": data.location,
+        "registrationStart": convertToISO(`${data.registrationStartDate}:${data.registrationStartTime}`),
         "registrationEnd": convertToISO(`${data.registrationEndDate}:${data.registrationEndTime}`),
         "eventStartTime": convertToISO(`${data.eventStartDate}/${data.eventStartTime}`),
         "eventEndTime": convertToISO(`${data.eventEndDate}/${data.eventEndTime}`),
+        "seat": Number(data.seat),
+        "eventBanner": uploadedImageUrl,
+        "eventType": data.eventType,
       };
-  
+
       const result = await updateEvent(eventId as string, formData);
-      result?.success 
-        ? toast.success(result.message) 
+      result?.success
+        ? toast.success(result.message)
         : toast.error(result?.message);
-      console.log("formData submitted",formData)
-      console.log("formData error",result?.message)
+      console.log("formData submitted", formData)
+      console.log("formData error", result?.message)
     } catch (error: any) {
       toast.error(error.message);
     }
