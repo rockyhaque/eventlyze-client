@@ -10,8 +10,9 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
+import { TEvent } from "@/types/eventTypes"
 
-export function EventDetailsHero() {
+export function EventDetailsHero({eventDetails}:{eventDetails:TEvent}) {
   const [isLiked, setIsLiked] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const { scrollY } = useScroll()
@@ -108,8 +109,8 @@ export function EventDetailsHero() {
       <div className="relative h-[70vh] w-full overflow-hidden">
         <motion.div style={{ y }} className="absolute inset-0 h-[120%] w-full">
           <Image
-            src={event.image || "/placeholder.svg"}
-            alt={event.title}
+            src={eventDetails?.eventBanner || "/placeholder.svg"}
+            alt={eventDetails?.title}
             width={1200}
             height={600}
             className="h-full w-full object-cover"
@@ -118,7 +119,7 @@ export function EventDetailsHero() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background"></div>
         </motion.div>
 
-        {/* Event details overlay */}
+        {/* eventDetails? details overlay */}
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
           <div className="container max-w-7xl">
             <motion.div
@@ -127,12 +128,12 @@ export function EventDetailsHero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="mb-4 flex flex-wrap gap-2"
             >
-              <Badge className="bg-primary/90 hover:bg-primary/80 text-lg px-3 py-1">{event.category}</Badge>
+              <Badge className="bg-primary/90 hover:bg-primary/80 text-lg px-3 py-1">{eventDetails?.category}</Badge>
               <Badge
                 variant="outline"
                 className="bg-black/30 text-white backdrop-blur-sm hover:bg-black/50 text-lg px-3 py-1"
               >
-                {event.price}
+                {eventDetails?.price}
               </Badge>
             </motion.div>
 
@@ -142,7 +143,7 @@ export function EventDetailsHero() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="mb-4 font-display text-3xl font-bold text-white sm:text-4xl md:text-5xl lg:text-6xl"
             >
-              {event.title}
+              {eventDetails?.title}
             </motion.h1>
 
             <motion.div
@@ -153,19 +154,19 @@ export function EventDetailsHero() {
             >
               <div className="flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-primary" />
-                <span className="text-lg">{event.date}</span>
+                <span className="text-lg">{eventDetails?.registrationStart}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-primary" />
-                <span className="text-lg">{event.time}</span>
+                <span className="text-lg">{eventDetails?.registrationEnd}</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="h-5 w-5 text-primary" />
-                <span className="text-lg">{event.location}</span>
+                <span className="text-lg">{eventDetails?.location}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-primary" />
-                <span className="text-lg">{event.attendees.toLocaleString()} attendees</span>
+                <span className="text-lg">{eventDetails?.participant?.length?.toLocaleString()} attendees</span>
               </div>
             </motion.div>
 
@@ -175,13 +176,13 @@ export function EventDetailsHero() {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="mt-8 flex items-center gap-4"
             >
-              <Avatar className="h-12 w-12 border-2 border-white">
-                <AvatarImage src={event.organizer.image || "/placeholder.svg"} alt={event.organizer.name} />
-                <AvatarFallback>{event.organizer.name.charAt(0)}</AvatarFallback>
-              </Avatar>
+              {/* <Avatar className="h-12 w-12 border-2 border-white">
+                <AvatarImage src={eventDetails?.organizer.image || "/placeholder.svg"} alt={eventDetails?.organizer.name} />
+                <AvatarFallback>{eventDetails?.organizer.name.charAt(0)}</AvatarFallback>
+              </Avatar> */}
               <div>
                 <div className="text-sm text-white/70">Organized by</div>
-                <div className="text-lg font-medium text-white">{event.organizer.name}</div>
+                <div className="text-lg font-medium text-white">{eventDetails?.ownerId}</div>
               </div>
               <div className="ml-auto">
                 <Button size="lg" className="gap-2 text-lg">
@@ -208,7 +209,7 @@ export function EventDetailsHero() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
             </Link>
-            <h2 className="font-display text-lg font-bold truncate max-w-[200px] sm:max-w-md">{event.title}</h2>
+            <h2 className="font-display text-lg font-bold truncate max-w-[200px] sm:max-w-md">{eventDetails?.title}</h2>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setIsLiked(!isLiked)}>
