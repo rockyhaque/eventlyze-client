@@ -1,13 +1,63 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Calendar, MapPin, ArrowRight } from "lucide-react"
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Calendar, MapPin, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
 
-export function HeroSection() {
+type Event = {
+  image: string;
+  title: string;
+  category: string;
+  eventStartTime: string;
+  location: string;
+};
+
+interface UserImage {
+  id: number;
+  src: string;
+  alt: string;
+}
+
+// Sample user image data
+const userImages: UserImage[] = [
+  {
+    id: 1,
+    src: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    alt: "User 1 Avatar",
+  },
+  {
+    id: 2,
+    src: "https://images.unsplash.com/flagged/photo-1553642618-de0381320ff3?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    alt: "User 2 Avatar",
+  },
+  {
+    id: 3,
+    src: "https://images.unsplash.com/photo-1623880840102-7df0a9f3545b?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    alt: "User 3 Avatar",
+  },
+  {
+    id: 4,
+    src: "https://images.unsplash.com/photo-1600486913747-55e5470d6f40?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    alt: "User 4 Avatar",
+  },
+];
+
+export function HeroSection({ data }: any) {
+  const events = data?.data?.data;
+  console.log(events);
+  const [featuredEvent, setFeaturedEvent] = useState<Event | null>(null);
+  useEffect(() => {
+    // Select a random event from the events array
+    if (events && events.length > 0) {
+      const randomIndex: number = Math.floor(Math.random() * events.length);
+      setFeaturedEvent(events[randomIndex]);
+    }
+  }, []);
+
+  console.log(featuredEvent);
 
   return (
     <section className="relative overflow-hidden pt-16 md:pt-24">
@@ -38,7 +88,8 @@ export function HeroSection() {
           </h1>
 
           <p className="max-w-[600px] text-lg text-muted-foreground md:text-xl">
-            Find the perfect events to attend, connect with like-minded people, and create unforgettable memories.
+            Find the perfect events to attend, connect with like-minded people,
+            and create unforgettable memories.
           </p>
 
           <div className="flex flex-col gap-4 sm:flex-row">
@@ -55,13 +106,16 @@ export function HeroSection() {
 
           <div className="mt-4 flex items-center gap-6">
             <div className="flex -space-x-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="inline-block h-8 w-8 overflow-hidden rounded-full border-2 border-background">
+              {userImages.map((image) => (
+                <div
+                  key={image.id}
+                  className="inline-block h-8 w-8 overflow-hidden rounded-full border-2 border-background"
+                >
                   <Image
-                    src={`/placeholder.svg?height=32&width=32&text=User${i}`}
+                    src={image.src}
                     width={32}
                     height={32}
-                    alt={`User ${i}`}
+                    alt={image.alt}
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -71,7 +125,8 @@ export function HeroSection() {
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              Join <span className="font-medium text-foreground">2,000+</span> people attending events this month
+              Join <span className="font-medium text-foreground">2,000+</span>{" "}
+              people attending events this month
             </p>
           </div>
         </motion.div>
@@ -83,36 +138,57 @@ export function HeroSection() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl">
-            <Image
-              src="/placeholder.svg?height=600&width=800&text=Featured+Event"
-              alt="Featured event"
-              width={800}
-              height={600}
-              className="h-full w-full object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6">
-              <div className="mb-2 flex flex-wrap gap-2">
-                <span className="inline-flex items-center rounded-full bg-primary/90 px-2.5 py-0.5 text-xs font-medium text-white">
-                  Featured
-                </span>
-                <span className="inline-flex items-center rounded-full bg-secondary/90 px-2.5 py-0.5 text-xs font-medium text-white">
-                  Music Festival
-                </span>
-              </div>
-              <h2 className="mb-2 font-display text-2xl font-bold text-white">Summer Music Festival 2023</h2>
-              <div className="flex flex-wrap gap-4 text-sm text-white/90">
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>June 15-18, 2023</span>
+            {featuredEvent ? (
+              <>
+                <Image
+                  src={
+                    featuredEvent.image ||
+                    "https://img.freepik.com/free-photo/landscape-morning-fog-mountains-with-hot-air-balloons-sunrise_335224-794.jpg?t=st=1746527742~exp=1746531342~hmac=bbdd21966166c500675997bdb239d71d43bf1a538c9e582560c96f23bf0ba26d&w=996"
+                  }
+                  alt={featuredEvent.title}
+                  width={800}
+                  height={600}
+                  className="h-full w-full object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <div className="mb-2 flex flex-wrap gap-2">
+                    <span className="inline-flex items-center rounded-full bg-primary/90 px-2.5 py-0.5 text-xs font-medium text-white">
+                      Featured
+                    </span>
+                    <span className="inline-flex items-center rounded-full bg-secondary/90 px-2.5 py-0.5 text-xs font-medium text-white">
+                      {featuredEvent.category}
+                    </span>
+                  </div>
+                  <h2 className="mb-2 font-display text-2xl font-bold text-white">
+                    {featuredEvent.title}
+                  </h2>
+                  <div className="flex flex-wrap gap-4 text-sm text-white/90">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-4 w-4" />
+                      <span>
+                        {new Date(
+                          featuredEvent.eventStartTime
+                        ).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      <span>{featuredEvent.location}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4" />
-                  <span>Central Park, New York</span>
-                </div>
+              </>
+            ) : (
+              <div className="h-full w-full bg-muted flex items-center justify-center">
+                <p className="text-muted-foreground">Loading event...</p>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Floating elements */}
@@ -121,10 +197,15 @@ export function HeroSection() {
               <Calendar className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <div className="absolute -bottom-6 -left-6 animate-float" style={{ animationDelay: "1s" }}>
+          <div
+            className="absolute -bottom-6 -left-6 animate-float"
+            style={{ animationDelay: "1s" }}
+          >
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg">
               <div className="text-center">
-                <div className="font-display text-xl font-bold text-primary">15</div>
+                <div className="font-display text-xl font-bold text-primary">
+                  15
+                </div>
                 <div className="text-xs font-medium text-primary">June</div>
               </div>
             </div>
@@ -134,7 +215,11 @@ export function HeroSection() {
 
       {/* Wave divider */}
       <div className="absolute bottom-0 left-0 right-0 z-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" className="text-background">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 100"
+          className="text-background"
+        >
           <path
             fill="currentColor"
             fillOpacity="1"
@@ -143,5 +228,5 @@ export function HeroSection() {
         </svg>
       </div>
     </section>
-  )
+  );
 }
