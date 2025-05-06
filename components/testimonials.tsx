@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import { motion, AnimatePresence } from "framer-motion"
-import { Quote } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { Quote } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const testimonials = [
   {
@@ -14,7 +14,8 @@ const testimonials = [
     author: {
       name: "Sarah Johnson",
       role: "Marketing Director",
-      image: "/placeholder.svg?height=100&width=100&text=SJ",
+      image:
+        "https://images.unsplash.com/photo-1599834562135-b6fc90e642ca?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
   },
   {
@@ -24,7 +25,8 @@ const testimonials = [
     author: {
       name: "Michael Chen",
       role: "Event Coordinator",
-      image: "/placeholder.svg?height=100&width=100&text=MC",
+      image:
+        "https://images.unsplash.com/photo-1601397217569-d2413068e508?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
   },
   {
@@ -34,30 +36,37 @@ const testimonials = [
     author: {
       name: "Jessica Williams",
       role: "Travel Blogger",
-      image: "/placeholder.svg?height=100&width=100&text=JW",
+      image:
+        "https://images.unsplash.com/photo-1596177015544-99d1ce149e1d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
   },
-]
+];
 
 export function Testimonials() {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [hoverDirection, setHoverDirection] = useState<"prev" | "next" | null>(null)
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [hoverDirection, setHoverDirection] = useState<"prev" | "next" | null>(
+    null
+  );
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
 
   const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))
-  }
+    setActiveIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+  };
 
   const handleNext = () => {
-    setActiveIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))
-  }
+    setActiveIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+  };
 
   return (
     <section className="py-16">
       <div className="container">
         <div className="mb-10 text-center">
-          <h2 className="font-display text-3xl font-bold md:text-4xl">What Our Users Say</h2>
-          <p className="mt-2 text-muted-foreground">Hear from people who love using Eventify</p>
+          <h2 className="font-display text-3xl font-bold md:text-4xl">
+            What Our Users Say
+          </h2>
+          <p className="mt-2 text-muted-foreground">
+            Hear from people who love using Eventify
+          </p>
         </div>
 
         <div className="relative mx-auto max-w-4xl">
@@ -68,16 +77,16 @@ export function Testimonials() {
           <div
             className="relative overflow-hidden rounded-xl bg-muted/50 p-8 md:p-12 cursor-none"
             onMouseMove={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect()
-              const x = e.clientX - rect.left
-              const y = e.clientY - rect.top
-              setCursorPos({ x: e.clientX, y: e.clientY })
-              setHoverDirection(x < rect.width / 2 ? "prev" : "next")
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+              setCursorPos({ x: e.clientX, y: e.clientY });
+              setHoverDirection(x < rect.width / 2 ? "prev" : "next");
             }}
             onMouseLeave={() => setHoverDirection(null)}
             onClick={() => {
-              if (hoverDirection === "prev") handlePrev()
-              else handleNext()
+              if (hoverDirection === "prev") handlePrev();
+              else handleNext();
             }}
           >
             {testimonials.map((testimonial, index) => (
@@ -107,8 +116,12 @@ export function Testimonials() {
                     />
                   </div>
                   <div className="text-center">
-                    <div className="font-display font-bold">{testimonial.author.name}</div>
-                    <div className="text-sm text-muted-foreground">{testimonial.author.role}</div>
+                    <div className="font-display font-bold">
+                      {testimonial.author.name}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {testimonial.author.role}
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -137,7 +150,6 @@ export function Testimonials() {
 
           {/* Manual Controls (optional, still included) */}
           <div className="mt-8 flex justify-center gap-2">
-
             <div className="flex gap-2">
               {testimonials.map((_, index) => (
                 <button
@@ -145,16 +157,17 @@ export function Testimonials() {
                   onClick={() => setActiveIndex(index)}
                   className={cn(
                     "h-2 w-2 rounded-full transition-all",
-                    activeIndex === index ? "w-6 bg-primary" : "bg-muted-foreground/30",
+                    activeIndex === index
+                      ? "w-6 bg-primary"
+                      : "bg-muted-foreground/30"
                   )}
                   aria-label={`Go to testimonial ${index + 1}`}
                 />
               ))}
             </div>
-
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
