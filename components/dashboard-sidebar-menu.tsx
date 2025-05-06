@@ -13,6 +13,7 @@ import {
   ChevronRight,
   CalendarPlus,
   UserCog,
+  DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -49,6 +50,12 @@ export function DashboardSidebarMenu({data}:any) {
       href: "/dashboard/invitations",
       color: "text-pink-500",
       badge: 3,
+    },
+    {
+      label: "Payments",
+      icon: DollarSign,
+      href: "/dashboard/payments",
+      color: "text-orange-500",
     },
     // {
     //   label: "Messages",
