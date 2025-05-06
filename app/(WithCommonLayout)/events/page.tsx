@@ -8,22 +8,35 @@ import { UpcomingEvents } from "@/components/upcoming-events";
 import { Newsletter } from "@/components/newsletter";
 import { getAllEvents } from "@/services/EventServices";
 
-export default async function EventsPage() {
-  const events = await getAllEvents();
+import { loadSearchParams } from "../search-params";
+import type { SearchParams } from "nuqs/server";
+import { revalidateTag } from "next/cache";
 
-  // if (events instanceof Error) {
-  //   console.error(events.message);
-  // }
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+export default async function EventsPage({ searchParams }: PageProps) {
+  const { searchTerm, isPaid, price } = await loadSearchParams(searchParams);
+
+  const events = await getAllEvents({ searchTerm, isPaid, price });
+
+  async function refetchEvents() {
+    "use server";
+
+    revalidateTag("events");
+  }
+
 
   return (
     <div>
-      <EventsHero />
+      <EventsHero refetchEvents={refetchEvents} />
       <div className="container max-w-7xl py-10">
         <PageHeader
           title="Discover Events"
           description="Find and join amazing events happening around you"
         />
-        <EventsFilter />
+        <EventsFilter refetchEvents={refetchEvents} />
         <EventsGrid eventsData={events?.data} />
       </div>
       <EventCategories />

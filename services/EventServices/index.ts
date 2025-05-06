@@ -1,5 +1,6 @@
 "use server";
 import app_axios from "@/lib/axios";
+import { unstable_cache } from "next/cache";
 import { FieldValues } from "react-hook-form";
 
 export const createEvent = async (eventData: FieldValues) => {
@@ -16,12 +17,29 @@ export const createEvent = async (eventData: FieldValues) => {
   }
 };
 
-export const getAllEvents = async () => {
+// interface for params
+interface IGetEventParams {
+  searchTerm?: string;
+  isPaid?: string;
+  price?: string;
+}
+
+export const getAllEvents = async ({
+  searchTerm,
+  isPaid,
+  price,
+}: IGetEventParams={}) => {
   try {
-    const res = await app_axios.get("/event/all-events");
+    const params = new URLSearchParams();
+
+    if (searchTerm) params.append("searchTerm", searchTerm);
+    if (isPaid) params.append("isPaid", isPaid);
+    if (price) params.append("price", price);
+
+    const res = await app_axios.get(`/event/all-events?${params.toString()}`);
+
     return res.data;
   } catch (error: any) {
-    // console.log("error while getting events", error);
     const message =
       error?.response?.data?.message ||
       "Something went wrong while getting events!";
@@ -29,10 +47,15 @@ export const getAllEvents = async () => {
   }
 };
 
+export const getAllEventsCache = unstable_cache(getAllEvents, ["events"], {
+  tags: ["events"],
+});
+
 export const getSingleEvent = async (id: string) => {
   try {
     const res = await app_axios.get(`/event/${id}`);
 
+    return res.data;
   } catch (error: any) {
     console.log("error while getting single", error);
     const message =
