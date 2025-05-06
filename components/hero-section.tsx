@@ -15,6 +15,36 @@ type Event = {
   location: string;
 };
 
+interface UserImage {
+  id: number;
+  src: string;
+  alt: string;
+}
+
+// Sample user image data
+const userImages: UserImage[] = [
+  {
+    id: 1,
+    src: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    alt: "User 1 Avatar",
+  },
+  {
+    id: 2,
+    src: "https://images.unsplash.com/flagged/photo-1553642618-de0381320ff3?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    alt: "User 2 Avatar",
+  },
+  {
+    id: 3,
+    src: "https://images.unsplash.com/photo-1623880840102-7df0a9f3545b?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    alt: "User 3 Avatar",
+  },
+  {
+    id: 4,
+    src: "https://images.unsplash.com/photo-1600486913747-55e5470d6f40?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    alt: "User 4 Avatar",
+  },
+];
+
 export function HeroSection({ data }: any) {
   const events = data?.data?.data;
   console.log(events);
@@ -76,16 +106,16 @@ export function HeroSection({ data }: any) {
 
           <div className="mt-4 flex items-center gap-6">
             <div className="flex -space-x-2">
-              {[1, 2, 3, 4].map((i) => (
+              {userImages.map((image) => (
                 <div
-                  key={i}
+                  key={image.id}
                   className="inline-block h-8 w-8 overflow-hidden rounded-full border-2 border-background"
                 >
                   <Image
-                    src={`/placeholder.svg?height=32&width=32&text=User${i}`}
+                    src={image.src}
                     width={32}
                     height={32}
-                    alt={`User ${i}`}
+                    alt={image.alt}
                     className="h-full w-full object-cover"
                   />
                 </div>
