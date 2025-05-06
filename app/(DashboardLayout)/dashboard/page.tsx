@@ -11,11 +11,11 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-4">
-      <DashboardHeader />
-      <DashboardStats />
+      <DashboardHeader/>
+      <DashboardStats data={stats.data}/>
       <div className="grid gap-8 md:grid-cols-2">
         <RecentInvitations />
-        <RecentSubscriber/>
+        <RecentSubscriber subscribers={stats?.data?.recentSubscribers}/>
       </div>
     </div>
   )
