@@ -22,7 +22,7 @@ export function DashboardStats({data}:any) {
         icon={<Clock className="h-5 w-5 text-primary" />}
         title="Upcoming Events"
         value={data?.upcomingEvents}
-        trend="Next: Tomorrow"
+        trend="Last weak"
         trendUp={null}
       />
       <StatCard

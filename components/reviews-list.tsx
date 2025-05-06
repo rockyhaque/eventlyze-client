@@ -31,7 +31,7 @@ export function ReviewsList({reviews}:any) {
                   <div>
                    
                     <p className="text-sm text-white font-bold">
-                      {review.event.title}
+                      {review.user.name}
                     </p>
                   </div>
                 </div>

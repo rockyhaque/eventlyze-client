@@ -21,7 +21,7 @@ const chartData = [
 const chartConfig = {
   event: {
     label: "Events Created",
-    color: "#2563eb",
+    color: "#7b3aed",
   },
 } satisfies ChartConfig
 
