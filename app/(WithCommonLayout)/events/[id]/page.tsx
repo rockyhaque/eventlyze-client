@@ -12,6 +12,7 @@ export default async function EventDetailsPage({ params }: { params: any }) {
 
   const eventDetails = await getSingleEvent(eventId as string);
 
+
   return (
     <div className="relative min-h-screen">
       <div className="absolute inset-0 h-[70vh] overflow-hidden pointer-events-none"></div>

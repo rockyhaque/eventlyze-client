@@ -35,18 +35,18 @@ export function EventDetailsContent({
   eventDetails: TEvent;
 }) {
   const [showFullDescription, setShowFullDescription] = useState(false);
-  const truncatedDescription = eventDetails.description.slice(0, 300) + "...";
+  const truncatedDescription = eventDetails?.description?.slice(0, 300) + "...";
 
   const isRegistrationOpen = moment().isBetween(
-    eventDetails.registrationStart,
-    eventDetails.registrationEnd
+    eventDetails?.registrationStart,
+    eventDetails?.registrationEnd
   );
-  const daysRemaining = moment(eventDetails.registrationEnd).diff(
+  const daysRemaining = moment(eventDetails?.registrationEnd).diff(
     moment(),
     "days"
   );
   const seatsFilledPercentage = (
-    (eventDetails?.participant?.length / eventDetails.seat) *
+    (eventDetails?.participant?.length / eventDetails?.seat) *
     100
   ).toFixed(0);
 
@@ -73,10 +73,10 @@ export function EventDetailsContent({
             <div className="prose max-w-none text-muted-foreground">
               <p className="whitespace-pre-line">
                 {showFullDescription
-                  ? eventDetails.description
+                  ? eventDetails?.description
                   : truncatedDescription}
               </p>
-              {eventDetails.description.length > 300 && (
+              {eventDetails?.description?.length > 300 && (
                 <Button
                   variant="ghost"
                   size="sm"
@@ -105,7 +105,7 @@ export function EventDetailsContent({
                 <Tag className="h-5 w-5 text-primary" />
                 <span className="font-medium">Category</span>
               </div>
-              <span>{eventDetails.category}</span>
+              <span>{eventDetails?.category}</span>
             </div>
 
             {/* Event Type */}
@@ -114,17 +114,17 @@ export function EventDetailsContent({
                 <MapPin className="h-5 w-5 text-primary" />
                 <span className="font-medium">Event Type</span>
               </div>
-              <span>{eventDetails.eventType}</span>
+              <span>{eventDetails?.eventType}</span>
             </div>
 
             {/* Price */}
-            {eventDetails.isPaid && (
+            {eventDetails?.isPaid && (
               <div className="flex items-center justify-between rounded-lg bg-muted p-3">
                 <div className="flex items-center gap-2">
                   <DollarSign className="h-5 w-5 text-primary" />
                   <span className="font-medium">Price</span>
                 </div>
-                <span>${eventDetails.price}</span>
+                <span>${eventDetails?.price}</span>
               </div>
             )}
 
@@ -134,7 +134,7 @@ export function EventDetailsContent({
                 <CircleCheck className="h-5 w-5 text-primary" />
                 <span className="font-medium">Status</span>
               </div>
-              <span>{eventDetails.status}</span>
+              <span>{eventDetails?.status}</span>
             </div>
 
             {/* Total Seats */}
@@ -143,7 +143,7 @@ export function EventDetailsContent({
                 <Rows3 className="h-5 w-5 text-primary" />
                 <span className="font-medium">Total Seats</span>
               </div>
-              <span>{eventDetails.seat}</span>
+              <span>{eventDetails?.seat}</span>
             </div>
 
             {/* Participants */}
@@ -152,7 +152,7 @@ export function EventDetailsContent({
                 <Users className="h-5 w-5 text-primary" />
                 <span className="font-medium">Participants</span>
               </div>
-              <span>{eventDetails.participant.length}</span>
+              <span>{eventDetails?.participant?.length}</span>
             </div>
           </div>
         </TabsContent>
@@ -193,11 +193,11 @@ export function EventDetailsContent({
                           Start Time
                         </p>
                         <p className="font-medium">
-                          {moment(eventDetails.eventStartTime).format(
+                          {moment(eventDetails?.eventStartTime).format(
                             "MMMM Do YYYY"
                           )}
                           <span className="block text-violet-600 font-bold mt-1">
-                            {moment(eventDetails.eventStartTime).format(
+                            {moment(eventDetails?.eventStartTime).format(
                               "h:mm A"
                             )}
                           </span>
@@ -213,11 +213,11 @@ export function EventDetailsContent({
                           End Time
                         </p>
                         <p className="font-medium">
-                          {moment(eventDetails.eventEndTime).format(
+                          {moment(eventDetails?.eventEndTime).format(
                             "MMMM Do YYYY"
                           )}
                           <span className="block text-violet-600 font-bold mt-1">
-                            {moment(eventDetails.eventEndTime).format("h:mm A")}
+                            {moment(eventDetails?.eventEndTime).format("h:mm A")}
                           </span>
                         </p>
                       </div>
@@ -258,7 +258,7 @@ export function EventDetailsContent({
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">From</p>
                       <p className="font-medium">
-                        {moment(eventDetails.registrationStart).format(
+                        {moment(eventDetails?.registrationStart).format(
                           "MMM D, YYYY"
                         )}
                       </p>
@@ -269,7 +269,7 @@ export function EventDetailsContent({
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">To</p>
                       <p className="font-medium">
-                        {moment(eventDetails.registrationEnd).format(
+                        {moment(eventDetails?.registrationEnd).format(
                           "MMM D, YYYY"
                         )}
                       </p>
@@ -306,7 +306,7 @@ export function EventDetailsContent({
                       <span className="text-sm font-medium">
                         Available Seats
                       </span>
-                      <span className="font-bold">{eventDetails.seat}</span>
+                      <span className="font-bold">{eventDetails?.seat}</span>
                     </div>
 
                     <div className="flex items-center justify-between">
