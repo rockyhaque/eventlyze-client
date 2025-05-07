@@ -4,10 +4,13 @@ export const getActiveUser = async () => {
     try {
       const res = await app_axios.get(`/user/me`);
       const user = res.data.data;
+
+      console.log(user)
   
       const userData = {
         name: user.name,
         email: user.email,
+        userId: user.id,
         role: user.role,
         status: user.status,
       };

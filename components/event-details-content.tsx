@@ -210,9 +210,9 @@ export function EventDetailsContent({
                           End Time
                         </p>
                         <p className="font-medium">
-                          {formatDate(eventDetails.eventEndTime)}
+                          {formatDate(eventDetails?.eventEndTime)}
                           <span className="block text-violet-600 font-bold mt-1">
-                            {formatDate(eventDetails.eventEndTime, "h:mm A")}
+                            {formatDate(eventDetails?.eventEndTime, "h:mm A")}
                           </span>
                         </p>
                       </div>

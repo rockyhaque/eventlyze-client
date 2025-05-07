@@ -35,6 +35,8 @@ export default async function EventsPage({ searchParams }: PageProps) {
     revalidateTag("events");
   }
 
+  // console.log(events)
+
   return (
     <div>
       <EventsHero refetchEvents={refetchEvents} />
