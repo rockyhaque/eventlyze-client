@@ -56,7 +56,8 @@ export const updatedUserStatus = async (id: string, data: any) => {
       "Something went wrong while updating user status!";
     return new Error(message);
   }
-};
+
+}
 export const updatedUserRole = async (id: string, data: any) => {
   try {
     const response = await app_axios.patch(`/user/update-role/${id}`, {
