@@ -17,26 +17,6 @@ export function EventDetailsHero({eventDetails}:{eventDetails:TEvent}) {
   const [isScrolled, setIsScrolled] = useState(false)
   const { scrollY } = useScroll()
 
-  // Sample event data
-  const event = {
-    id: 1,
-    title: "Tech Conference 2023: Innovation Summit",
-    image: "/placeholder.svg?height=600&width=1200&text=Tech+Conference+2023",
-    date: "May 20-22, 2023",
-    time: "9:00 AM - 6:00 PM",
-    location: "Moscone Center, San Francisco, CA",
-    price: "$299",
-    category: "Technology",
-    tags: ["AI", "Blockchain", "Web3", "Startups", "Innovation"],
-    attendees: 1200,
-    organizer: {
-      name: "TechEvents Inc.",
-      image: "/placeholder.svg?height=100&width=100&text=TE",
-      events: 24,
-      rating: 4.8,
-    },
-  }
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)

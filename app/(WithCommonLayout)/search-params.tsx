@@ -4,7 +4,8 @@ import {  createLoader, parseAsString } from 'nuqs/server'
 export const coordinatesSearchParams = {
   searchTerm: parseAsString.withDefault(""),
   isPaid: parseAsString.withDefault(""),
-  price: parseAsString.withDefault(""),
+  sortBy: parseAsString.withDefault(""),
+  sortOrder: parseAsString.withDefault(""),
   category: parseAsString.withDefault(""),
 }
  

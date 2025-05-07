@@ -28,6 +28,7 @@ import { TEvent } from "@/types/eventTypes";
 import moment from "moment";
 import { Card, CardContent } from "./ui/card";
 import { Progress } from "./ui/progress";
+import { formatDate } from "./modules/Shared/DateTimeFormat/formatDate";
 
 export function EventDetailsContent({
   eventDetails,
@@ -193,13 +194,9 @@ export function EventDetailsContent({
                           Start Time
                         </p>
                         <p className="font-medium">
-                          {moment(eventDetails?.eventStartTime).format(
-                            "MMMM Do YYYY"
-                          )}
+                          {formatDate(eventDetails?.eventStartTime)}
                           <span className="block text-violet-600 font-bold mt-1">
-                            {moment(eventDetails?.eventStartTime).format(
-                              "h:mm A"
-                            )}
+                            {formatDate(eventDetails?.eventStartTime, "h:mm A")}
                           </span>
                         </p>
                       </div>
@@ -213,11 +210,9 @@ export function EventDetailsContent({
                           End Time
                         </p>
                         <p className="font-medium">
-                          {moment(eventDetails?.eventEndTime).format(
-                            "MMMM Do YYYY"
-                          )}
+                          {formatDate(eventDetails.eventEndTime)}
                           <span className="block text-violet-600 font-bold mt-1">
-                            {moment(eventDetails?.eventEndTime).format("h:mm A")}
+                            {formatDate(eventDetails.eventEndTime, "h:mm A")}
                           </span>
                         </p>
                       </div>
@@ -258,9 +253,9 @@ export function EventDetailsContent({
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">From</p>
                       <p className="font-medium">
-                        {moment(eventDetails?.registrationStart).format(
-                          "MMM D, YYYY"
-                        )}
+                      {
+                        formatDate(eventDetails?.registrationEnd)
+                      }
                       </p>
                     </div>
 
@@ -269,9 +264,9 @@ export function EventDetailsContent({
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">To</p>
                       <p className="font-medium">
-                        {moment(eventDetails?.registrationEnd).format(
-                          "MMM D, YYYY"
-                        )}
+                      {
+                        formatDate(eventDetails?.registrationEnd)
+                      }
                       </p>
                     </div>
 
