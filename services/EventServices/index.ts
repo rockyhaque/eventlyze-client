@@ -22,21 +22,27 @@ interface IGetEventParams {
   searchTerm?: string;
   isPaid?: string;
   price?: string;
+  category?: string;
 }
 
 export const getAllEvents = async ({
   searchTerm,
   isPaid,
   price,
-}: IGetEventParams={}) => {
+  category
+}: IGetEventParams = {}) => {
   try {
     const params = new URLSearchParams();
 
     if (searchTerm) params.append("searchTerm", searchTerm);
     if (isPaid) params.append("isPaid", isPaid);
     if (price) params.append("price", price);
+    if (category) params.append("category", category);
 
     const res = await app_axios.get(`/event/all-events?${params.toString()}`);
+
+    console.log(res.data)
+
 
     return res.data;
   } catch (error: any) {
@@ -54,8 +60,7 @@ export const getAllEventsCache = unstable_cache(getAllEvents, ["events"], {
 export const getSingleEvent = async (id: string) => {
   try {
     const res = await app_axios.get(`/event/${id}`);
-    return res.data
-
+    return res.data;
   } catch (error: any) {
     console.log("error while getting single", error);
     const message =
@@ -65,10 +70,10 @@ export const getSingleEvent = async (id: string) => {
   }
 };
 
-export const updateEvent = async (id: string, data:any) => {
+export const updateEvent = async (id: string, data: any) => {
   try {
-    console.log("Data Before Send", data)
-    const res = await app_axios.put(`/event/${id}`, data );
+    console.log("Data Before Send", data);
+    const res = await app_axios.put(`/event/${id}`, data);
     console.log("Updated Response", res.data);
     return res.data;
   } catch (error: any) {

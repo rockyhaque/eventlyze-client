@@ -13,21 +13,23 @@ import {
 import { useQueryState } from "nuqs";
 
 const categories = [
-  { name: "Music", value: "music" },
-  { name: "Technology", value: "technology" },
-  { name: "Art", value: "art" },
-  { name: "Business", value: "business" },
-  { name: "Food & Drink", value: "food-and-drink" },
+  { name: "Music", value: "MUSIC" },
+  { name: "Technology", value: "TECHNOLOGY" },
+  { name: "Art", value: "ART" },
+  { name: "Business", value: "BUSINESS" },
+  { name: "Food & Drink", value: "FOOD-AND-DRINK" },
 ];
+
 interface IEventsFilterParams {
   refetchEvents: () => Promise<void>;
 }
 
 export function EventsHero({ refetchEvents }: IEventsFilterParams) {
-  const [category, setCategory] = useQueryState("category", { defaultValue: "" });
+  const [categoryState, setCategory] = useQueryState("category", {
+    defaultValue: "",
+  });
   const [date, setDate] = useQueryState("date", { defaultValue: "" });
 
-  
   const handleCategory = (value: string) => {
     setCategory(value);
     setTimeout(() => {
@@ -41,8 +43,6 @@ export function EventsHero({ refetchEvents }: IEventsFilterParams) {
       refetchEvents();
     }, 100);
   };
-  
-
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-16 md:py-24">
@@ -105,12 +105,19 @@ export function EventsHero({ refetchEvents }: IEventsFilterParams) {
             </div>
 
             <div className="mt-4 flex flex-wrap gap-2 justify-center">
-            {categories.map((category) => (
+              {categories.map((category) => (
                 <Button
                   key={category.value}
                   onClick={() => handleCategory(category.value)}
-                  variant="outline"
+                  variant={
+                    category.value === categoryState ? "default" : "outline"
+                  }
                   size="sm"
+                  className={
+                    category.value === categoryState
+                      ? "bg-primary text-white"
+                      : ""
+                  }
                 >
                   {category.name}
                 </Button>
