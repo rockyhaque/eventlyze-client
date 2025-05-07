@@ -14,10 +14,13 @@ import { getAllNotification } from "@/services/NotificationService"
 
 type Notification = {
   id: string
-  title: string
-  description: string
-  time: string
+  userId: string
+  eventId: string
+  message: string
   read: boolean
+  readUser: boolean
+  createdAt: string
+  updatedAt: string
   avatar?: string
   avatarFallback: string
 }
@@ -72,19 +75,35 @@ const notifications: Notification[] = [
 
 export function NotificationsPopover() {
   const [open, setOpen] = useState(false);
-  const [notifs, setNotifs] = useState(notifications);
-  const [notificationss, setNotifications] = useState<any[]>([]);
+  // const [notifs, setNotifs] = useState(notifications);
+  // const [notificationss, setNotifications] = useState<any[]>([]);
+  const [notifs, setNotifs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  console.log(notificationss);
+  // console.log(notifs);
+  
+
+  // console.log(notificationss?.data?.totalUnReadNotification);
 
 
-  const unreadCount = notifs.filter((n) => !n.read).length
+  // const unreadCount = notifs.filter((n) => !n.read).length
+  // const unreadCount = notificationss?.data?.totalUnReadNotification
+  const unreadCount = notifs?.data?.totalUnReadNotification
+  // console.log("count notifffff",unreadCount);
+
+  // console.log(notifs?.data?.allNotifications);
+
+  const notifsdata = notifs?.data?.allNotifications
+
+  console.log("al noti", notifsdata);
+  
+  
+  
 
 
   const markAllAsRead = () => {
-    setNotifs(notifs.map((n) => ({ ...n, read: true })))
+    setNotifs(notifs.map((n: any) => ({ ...n, read: true })))
   }
 
   useEffect(() => {
@@ -98,8 +117,8 @@ export function NotificationsPopover() {
         if (data instanceof Error) {
           setError(data.message);
         } else {
-          setNotifications(data);
-          console.log("Notification data", data);
+          // setNotifications(data);
+          setNotifs(data);
         }
       } catch (err) {
         console.error("Fetch error:", err);
@@ -139,8 +158,8 @@ export function NotificationsPopover() {
         </div>
         <ScrollArea className="h-80">
           <div className="flex flex-col">
-            {notifs.length > 0 ? (
-              notifs.map((notification) => (
+            {notifsdata.length > 0 ? (
+              notifsdata.map((notification: Notification) => (
                 <div
                   key={notification.id}
                   className={cn(
@@ -154,10 +173,11 @@ export function NotificationsPopover() {
                   </Avatar>
                   <div className="flex-1 space-y-1">
                     <p className={cn("text-sm font-medium", !notification.read && "font-semibold")}>
-                      {notification.title}
+                      {notification?.message}
                     </p>
-                    <p className="text-xs text-muted-foreground">{notification.description}</p>
-                    <p className="text-xs text-muted-foreground">{notification.time}</p>
+                    {/* <p className="text-xs text-muted-foreground">{notification.description}</p> */}
+                    {/* <p className="text-xs text-muted-foreground">{notification?.message}</p> */}
+                    <p className="text-xs text-muted-foreground">{notification.createdAt}</p>
                   </div>
                   {!notification.read && <div className="h-2 w-2 rounded-full bg-primary"></div>}
                 </div>
