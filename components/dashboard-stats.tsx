@@ -1,35 +1,35 @@
 import type React from "react"
 import { CalendarDays, Clock, Users, Award } from "lucide-react"
 
-export function DashboardStats() {
+export function DashboardStats({data}:any) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <StatCard
         icon={<CalendarDays className="h-5 w-5 text-primary" />}
         title="Total Events"
-        value="24"
+        value={data?.totalEvents}
         trend="+12% from last month"
         trendUp={true}
       />
       <StatCard
         icon={<Users className="h-5 w-5 text-primary" />}
         title="Event Attendees"
-        value="1,234"
+        value={data?.eventAttendees}
         trend="+18% from last month"
         trendUp={true}
       />
       <StatCard
         icon={<Clock className="h-5 w-5 text-primary" />}
         title="Upcoming Events"
-        value="8"
-        trend="Next: Tomorrow"
+        value={data?.upcomingEvents}
+        trend="Last weak"
         trendUp={null}
       />
       <StatCard
         icon={<Award className="h-5 w-5 text-primary" />}
         title="Event Rating"
-        value="4.8"
-        trend="Based on 156 reviews"
+        value={data?.eventRating}
+        trend={`Based on ${data?.totalEvents} reviews`}
         trendUp={null}
       />
     </div>

@@ -1,16 +1,21 @@
+import { DashboardCategoryChart } from "@/components/dashboard-category-chart"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { DashboardStats } from "@/components/dashboard-stats"
-import { RecentInvitations } from "@/components/recent-invitations"
 import { RecentSubscriber } from "@/components/recent-subscriber"
+import { getActiveUser } from "@/hooks/getActiveUser"
+import { getStats } from "@/services/AdminServices"
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const {role} = await getActiveUser()
+  const stats = await getStats()
+
   return (
     <div className="space-y-4">
-      <DashboardHeader />
-      <DashboardStats />
+      <DashboardHeader/>
+      <DashboardStats data={stats.data}/>
       <div className="grid gap-8 md:grid-cols-2">
-        <RecentInvitations />
-        <RecentSubscriber/>
+        <DashboardCategoryChart />
+        <RecentSubscriber subscribers={stats?.data?.recentSubscribers}/>
       </div>
     </div>
   )

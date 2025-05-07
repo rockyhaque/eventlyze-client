@@ -54,8 +54,8 @@ export const getAllEventsCache = unstable_cache(getAllEvents, ["events"], {
 export const getSingleEvent = async (id: string) => {
   try {
     const res = await app_axios.get(`/event/${id}`);
+    return res.data
 
-    return res.data;
   } catch (error: any) {
     console.log("error while getting single", error);
     const message =
@@ -65,10 +65,11 @@ export const getSingleEvent = async (id: string) => {
   }
 };
 
-export const updateEvent = async (id: string) => {
+export const updateEvent = async (id: string, data:any) => {
   try {
-    const res = await app_axios.put(`/event/${id}`);
-    console.log(res);
+    console.log("Data Before Send", data)
+    const res = await app_axios.put(`/event/${id}`, data );
+    console.log("Updated Response", res.data);
     return res.data;
   } catch (error: any) {
     console.log("error while updating event", error);
