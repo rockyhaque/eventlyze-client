@@ -153,7 +153,7 @@ export function DashboardSidebarMenu({data}:any) {
             <div className="flex items-center gap-2">
               <Avatar className="h-8 w-8">
               
-                <AvatarFallback>{data?.name.charAt(0)}</AvatarFallback>
+                <AvatarFallback>{data?.name?.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className={cn(isCollapsed && "hidden")}>
               <p className="text-xs text-muted-foreground">

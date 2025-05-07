@@ -8,6 +8,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { PageHeader } from "./page-header"
+import { Card } from "./ui/card"
 
 const chartConfig = {
   event: {
@@ -16,23 +18,26 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function DashboardCategoryChart({data}:any) {
+export function DashboardCategoryChart({ data }: any) {
 
   console.log(data)
   return (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-      <BarChart accessibilityLayer data={data}>
-        <CartesianGrid vertical={false} />
-        <XAxis
-          dataKey="month"
-          tickLine={false}
-          tickMargin={10}
-          axisLine={false}
-          tickFormatter={(value) => value.slice(0, 3)}
-        />
-        <ChartTooltip content={<ChartTooltipContent className="w-[200px]" />} />
-        <Bar dataKey="event" fill="var(--color-event)" radius={4} />
-      </BarChart>
-    </ChartContainer>
+    <Card className="p-5">
+      <PageHeader title="Yearly Events" description="Number of events created over the year." />
+      <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+        <BarChart accessibilityLayer data={data}>
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="month"
+            tickLine={false}
+            tickMargin={10}
+            axisLine={false}
+            tickFormatter={(value) => value.slice(0, 3)}
+          />
+          <ChartTooltip content={<ChartTooltipContent className="w-[200px]" />} />
+          <Bar dataKey="event" fill="var(--color-event)" radius={4} />
+        </BarChart>
+      </ChartContainer>
+    </Card>
   )
 }

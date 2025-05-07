@@ -2,6 +2,18 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export function RecentSubscriber({subscribers}:any) {
+
+  if (subscribers.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+     
+        <h3 className="mt-4 text-lg font-medium">No Subscribers</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+            You haven't received any subscribers yet.
+        </p>
+      </div>
+    )
+  }
   return (
     <Card>
       <CardHeader>
