@@ -12,8 +12,10 @@ export default async function EventDetailsPage({ params }: { params: any }) {
 
   const res = await getSingleEvent(eventId as string);
   const eventDetails = res.data;
+
   
 
+  console.log(eventDetails);
 
   return (
     <div className="relative min-h-screen">
@@ -26,12 +28,15 @@ export default async function EventDetailsPage({ params }: { params: any }) {
       <div className="relative z-20 bg-background">
         <div className="container max-w-7xl py-10">
           <div className="mb-8">
-            <EventCountdown  eventStartTime={eventDetails?.registrationEnd} title="Registration days left" />
+            <EventCountdown
+              eventStartTime={eventDetails?.registrationEnd}
+              title="Registration days left"
+            />
           </div>
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div className="lg:col-span-2">
-              <EventDetailsContent  eventDetails={eventDetails} />
+              <EventDetailsContent eventDetails={eventDetails} />
             </div>
 
             <div className="lg:col-span-1">
@@ -43,7 +48,7 @@ export default async function EventDetailsPage({ params }: { params: any }) {
           </div>
 
           <div className="mt-16">
-            <EventReviews />
+            <EventReviews eventReviews={eventDetails} />
           </div>
 
           <div className="mt-16">
