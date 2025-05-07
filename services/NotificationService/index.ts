@@ -7,7 +7,7 @@ import app_axios from "@/lib/axios";
 export const getAllNotification = async () => {
     try {
         const res = await app_axios.get(`notifications/all-notification`);
-        console.log("notification", res);
+        // console.log("notification", res);
 
         return res.data;
     } catch (error: any) {
