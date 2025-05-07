@@ -11,22 +11,24 @@ import { getAllEvents } from "@/services/EventServices";
 import { loadSearchParams } from "../search-params";
 import type { SearchParams } from "nuqs/server";
 import { revalidateTag } from "next/cache";
+import { NotFoundData } from "@/components/modules/Shared/NotFoundData/NotFoundData";
 
 type PageProps = {
   searchParams: Promise<SearchParams>;
 };
 
 export default async function EventsPage({ searchParams }: PageProps) {
-  const { searchTerm, isPaid, price } = await loadSearchParams(searchParams);
+  const { searchTerm, isPaid, price, category } = await loadSearchParams(
+    searchParams
+  );
 
-  const events = await getAllEvents({ searchTerm, isPaid, price });
+  const events = await getAllEvents({ searchTerm, isPaid, price, category });
 
   async function refetchEvents() {
     "use server";
 
     revalidateTag("events");
   }
-
 
   return (
     <div>
@@ -36,8 +38,14 @@ export default async function EventsPage({ searchParams }: PageProps) {
           title="Discover Events"
           description="Find and join amazing events happening around you"
         />
+
         <EventsFilter refetchEvents={refetchEvents} />
-        <EventsGrid eventsData={events?.data} />
+
+        {!events || !events?.data || events?.data?.length === 0 ? (
+          <NotFoundData />
+        ) : (
+          <EventsGrid eventsData={events?.data} />
+        )}
       </div>
       <EventCategories />
       <UpcomingEvents />
