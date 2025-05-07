@@ -9,15 +9,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-const chartData = [
-  { month: "January", event: 186 },
-  { month: "February", event: 305},
-  { month: "March", event: 237},
-  { month: "April", event: 73},
-  { month: "May", event: 209},
-  { month: "June", event: 214},
-]
-
 const chartConfig = {
   event: {
     label: "Events Created",
@@ -25,10 +16,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function DashboardCategoryChart() {
+export function DashboardCategoryChart({data}:any) {
+
+  console.log(data)
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-      <BarChart accessibilityLayer data={chartData}>
+      <BarChart accessibilityLayer data={data}>
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="month"
