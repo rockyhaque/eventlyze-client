@@ -2,13 +2,15 @@
 
 import Link from "next/link"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
+import { toast } from "sonner"
+import { getAllNotification } from "@/services/NotificationService"
 
 type Notification = {
   id: string
@@ -69,14 +71,50 @@ const notifications: Notification[] = [
 ]
 
 export function NotificationsPopover() {
-  const [open, setOpen] = useState(false)
-  const [notifs, setNotifs] = useState(notifications)
+  const [open, setOpen] = useState(false);
+  const [notifs, setNotifs] = useState(notifications);
+  const [notificationss, setNotifications] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  console.log(notificationss);
+
 
   const unreadCount = notifs.filter((n) => !n.read).length
+
 
   const markAllAsRead = () => {
     setNotifs(notifs.map((n) => ({ ...n, read: true })))
   }
+
+  useEffect(() => {
+    const getNotificationData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const data = await getAllNotification();
+
+        if (data instanceof Error) {
+          setError(data.message);
+        } else {
+          setNotifications(data);
+          console.log("Notification data", data);
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setError("Failed to fetch notifications");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getNotificationData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

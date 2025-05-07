@@ -6,8 +6,11 @@ import { DashboardEvents } from "@/components/dashboard-events"
 import Link from "next/link"
 import { getAllEvents } from "@/services/EventServices"
 
+
 export default async function EventsPage() {
   const { data } = await getAllEvents()
+  
+  
   return (
     <div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
