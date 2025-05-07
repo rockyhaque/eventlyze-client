@@ -18,11 +18,16 @@ type PageProps = {
 };
 
 export default async function EventsPage({ searchParams }: PageProps) {
-  const { searchTerm, isPaid, price, category } = await loadSearchParams(
-    searchParams
-  );
+  const { searchTerm, isPaid, sortBy, sortOrder, category } =
+    await loadSearchParams(searchParams);
 
-  const events = await getAllEvents({ searchTerm, isPaid, price, category });
+  const events = await getAllEvents({
+    searchTerm,
+    isPaid,
+    sortBy,
+    sortOrder,
+    category,
+  });
 
   async function refetchEvents() {
     "use server";

@@ -26,17 +26,24 @@ import PaymentDialog from "./PaymentDialog";
 import RequestDialog from "./RequestDialog";
 import { formatDateTime } from "./modules/Shared/DateTimeFormat/formatDateTime";
 import { joinFreeEvent } from "@/services/Participant";
+import { toast } from "sonner";
 
 export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
   const [showRequestDialog, setShowRequestDialog] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
 
   const handleJoinFreeEvent = async (id: string) => {
+    const JoinedEventId = {
+      eventId: id,
+    };
 
-    console.log({id},"from button")
-    const res = await joinFreeEvent(id);
+    const res = await joinFreeEvent(JoinedEventId);
 
-    console.log(res)
+    if (res.success) {
+      toast.success(res.message);
+    } else {
+      toast.error(res.message);
+    }
   };
 
   const getActionButton = () => {
@@ -57,7 +64,11 @@ export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
       );
     } else {
       return (
-        <Button size="lg" className="w-full" onClick={()=>handleJoinFreeEvent(eventDetails?.id)}>
+        <Button
+          size="lg"
+          className="w-full"
+          onClick={() => handleJoinFreeEvent(eventDetails?.id)}
+        >
           Join Event
         </Button>
       );
@@ -119,7 +130,7 @@ export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
             </span>
           </div>
 
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="tickets">Number of Tickets</Label>
             <Select defaultValue="1">
               <SelectTrigger id="tickets">
@@ -133,7 +144,7 @@ export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
         </CardContent>
         <CardFooter className="flex flex-col">
           {getActionButton()}

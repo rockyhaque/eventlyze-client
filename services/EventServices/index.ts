@@ -21,14 +21,16 @@ export const createEvent = async (eventData: FieldValues) => {
 interface IGetEventParams {
   searchTerm?: string;
   isPaid?: string;
-  price?: string;
+  sortBy?: string;
+  sortOrder?: string;
   category?: string;
 }
 
 export const getAllEvents = async ({
   searchTerm,
   isPaid,
-  price,
+  sortBy,
+  sortOrder,
   category
 }: IGetEventParams = {}) => {
   try {
@@ -36,7 +38,10 @@ export const getAllEvents = async ({
 
     if (searchTerm) params.append("searchTerm", searchTerm);
     if (isPaid) params.append("isPaid", isPaid);
-    if (price) params.append("price", price);
+
+    if (sortBy) params.append("sortBy", sortBy);
+    if (sortOrder) params.append("sortOrder", sortOrder);
+
     if (category) params.append("category", category);
 
     const res = await app_axios.get(`/event/all-events?${params.toString()}`);

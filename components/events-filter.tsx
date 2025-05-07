@@ -19,10 +19,11 @@ interface IEventsFilterParams {
 export function EventsFilter({ refetchEvents }: IEventsFilterParams) {
   const [search, setSearch] = useQueryState("searchTerm", { defaultValue: "" });
   const [isPaid, setIsPaid] = useQueryState("isPaid", { defaultValue: "" });
-  const [price, setPrice] = useQueryState("price", { defaultValue: "" });
+  const [sortBy, setSortBy] = useQueryState("sortBy", { defaultValue: "" });
+  const [sortOrder, setSortOrder] = useQueryState("sortOrder", {
+    defaultValue: "",
+  });
 
-  
-  
   const handleSearch = (value: string) => {
     setSearch(value);
     setTimeout(() => {
@@ -37,10 +38,11 @@ export function EventsFilter({ refetchEvents }: IEventsFilterParams) {
     }, 100);
   };
 
-  const handlePriceSort = (value: string) => {
-    setPrice(value);
+  const handleSortChange = (sortField: string, order: string) => {
+    setSortBy(sortField);
+    setSortOrder(order);
     setTimeout(() => {
-      refetchEvents();
+      refetchEvents(); // or refetch from useQuery
     }, 100);
   };
 
@@ -68,13 +70,31 @@ export function EventsFilter({ refetchEvents }: IEventsFilterParams) {
             </SelectContent>
           </Select>
 
-          <Select value={price} onValueChange={(val) => handlePriceSort(val)}>
+          {/* <Select value={sortOrder} onValueChange={(val) => handlePriceSort(val)}>
             <SelectTrigger className="w-[160px]">
               <SelectValue placeholder="Sort by Price" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="asc">Price (Low to High)</SelectItem>
               <SelectItem value="desc">Price (High to Low)</SelectItem>
+            </SelectContent>
+          </Select> */}
+
+          <Select
+            onValueChange={(val) => {
+              const [field, order] = val.split(":");
+              handleSortChange(field, order);
+            }}
+            value={`${sortBy}:${sortOrder}`}
+          >
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Sort events" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="price:asc">Price (Low to High)</SelectItem>
+              <SelectItem value="price:desc">Price (High to Low)</SelectItem>
+              <SelectItem value="seat:asc">Seat (Low to High)</SelectItem>
+              <SelectItem value="seat:desc">Seat (High to High)</SelectItem>
             </SelectContent>
           </Select>
         </div>

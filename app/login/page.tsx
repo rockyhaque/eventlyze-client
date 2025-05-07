@@ -26,6 +26,10 @@ export default function LoginPage() {
   const router = useRouter()
   const form = useForm({
     resolver: zodResolver(loginSchema),
+    defaultValues:{
+      email: "ran@gmail.com",
+      password: "000000",
+    }
   });
   const {
     formState: { isSubmitting },
