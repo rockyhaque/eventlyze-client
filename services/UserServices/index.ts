@@ -23,6 +23,28 @@ export const getSingleUser = async (email:string) => {
   }
 };
 
+// export const myProfile = async () => {
+//   try {
+//     const token = Cookies.get("accessToken");
+
+//     // If no token is found, you can handle it by throwing an error or returning an error message
+//     if (!token) {
+//       throw new Error("No access token found");
+//     }
+
+//     const response = await app_axios.get("/user/me", {
+//       headers: {
+//         Authorization: token,
+//       },
+//     });
+
+//     return response.data;
+//   } catch (error: any) {
+//     console.log("error while fetching user", error);
+//     const message = error?.response?.data?.message || "Something went wrong!";
+//     return new Error(message);
+//   }
+// };
 
 
 export const updatedUser = async (data:any) => {
