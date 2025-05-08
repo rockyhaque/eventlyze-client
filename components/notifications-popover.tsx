@@ -2,81 +2,154 @@
 
 import Link from "next/link"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
+import { toast } from "sonner"
+import { getAllNotification } from "@/services/NotificationService"
+import Cookies from "js-cookie";
+import { getActiveUser } from "@/hooks/getActiveUser"
+
 
 type Notification = {
   id: string
-  title: string
-  description: string
-  time: string
+  userId: string
+  eventId: string
+  message: string
   read: boolean
+  readUser: boolean
+  createdAt: string
+  updatedAt: string
   avatar?: string
   avatarFallback: string
 }
 
-const notifications: Notification[] = [
-  {
-    id: "1",
-    title: "New Event Invitation",
-    description: "Sarah invited you to 'Tech Conference 2023'",
-    time: "Just now",
-    read: false,
-    avatar: "/placeholder.svg?height=32&width=32&text=SJ",
-    avatarFallback: "SJ",
-  },
-  {
-    id: "2",
-    title: "Event Reminder",
-    description: "Your event 'Team Meetup' starts in 2 hours",
-    time: "2 hours ago",
-    read: false,
-    avatar: "/placeholder.svg?height=32&width=32&text=EM",
-    avatarFallback: "EM",
-  },
-  {
-    id: "3",
-    title: "New Message",
-    description: "Michael sent you a message about the workshop",
-    time: "Yesterday",
-    read: true,
-    avatar: "/placeholder.svg?height=32&width=32&text=MS",
-    avatarFallback: "MS",
-  },
-  {
-    id: "4",
-    title: "Event Update",
-    description: "The venue for 'Design Workshop' has changed",
-    time: "2 days ago",
-    read: true,
-    avatar: "/placeholder.svg?height=32&width=32&text=DW",
-    avatarFallback: "DW",
-  },
-  {
-    id: "5",
-    title: "New Review",
-    description: "Someone left a 5-star review on your event",
-    time: "3 days ago",
-    read: true,
-    avatar: "/placeholder.svg?height=32&width=32&text=RV",
-    avatarFallback: "RV",
-  },
-]
+interface NotificationResponse {
+  data: {
+    totalUnReadNotification: number;
+    allNotifications: any
+  };
+}
+
 
 export function NotificationsPopover() {
-  const [open, setOpen] = useState(false)
-  const [notifs, setNotifs] = useState(notifications)
+  const [open, setOpen] = useState(false);
 
-  const unreadCount = notifs.filter((n) => !n.read).length
+  const [notifs, setNotifs] = useState<NotificationResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // const [user, setUser] = useState(null);
+
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     try {
+  //       const { role } = await getActiveUser();
+  //       console.log("role", role);
+
+  //       setUser(role || null);
+  //     } catch (err) {
+  //       console.error("Fetch error:", err);
+  //       setUser(null);
+  //     }
+  //   };
+
+  //   getUserData();
+  // }, []);
+
+  // console.log("Current user", user);
+
+
+  // console.log("main notification",notifs);
+  // console.log("ss", notificationss);
+
+
+  const unreadCount = notifs?.data?.totalUnReadNotification as number
+  const notifsdata = notifs?.data?.allNotifications
+  const notifsLength = notifs?.data?.allNotifications.length
+
+  // const markAllAsRead = () => {
+  //   setNotifs(notifs.data?.allNotifications.map((n: any) => ({ ...n, readUser: true })))
+  // }
 
   const markAllAsRead = () => {
-    setNotifs(notifs.map((n) => ({ ...n, read: true })))
+    if (!notifs) return; // Handle null case
+
+    setNotifs({
+      ...notifs,
+      data: {
+        ...notifs.data,
+        allNotifications: notifs.data.allNotifications.map((n: Notification) => ({ ...n, readUser: true }))
+      }
+    });
   }
+
+  // notification data fatching Function
+  useEffect(() => {
+    const getNotificationData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const data = await getAllNotification();
+
+        if (data instanceof Error) {
+          setError(data.message);
+        } else {
+          // setNotifications(data);
+          setNotifs(data);
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setError("Failed to fetch notifications");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getNotificationData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+
+  // date Formating
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInMilliseconds = now.getTime() - date.getTime();
+
+    const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    if (diffInDays > 7) {
+      return date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } else if (diffInDays > 0) {
+
+      return `${diffInDays}d ago`;
+    } else if (diffInHours > 0) {
+
+      return `${diffInHours}h ago`;
+    } else if (diffInMinutes > 0) {
+
+      return `${diffInMinutes}m ago`;
+    } else {
+
+      return 'Just now';
+    }
+  };
+
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -99,15 +172,16 @@ export function NotificationsPopover() {
             </Button>
           )}
         </div>
+
         <ScrollArea className="h-80">
           <div className="flex flex-col">
-            {notifs.length > 0 ? (
-              notifs.map((notification) => (
+            {notifsLength > 0 ? (
+              notifsdata.map((notification: Notification) => (
                 <div
                   key={notification.id}
                   className={cn(
                     "flex items-start gap-3 border-b p-3 transition-colors hover:bg-muted/50",
-                    !notification.read && "bg-muted/30",
+                    !notification.readUser && "bg-muted/30",
                   )}
                 >
                   <Avatar className="h-8 w-8">
@@ -115,13 +189,12 @@ export function NotificationsPopover() {
                     <AvatarFallback>{notification.avatarFallback}</AvatarFallback>
                   </Avatar>
                   <div className="flex-1 space-y-1">
-                    <p className={cn("text-sm font-medium", !notification.read && "font-semibold")}>
-                      {notification.title}
+                    <p className={cn("text-sm font-medium", !notification.readUser && "font-semibold")}>
+                      {notification?.message}
                     </p>
-                    <p className="text-xs text-muted-foreground">{notification.description}</p>
-                    <p className="text-xs text-muted-foreground">{notification.time}</p>
+                    <p className="text-xs text-muted-foreground">{formatDate(notification?.createdAt)}</p>
                   </div>
-                  {!notification.read && <div className="h-2 w-2 rounded-full bg-primary"></div>}
+                  {!notification.readUser && <div className="h-2 w-2 rounded-full bg-primary"></div>}
                 </div>
               ))
             ) : (
@@ -129,6 +202,7 @@ export function NotificationsPopover() {
             )}
           </div>
         </ScrollArea>
+
         <div className="border-t p-2">
           <Button variant="ghost" size="sm" className="w-full justify-center text-xs" asChild>
             <Link href="/dashboard/notifications">View all notifications</Link>
