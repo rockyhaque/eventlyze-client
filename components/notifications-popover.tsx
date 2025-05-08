@@ -9,10 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
-import { toast } from "sonner"
 import { getAllNotification } from "@/services/NotificationService"
-import Cookies from "js-cookie";
-import { getActiveUser } from "@/hooks/getActiveUser"
 import { getActiveUserClient } from "@/hooks/getActiveUserClient"
 
 
@@ -56,7 +53,6 @@ export function NotificationsPopover() {
     getUserData();
   }, []);
 
-  console.log("Current user", user);
 
   const [notifs, setNotifs] = useState<NotificationResponse | null>(null);
   const [loading, setLoading] = useState(false);

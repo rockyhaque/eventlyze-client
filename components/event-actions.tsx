@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { getCountdownTime } from "./modules/Shared/DateTimeFormat/getCountdownTime";
 import { TActiveUser } from "@/types/userTypes";
 import { formatDate } from "./modules/Shared/DateTimeFormat/formatDate";
+import InvitationForm from "./modules/Invaitation/InvitationForm";
 
 type EventReviewsProps = {
   eventDetails: TEvent;
@@ -30,8 +31,6 @@ type EventReviewsProps = {
 };
 
 export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
-  const [showRequestDialog, setShowRequestDialog] = useState(false);
-  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const participantUser = eventDetails?.participant?.some(
     (p) => p.userId === activeUser?.userId
   );
@@ -45,9 +44,9 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
   });
   const [isRunning, setIsRunning] = useState(true);
 
+  const isOwner = eventDetails?.ownerId === activeUser?.userId
 
-  const [rating, setRating] = useState(0);
-  const [hoveredRating, setHoveredRating] = useState(0);
+
 
   // const participantUser = eventReviews?.participant?.some(
   //   (p) => p.userId === userId && p.status === "JOINED"
@@ -104,6 +103,14 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
   };
 
   const getActionButton = () => {
+
+
+    if (isOwner) {
+      return (
+        <InvitationForm eventId={eventDetails?.id} />
+      );
+    }
+
     if (!isRunning) {
       return (
         <Button size="lg" className="w-full" disabled>

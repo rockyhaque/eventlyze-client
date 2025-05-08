@@ -8,20 +8,15 @@ import { getSingleEvent } from "@/services/EventServices";
 import { EventDetailsHero } from "@/components/event-details-hero";
 import { getActiveUser } from "@/hooks/getActiveUser";
 
-
-
-
 export default async function EventDetailsPage({ params }: { params: any }) {
   const eventId = (await params).id;
 
   const res = await getSingleEvent(eventId as string);
   const eventDetails = res.data;
 
-    const activeUser = await getActiveUser()
+  const activeUser = await getActiveUser();
 
-  
-    console.log(eventDetails)
-
+  console.log(eventDetails);
 
   return (
     <div className="relative min-h-screen">
@@ -42,19 +37,31 @@ export default async function EventDetailsPage({ params }: { params: any }) {
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div className="lg:col-span-2">
-              <EventDetailsContent eventDetails={eventDetails} />
+              {activeUser && (
+                <EventDetailsContent activeUser={activeUser} eventDetails={eventDetails} />
+              )}
             </div>
 
             <div className="lg:col-span-1">
               <div className="space-y-8">
-                <EventActions activeUser={activeUser} eventDetails={eventDetails} />
+                {activeUser && (
+                  <EventActions
+                    activeUser={activeUser}
+                    eventDetails={eventDetails}
+                  />
+                )}
                 <EventAttendees eventDetails={eventDetails} />
               </div>
             </div>
           </div>
 
           <div className="mt-16">
-            <EventReviews activeUser={activeUser} eventReviews={eventDetails} />
+            {activeUser && (
+              <EventReviews
+                activeUser={activeUser}
+                eventReviews={eventDetails}
+              />
+            )}
           </div>
 
           <div className="mt-16">

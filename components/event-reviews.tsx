@@ -138,7 +138,7 @@ export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      {/* <div className="font-medium">{review.user.name}</div> */}
+                      <div className="font-medium">{review.user.name}</div>
                       <div className="text-xs text-muted-foreground">
                         {formatDate(review.createdAt)}:{" "}
                         {formatDate(review.createdAt, "h:mm A")}
