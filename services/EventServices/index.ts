@@ -31,7 +31,7 @@ export const getAllEvents = async ({
   isPaid,
   sortBy,
   sortOrder,
-  category
+  category,
 }: IGetEventParams = {}) => {
   try {
     const params = new URLSearchParams();
@@ -46,8 +46,7 @@ export const getAllEvents = async ({
 
     const res = await app_axios.get(`/event/all-events?${params.toString()}`);
 
-    console.log(res.data)
-
+    console.log(res.data);
 
     return res.data;
   } catch (error: any) {

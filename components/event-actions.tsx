@@ -21,8 +21,14 @@ import { createPayment, joinFreeEvent } from "@/services/Participant";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { getCountdownTime } from "./modules/Shared/DateTimeFormat/getCountdownTime";
+import { TActiveUser } from "@/types/userTypes";
 
-export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
+type EventReviewsProps = {
+  eventDetails: TEvent;
+  activeUser: TActiveUser;
+};
+
+export function EventActions({ eventDetails, activeUser }: EventReviewsProps)  {
   const [showRequestDialog, setShowRequestDialog] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
 
@@ -33,11 +39,25 @@ export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
     seconds: 0,
   });
    const [isRunning, setIsRunning] = useState(true);
+
+   const { userId } = activeUser;
+
+  const [rating, setRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState(0);
+
+  // const participantUser = eventReviews?.participant?.some(
+  //   (p) => p.userId === userId && p.status === "JOINED"
+  // );
+
+  const participantUser = eventDetails?.participant?.some(
+    (p) => p.userId === userId
+  );
+
   
     useEffect(() => {
       const interval = setInterval(() => {
         const { days, hours, minutes, seconds, isExpired } =
-          getCountdownTime(eventDetails?.registrationStart);
+          getCountdownTime(eventDetails?.registrationEnd);
   
         setTimeLeft({ days, hours, minutes, seconds });
         if (isExpired) {
@@ -79,8 +99,9 @@ export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
       toast.error(res.message);
     }
 
-    console.log(res);
   };
+
+
 
   const getActionButton = () => {
 
@@ -88,6 +109,14 @@ export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
       return (
         <Button size="lg" className="w-full" disabled>
           Event Ended
+        </Button>
+      );
+    }
+
+    if (participantUser) {
+      return (
+        <Button size="lg" className="w-full" disabled>
+          Already Joined
         </Button>
       );
     }
