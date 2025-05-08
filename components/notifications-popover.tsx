@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 import { getAllNotification } from "@/services/NotificationService"
+import Cookies from "js-cookie";
 
 type Notification = {
   id: string
@@ -25,64 +26,67 @@ type Notification = {
   avatarFallback: string
 }
 
-const notifications: Notification[] = [
-  {
-    id: "1",
-    title: "New Event Invitation",
-    description: "Sarah invited you to 'Tech Conference 2023'",
-    time: "Just now",
-    read: false,
-    avatar: "/placeholder.svg?height=32&width=32&text=SJ",
-    avatarFallback: "SJ",
-  },
-  {
-    id: "2",
-    title: "Event Reminder",
-    description: "Your event 'Team Meetup' starts in 2 hours",
-    time: "2 hours ago",
-    read: false,
-    avatar: "/placeholder.svg?height=32&width=32&text=EM",
-    avatarFallback: "EM",
-  },
-  {
-    id: "3",
-    title: "New Message",
-    description: "Michael sent you a message about the workshop",
-    time: "Yesterday",
-    read: true,
-    avatar: "/placeholder.svg?height=32&width=32&text=MS",
-    avatarFallback: "MS",
-  },
-  {
-    id: "4",
-    title: "Event Update",
-    description: "The venue for 'Design Workshop' has changed",
-    time: "2 days ago",
-    read: true,
-    avatar: "/placeholder.svg?height=32&width=32&text=DW",
-    avatarFallback: "DW",
-  },
-  {
-    id: "5",
-    title: "New Review",
-    description: "Someone left a 5-star review on your event",
-    time: "3 days ago",
-    read: true,
-    avatar: "/placeholder.svg?height=32&width=32&text=RV",
-    avatarFallback: "RV",
-  },
-]
+// const notifications: Notification[] = [
+//   {
+//     id: "1",
+//     title: "New Event Invitation",
+//     description: "Sarah invited you to 'Tech Conference 2023'",
+//     time: "Just now",
+//     read: false,
+//     avatar: "/placeholder.svg?height=32&width=32&text=SJ",
+//     avatarFallback: "SJ",
+//   },
+//   {
+//     id: "2",
+//     title: "Event Reminder",
+//     description: "Your event 'Team Meetup' starts in 2 hours",
+//     time: "2 hours ago",
+//     read: false,
+//     avatar: "/placeholder.svg?height=32&width=32&text=EM",
+//     avatarFallback: "EM",
+//   },
+//   {
+//     id: "3",
+//     title: "New Message",
+//     description: "Michael sent you a message about the workshop",
+//     time: "Yesterday",
+//     read: true,
+//     avatar: "/placeholder.svg?height=32&width=32&text=MS",
+//     avatarFallback: "MS",
+//   },
+//   {
+//     id: "4",
+//     title: "Event Update",
+//     description: "The venue for 'Design Workshop' has changed",
+//     time: "2 days ago",
+//     read: true,
+//     avatar: "/placeholder.svg?height=32&width=32&text=DW",
+//     avatarFallback: "DW",
+//   },
+//   {
+//     id: "5",
+//     title: "New Review",
+//     description: "Someone left a 5-star review on your event",
+//     time: "3 days ago",
+//     read: true,
+//     avatar: "/placeholder.svg?height=32&width=32&text=RV",
+//     avatarFallback: "RV",
+//   },
+// ]
 
 export function NotificationsPopover() {
   const [open, setOpen] = useState(false);
+
   // const [notifs, setNotifs] = useState(notifications);
   // const [notificationss, setNotifications] = useState<any[]>([]);
   const [notifs, setNotifs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // console.log(notifs);
-  
+  // console.log("main notification",notifs);
+  // console.log("ss", notificationss);
+
+
 
   // console.log(notificationss?.data?.totalUnReadNotification);
 
@@ -95,16 +99,20 @@ export function NotificationsPopover() {
   // console.log(notifs?.data?.allNotifications);
 
   const notifsdata = notifs?.data?.allNotifications
+  const notifsLength = notifs?.data?.allNotifications.length
+  // console.log(notifsLength);
 
-  console.log("al noti", notifsdata);
-  
-  
-  
+
+  // console.log("al noti", notifsdata);
+
+
+
 
 
   const markAllAsRead = () => {
-    setNotifs(notifs.map((n: any) => ({ ...n, read: true })))
+    setNotifs(notifs.data?.allNotifications.map((n: any) => ({ ...n, read: true })))
   }
+
 
   useEffect(() => {
     const getNotificationData = async () => {
@@ -156,15 +164,16 @@ export function NotificationsPopover() {
             </Button>
           )}
         </div>
+
         <ScrollArea className="h-80">
           <div className="flex flex-col">
-            {notifsdata.length > 0 ? (
+            {notifsLength > 0 ? (
               notifsdata.map((notification: Notification) => (
                 <div
                   key={notification.id}
                   className={cn(
                     "flex items-start gap-3 border-b p-3 transition-colors hover:bg-muted/50",
-                    !notification.read && "bg-muted/30",
+                    !notification.readUser && "bg-muted/30",
                   )}
                 >
                   <Avatar className="h-8 w-8">
@@ -172,14 +181,14 @@ export function NotificationsPopover() {
                     <AvatarFallback>{notification.avatarFallback}</AvatarFallback>
                   </Avatar>
                   <div className="flex-1 space-y-1">
-                    <p className={cn("text-sm font-medium", !notification.read && "font-semibold")}>
+                    <p className={cn("text-sm font-medium", !notification.readUser && "font-semibold")}>
                       {notification?.message}
                     </p>
                     {/* <p className="text-xs text-muted-foreground">{notification.description}</p> */}
                     {/* <p className="text-xs text-muted-foreground">{notification?.message}</p> */}
                     <p className="text-xs text-muted-foreground">{notification.createdAt}</p>
                   </div>
-                  {!notification.read && <div className="h-2 w-2 rounded-full bg-primary"></div>}
+                  {!notification.readUser && <div className="h-2 w-2 rounded-full bg-primary"></div>}
                 </div>
               ))
             ) : (
@@ -187,6 +196,7 @@ export function NotificationsPopover() {
             )}
           </div>
         </ScrollArea>
+
         <div className="border-t p-2">
           <Button variant="ghost" size="sm" className="w-full justify-center text-xs" asChild>
             <Link href="/dashboard/notifications">View all notifications</Link>
@@ -194,5 +204,6 @@ export function NotificationsPopover() {
         </div>
       </PopoverContent>
     </Popover>
+    // <div>aa</div>
   )
 }
