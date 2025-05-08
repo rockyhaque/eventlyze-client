@@ -33,17 +33,14 @@ export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
 
-  // const participantUser = eventReviews?.participant?.some(
-  //   (p) => p.userId === userId && p.status === "JOINED"
-  // );
-
   const participantUser = eventReviews?.participant?.some(
-    (p) => p.userId === userId
+    (p) => p.userId === userId && p.status === "JOINED"
   );
 
-  console.log(userId);
+  // const participantUser = eventReviews?.participant?.some(
+  //   (p) => p.userId === userId
+  // );
 
-  console.log(participantUser);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {

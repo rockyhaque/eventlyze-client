@@ -9,7 +9,7 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex flex-row">
-      <div className="sidebar w-full border max-w-[300px]">
+      <div className="sidebar w-full border max-w-[300px] border-b-0">
         <DashboardSidebar />
       </div>
       <main className="flex w-full flex-col overflow-hidden p-6">{children}</main>

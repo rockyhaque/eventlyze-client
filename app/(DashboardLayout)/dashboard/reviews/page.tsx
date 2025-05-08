@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/page-header"
 import { ReviewsList } from "@/components/reviews-list"
-import { getAllReviews } from "@/services/Reviews"
+import { getAllReviews } from "@/services/DashboardService"
 
 export default async function ReviewsPage() {
   const reviewData = await getAllReviews()
