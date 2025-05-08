@@ -12,6 +12,7 @@ export const getActiveUser = async () => {
           userId: user?.id,
           role: user?.role,
           status: user?.status,
+          contactNumber: user?.contactNumber
         };
     
         return userData;

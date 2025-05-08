@@ -23,10 +23,6 @@ export const getSingleUser = async (email:string) => {
   }
 };
 
-
-
-
-
 export const updatedUser = async (data:any) => {
     try {
         const response = await app_axios.patch("/user/update-my-profile", data);
@@ -36,19 +32,7 @@ export const updatedUser = async (data:any) => {
         const message = error?.response?.data?.message || "Something went wrong updating user!";
         return new Error(message);
     }
-
-export const getSingleUser = async (email:string) => {
-  try {
-    const response = await app_axios.get("/user/all-users");
-    return response.data;
-  } catch (error: any) {
-    console.log("error while fetching user", error);
-    const message = error?.response?.data?.message || "Something went wrong!";
-    return new Error(message);
-  }
-};
-
-
+}
 
 
 export const updatedUserStatus = async (id: string, data: any) => {
