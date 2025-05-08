@@ -33,55 +33,14 @@ export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
 
-  // const participantUser = eventReviews?.participant?.some(
-  //   (p) => p.userId === userId && p.status === "JOINED"
-  // );
-
   const participantUser = eventReviews?.participant?.some(
-    (p) => p.userId === userId
+    (p) => p.userId === userId && p.status === "JOINED"
   );
 
-  console.log(userId);
-
-  console.log(participantUser);
-
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    try {
-      const reviewData = {
-        eventId: eventReviews.id,
-        content: data.content,
-        rating: rating,
-      };
-
-      const result = await createReview(reviewData);
-
-      if (result?.success) {
-        toast.success(result.message || "Review created successfully!");
-        form.reset();
-      }
-    } catch (error: any) {
-      toast.error(error.message || "Review created failed!");
-    }
-  };
-export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
-  const form = useForm();
-
-  const { userId } = activeUser;
-
-  const [rating, setRating] = useState(0);
-  const [hoveredRating, setHoveredRating] = useState(0);
-
   // const participantUser = eventReviews?.participant?.some(
-  //   (p) => p.userId === userId && p.status === "JOINED"
+  //   (p) => p.userId === userId
   // );
 
-  const participantUser = eventReviews?.participant?.some(
-    (p) => p.userId === userId
-  );
-
-  console.log(userId);
-
-  console.log(participantUser);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
@@ -104,38 +63,38 @@ export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
 
   return (
     <div className="mt-12 space-y-6">
-      <h2 className="font-display text-2xl font-bold">Reviews & Ratings</h2>
+      {participantUser && (
+        <div className="space-y-6">
+          <h2 className="font-display text-2xl font-bold">Reviews & Ratings</h2>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="rounded-xl border p-6">
+                <h3 className="mb-4 font-medium">Write a Review</h3>
 
-      <div className="space-y-6">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="rounded-xl border p-6">
-              <h3 className="mb-4 font-medium">Write a Review</h3>
-
-              <div className="mb-4 flex items-center">
-                <div className="mr-2 text-sm font-medium">Your Rating:</div>
-                <div className="flex">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      className="p-1"
-                      onMouseEnter={() => setHoveredRating(star)}
-                      onMouseLeave={() => setHoveredRating(0)}
-                      onClick={() => setRating(star)}
-                    >
-                      <Star
-                        className={cn(
-                          "h-5 w-5",
-                          (hoveredRating || rating) >= star
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-muted-foreground"
-                        )}
-                      />
-                    </button>
-                  ))}
+                <div className="mb-4 flex items-center">
+                  <div className="mr-2 text-sm font-medium">Your Rating:</div>
+                  <div className="flex">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        className="p-1"
+                        onMouseEnter={() => setHoveredRating(star)}
+                        onMouseLeave={() => setHoveredRating(0)}
+                        onClick={() => setRating(star)}
+                      >
+                        <Star
+                          className={cn(
+                            "h-5 w-5",
+                            (hoveredRating || rating) >= star
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "text-muted-foreground"
+                          )}
+                        />
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
                 {/* <Textarea
             placeholder="Share your experience with this event..."
@@ -149,39 +108,15 @@ export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
                   required
                 />
 
-              <Button className="my-3" type="submit">Submit Review</Button>
-            </div>
-          </form>
-        </Form>
+                <Button className="my-3" type="submit">
+                  Submit Review
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </div>
+      )}
 
-      <div className="space-y-6">
-        {eventReviews?.review &&
-          eventReviews?.review?.map((review: TReview) => (
-            <>
-              <h2 className="font-display text-2xl font-bold">
-                Reviews & Ratings
-              </h2>
-
-              <div key={review.id} className="rounded-xl border p-6">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Avatar>
-                      <AvatarImage
-                        src={review.user.photo}
-                        alt={review.user.name}
-                      />
-                      <AvatarFallback>
-                        {review.user.name.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      {/* <div className="font-medium">{review.user.name}</div> */}
-                      <div className="text-xs text-muted-foreground">
-                        {formatDate(review.createdAt)}:{" "}
-                        {formatDate(review.createdAt, "h:mm A")}
-                      </div>
-                    </div>
-                  </div>
       <div className="space-y-6">
         {eventReviews?.review &&
           eventReviews?.review?.map((review: TReview) => (
@@ -225,20 +160,6 @@ export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
                         />
                       ))}
                     </div>
-                  <div className="flex items-center">
-                    <div className="flex">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={cn(
-                            "h-4 w-4",
-                            i < review.rating
-                              ? "fill-yellow-400 text-yellow-400"
-                              : "text-muted-foreground"
-                          )}
-                        />
-                      ))}
-                    </div>
 
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -260,28 +181,7 @@ export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
                     </DropdownMenu>
                   </div>
                 </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="ml-2 h-8 w-8"
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">More options</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem className="flex items-center gap-2">
-                          <Flag className="h-4 w-4" />
-                          <span>Report Review</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </div>
 
-                <p className="mb-4 text-muted-foreground">{review.content}</p>
                 <p className="mb-4 text-muted-foreground">{review.content}</p>
 
                 {/* <Button
@@ -294,9 +194,9 @@ export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
             <span>{review.likes} found this helpful</span>
           </Button> */}
               </div>
-            ))}
-        </div>
+            </>
+          ))}
       </div>
     </div>
-  )
+  );
 }
