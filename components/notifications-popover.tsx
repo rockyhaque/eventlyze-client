@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 import { getAllNotification } from "@/services/NotificationService"
 import Cookies from "js-cookie";
+import { getActiveUser } from "@/hooks/getActiveUser"
+
 
 type Notification = {
   id: string
@@ -33,89 +35,42 @@ interface NotificationResponse {
   };
 }
 
-// const notifications: Notification[] = [
-//   {
-//     id: "1",
-//     title: "New Event Invitation",
-//     description: "Sarah invited you to 'Tech Conference 2023'",
-//     time: "Just now",
-//     read: false,
-//     avatar: "/placeholder.svg?height=32&width=32&text=SJ",
-//     avatarFallback: "SJ",
-//   },
-//   {
-//     id: "2",
-//     title: "Event Reminder",
-//     description: "Your event 'Team Meetup' starts in 2 hours",
-//     time: "2 hours ago",
-//     read: false,
-//     avatar: "/placeholder.svg?height=32&width=32&text=EM",
-//     avatarFallback: "EM",
-//   },
-//   {
-//     id: "3",
-//     title: "New Message",
-//     description: "Michael sent you a message about the workshop",
-//     time: "Yesterday",
-//     read: true,
-//     avatar: "/placeholder.svg?height=32&width=32&text=MS",
-//     avatarFallback: "MS",
-//   },
-//   {
-//     id: "4",
-//     title: "Event Update",
-//     description: "The venue for 'Design Workshop' has changed",
-//     time: "2 days ago",
-//     read: true,
-//     avatar: "/placeholder.svg?height=32&width=32&text=DW",
-//     avatarFallback: "DW",
-//   },
-//   {
-//     id: "5",
-//     title: "New Review",
-//     description: "Someone left a 5-star review on your event",
-//     time: "3 days ago",
-//     read: true,
-//     avatar: "/placeholder.svg?height=32&width=32&text=RV",
-//     avatarFallback: "RV",
-//   },
-// ]
 
 export function NotificationsPopover() {
   const [open, setOpen] = useState(false);
 
-  // const [notifs, setNotifs] = useState(notifications);
-  // const [notificationss, setNotifications] = useState<any[]>([]);
-  // const [notifs, setNotifs] = useState<any[]>([]);
   const [notifs, setNotifs] = useState<NotificationResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // const [user, setUser] = useState(null);
+
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     try {
+  //       const { role } = await getActiveUser();
+  //       console.log("role", role);
+
+  //       setUser(role || null);
+  //     } catch (err) {
+  //       console.error("Fetch error:", err);
+  //       setUser(null);
+  //     }
+  //   };
+
+  //   getUserData();
+  // }, []);
+
+  // console.log("Current user", user);
+
 
   // console.log("main notification",notifs);
   // console.log("ss", notificationss);
 
 
-
-  // console.log(notificationss?.data?.totalUnReadNotification);
-
-
-  // const unreadCount = notifs.filter((n) => !n.read).length
-  // const unreadCount = notificationss?.data?.totalUnReadNotification
   const unreadCount = notifs?.data?.totalUnReadNotification as number
-  // console.log("count notifffff",unreadCount);
-
-  // console.log(notifs?.data?.allNotifications);
-
   const notifsdata = notifs?.data?.allNotifications
   const notifsLength = notifs?.data?.allNotifications.length
-  // console.log(notifsLength);
-
-
-  // console.log("al noti", notifsdata);
-
-
-
-
 
   // const markAllAsRead = () => {
   //   setNotifs(notifs.data?.allNotifications.map((n: any) => ({ ...n, readUser: true })))
@@ -133,7 +88,7 @@ export function NotificationsPopover() {
     });
   }
 
-  // data fatchung Function
+  // notification data fatching Function
   useEffect(() => {
     const getNotificationData = async () => {
       setLoading(true);
@@ -196,7 +151,6 @@ export function NotificationsPopover() {
   };
 
 
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -238,8 +192,6 @@ export function NotificationsPopover() {
                     <p className={cn("text-sm font-medium", !notification.readUser && "font-semibold")}>
                       {notification?.message}
                     </p>
-                    {/* <p className="text-xs text-muted-foreground">{notification.description}</p> */}
-                    {/* <p className="text-xs text-muted-foreground">{notification?.message}</p> */}
                     <p className="text-xs text-muted-foreground">{formatDate(notification?.createdAt)}</p>
                   </div>
                   {!notification.readUser && <div className="h-2 w-2 rounded-full bg-primary"></div>}
@@ -258,6 +210,5 @@ export function NotificationsPopover() {
         </div>
       </PopoverContent>
     </Popover>
-    // <div>aa</div>
   )
 }

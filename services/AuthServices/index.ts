@@ -3,6 +3,7 @@
 import app_axios from "@/lib/axios";
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
+import { jwtDecode } from "jwt-decode";
 
 
 export const signUpUser = async (userData: FieldValues) => {
@@ -36,3 +37,4 @@ export const signInUser = async (userData: FieldValues) => {
     return new Error(message);
   }
 };
+
