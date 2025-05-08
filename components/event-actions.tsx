@@ -28,7 +28,7 @@ type EventReviewsProps = {
   activeUser: TActiveUser;
 };
 
-export function EventActions({ eventDetails, activeUser }: EventReviewsProps)  {
+export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
   const [showRequestDialog, setShowRequestDialog] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
 
@@ -38,9 +38,9 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps)  {
     minutes: 0,
     seconds: 0,
   });
-   const [isRunning, setIsRunning] = useState(true);
+  const [isRunning, setIsRunning] = useState(true);
 
-   const { userId } = activeUser;
+  const { userId } = activeUser;
 
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
@@ -53,21 +53,21 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps)  {
     (p) => p.userId === userId
   );
 
-  
-    useEffect(() => {
-      const interval = setInterval(() => {
-        const { days, hours, minutes, seconds, isExpired } =
-          getCountdownTime(eventDetails?.registrationEnd);
-  
-        setTimeLeft({ days, hours, minutes, seconds });
-        if (isExpired) {
-          setIsRunning(false);
-          clearInterval(interval);
-        }
-      }, 1000);
-  
-      return () => clearInterval(interval);
-    }, [eventDetails?.registrationStart]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const { days, hours, minutes, seconds, isExpired } = getCountdownTime(
+        eventDetails?.registrationEnd
+      );
+
+      setTimeLeft({ days, hours, minutes, seconds });
+      if (isExpired) {
+        setIsRunning(false);
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [eventDetails?.registrationStart]);
 
   const router = useRouter();
 
@@ -98,13 +98,9 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps)  {
     } else {
       toast.error(res.message);
     }
-
   };
 
-
-
   const getActionButton = () => {
-
     if (!isRunning) {
       return (
         <Button size="lg" className="w-full" disabled>
@@ -136,16 +132,22 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps)  {
           Pay & Join
         </Button>
       );
-    }
-    // else if (!eventDetails?.isPublic) {
-    //   return (
-    //     <RequestDialog
-    //       open={showRequestDialog}
-    //       onOpenChange={setShowRequestDialog}
-    //     />
-    //   );
-    // }
-    else {
+    } else if (!eventDetails?.isPublic) {
+      return (
+        // <RequestDialog
+        //   open={showRequestDialog}
+        //   onOpenChange={setShowRequestDialog}
+        // />
+
+        <Button
+        size="lg"
+        className="w-full"
+        onClick={() => handleJoinFreeEvent(eventDetails?.id)}
+      >
+        Request for join
+      </Button>
+      );
+    } else {
       return (
         <Button
           size="lg"
