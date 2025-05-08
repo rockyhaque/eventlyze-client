@@ -115,9 +115,7 @@ export function Navigation() {
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard">Dashboard</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard/profile">Profile</Link>
-                  </DropdownMenuItem>
+          
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/settings">Settings</Link>
                   </DropdownMenuItem>
@@ -199,13 +197,7 @@ export function Navigation() {
                 >
                   Dashboard
                 </Link>
-                <Link
-                  href="/dashboard/profile"
-                  className="flex h-12 items-center text-lg font-medium"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Profile
-                </Link>
+              
                 <Link
                   href="/dashboard/settings"
                   className="flex h-12 items-center text-lg font-medium"

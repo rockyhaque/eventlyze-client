@@ -1,5 +1,4 @@
 "use client"
-import React, { useState } from 'react'
 import {
     Select,
     SelectContent,
@@ -24,6 +23,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useState } from "react"
 const UpdateUserForm = ({user}:any) => {
     const { uploadImagesToCloudinary, isUploading } = useImageUploader()
     const [selectedImage, setSelectedImage] = useState<File | null>(null)
@@ -52,20 +52,20 @@ const UpdateUserForm = ({user}:any) => {
     if (selectedImage) {
       uploadedPhotoUrl = await uploadImagesToCloudinary(selectedImage, false)
     }
-
+    const userImage = user?.photo || uploadedPhotoUrl
     const finalData = {
       ...data,
-      photo: uploadedPhotoUrl,
+      photo: userImage,
     }
 
     console.log("User Info:", finalData)
 
-    // const response = await updatedUser()
-    // if(response.success){
-    //   toast.success("Profile Updated Successfully!")
-    // }else{
-    //   toast.error("Profile Updated Failed!")
-    // }
+    const response = await updatedUser(finalData)
+    if(response.success){
+      toast.success("Profile Updated Successfully!")
+    }else{
+      toast.error("Profile Updated Failed!")
+    }
 
   }
   return (
