@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Users, DollarSign, Clock, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,25 +12,64 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { TEvent } from "@/types/eventTypes";
 
-import PaymentDialog from "./PaymentDialog";
 import RequestDialog from "./RequestDialog";
 import { formatDateTime } from "./modules/Shared/DateTimeFormat/formatDateTime";
-import { joinFreeEvent } from "@/services/Participant";
+import { createPayment, joinFreeEvent } from "@/services/Participant";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { getCountdownTime } from "./modules/Shared/DateTimeFormat/getCountdownTime";
+import { TActiveUser } from "@/types/userTypes";
 
-export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
+type EventReviewsProps = {
+  eventDetails: TEvent;
+  activeUser: TActiveUser;
+};
+
+export function EventActions({ eventDetails, activeUser }: EventReviewsProps)  {
   const [showRequestDialog, setShowRequestDialog] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+   const [isRunning, setIsRunning] = useState(true);
+
+   const { userId } = activeUser;
+
+  const [rating, setRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState(0);
+
+  // const participantUser = eventReviews?.participant?.some(
+  //   (p) => p.userId === userId && p.status === "JOINED"
+  // );
+
+  const participantUser = eventDetails?.participant?.some(
+    (p) => p.userId === userId
+  );
+
+  
+    useEffect(() => {
+      const interval = setInterval(() => {
+        const { days, hours, minutes, seconds, isExpired } =
+          getCountdownTime(eventDetails?.registrationEnd);
+  
+        setTimeLeft({ days, hours, minutes, seconds });
+        if (isExpired) {
+          setIsRunning(false);
+          clearInterval(interval);
+        }
+      }, 1000);
+  
+      return () => clearInterval(interval);
+    }, [eventDetails?.registrationStart]);
+
+  const router = useRouter();
 
   const handleJoinFreeEvent = async (id: string) => {
     const JoinedEventId = {
@@ -46,23 +85,67 @@ export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
     }
   };
 
+  const handlePayment = async (id: string) => {
+    const JoinedEventId = {
+      eventId: id,
+    };
+
+    const res = await createPayment(JoinedEventId);
+
+    if (res.success) {
+      toast.success(res.message);
+      router.push(res?.data?.paymentUrl);
+    } else {
+      toast.error(res.message);
+    }
+
+  };
+
+
+
   const getActionButton = () => {
+
+    if (!isRunning) {
+      return (
+        <Button size="lg" className="w-full" disabled>
+          Event Ended
+        </Button>
+      );
+    }
+
+    if (participantUser) {
+      return (
+        <Button size="lg" className="w-full" disabled>
+          Already Joined
+        </Button>
+      );
+    }
+
     if (eventDetails?.isPaid) {
       return (
-        <PaymentDialog
-          open={showPaymentDialog}
-          onOpenChange={setShowPaymentDialog}
-          price={Number(eventDetails?.price)}
-        />
+        // <PaymentDialog
+        //   open={showPaymentDialog}
+        //   onOpenChange={setShowPaymentDialog}
+        //   price={Number(eventDetails?.price)}
+        // />
+        <Button
+          onClick={() => handlePayment(eventDetails?.id)}
+          size="lg"
+          className="w-full"
+        >
+          Pay & Join
+        </Button>
       );
-    } else if (!eventDetails?.isPublic) {
-      return (
-        <RequestDialog
-          open={showRequestDialog}
-          onOpenChange={setShowRequestDialog}
-        />
-      );
-    } else {
+    }
+    // else if (!eventDetails?.isPublic) {
+    //   return (
+    //     <RequestDialog
+    //       open={showRequestDialog}
+    //       onOpenChange={setShowRequestDialog}
+    //     />
+    //   );
+    // }
+    else {
       return (
         <Button
           size="lg"

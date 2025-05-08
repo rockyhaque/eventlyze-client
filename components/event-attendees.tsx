@@ -1,14 +1,15 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Users, Search, Filter } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Users, Search, Filter } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
+import { TEvent } from "@/types/eventTypes";
 
 // Sample attendees data
 const attendees = Array.from({ length: 20 }).map((_, i) => ({
@@ -61,29 +62,36 @@ const attendees = Array.from({ length: 20 }).map((_, i) => ({
     "VentureStart",
   ][i % 10],
   isConnected: i % 5 === 0,
-}))
+}));
 
-export function EventAttendees() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [showFilters, setShowFilters] = useState(false)
-  const [selectedRoles, setSelectedRoles] = useState<string[]>([])
+type EventDetailsProps = {
+  eventDetails: TEvent;
+};
 
-  const roles = [...new Set(attendees.map((a) => a.role))]
+export function EventAttendees({ eventDetails }: EventDetailsProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+
+  const roles = [...new Set(attendees.map((a) => a.role))];
 
   const toggleRole = (role: string) => {
-    setSelectedRoles((prev) => (prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]))
-  }
+    setSelectedRoles((prev) =>
+      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]
+    );
+  };
 
   const filteredAttendees = attendees.filter((attendee) => {
     const matchesSearch =
       attendee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       attendee.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      attendee.role.toLowerCase().includes(searchQuery.toLowerCase())
+      attendee.role.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesRole = selectedRoles.length === 0 || selectedRoles.includes(attendee.role)
+    const matchesRole =
+      selectedRoles.length === 0 || selectedRoles.includes(attendee.role);
 
-    return matchesSearch && matchesRole
-  })
+    return matchesSearch && matchesRole;
+  });
 
   return (
     <motion.div
@@ -97,15 +105,15 @@ export function EventAttendees() {
           <Users className="h-5 w-5 text-primary" />
           <h2 className="font-display text-lg font-bold">Attendees</h2>
           <Badge variant="outline" className="ml-2">
-            {attendees.length}
+            {eventDetails?.participant?.length}
           </Badge>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setShowFilters(!showFilters)}>
+        {/* <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setShowFilters(!showFilters)}>
           <Filter className={cn("h-4 w-4", showFilters && "text-primary")} />
-        </Button>
+        </Button> */}
       </div>
 
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -115,9 +123,9 @@ export function EventAttendees() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-      </div>
+      </div> */}
 
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {showFilters && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
@@ -132,7 +140,9 @@ export function EventAttendees() {
                 {roles.map((role) => (
                   <Badge
                     key={role}
-                    variant={selectedRoles.includes(role) ? "default" : "outline"}
+                    variant={
+                      selectedRoles.includes(role) ? "default" : "outline"
+                    }
                     className="cursor-pointer"
                     onClick={() => toggleRole(role)}
                   >
@@ -143,12 +153,12 @@ export function EventAttendees() {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       <ScrollArea className="h-[300px] pr-4">
         <div className="space-y-3">
-          {filteredAttendees.length > 0 ? (
-            filteredAttendees.map((attendee, index) => (
+          {eventDetails?.participant?.length > 0 ? (
+            eventDetails?.participant.map((attendee, index) => (
               <motion.div
                 key={attendee.id}
                 className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted"
@@ -159,18 +169,25 @@ export function EventAttendees() {
               >
                 <div className="flex items-center gap-3">
                   <Avatar>
-                    <AvatarImage src={attendee.image || "/placeholder.svg"} alt={attendee.name} />
-                    <AvatarFallback>{attendee.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage
+                      // src={attendee.image || "/placeholder.svg"}
+                      alt="attendee"
+                    />
+                    <AvatarFallback>{attendee.status.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="font-medium">{attendee.name}</div>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="font-medium">Mamun</div>
+                    {/* <div className="text-xs text-muted-foreground">
                       {attendee.role} at {attendee.company}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
-                <Button variant={attendee.isConnected ? "default" : "outline"} size="sm" className="h-8 text-xs">
-                  {attendee.isConnected ? "Connected" : "Connect"}
+                <Button
+                  variant={attendee.status === "JOINED" ? "default" : "outline"}
+                  size="sm"
+                  className="h-8 text-xs cursor-default"
+                >
+                  {attendee.status === "JOINED" ? "Connected" : "Connect"}
                 </Button>
               </motion.div>
             ))
@@ -178,12 +195,11 @@ export function EventAttendees() {
             <div className="flex h-[200px] items-center justify-center text-center text-muted-foreground">
               <div>
                 <p>No attendees found</p>
-                <p className="text-sm">Try adjusting your filters</p>
               </div>
             </div>
           )}
         </div>
       </ScrollArea>
     </motion.div>
-  )
+  );
 }

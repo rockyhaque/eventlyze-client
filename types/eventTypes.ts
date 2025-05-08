@@ -13,6 +13,11 @@ export type TReview = {
   userId: string;
   content: string;
   rating: number;
+  user: {
+    email: string;
+    name: string;
+    photo: string;
+  };
   createdAt: string;
   updatedAt: string;
 };
@@ -58,5 +63,5 @@ export type TMeta = {
 
 export type TEventResponse = {
   data: TEvent[];
-  meta?:TMeta
+  meta?: TMeta;
 };

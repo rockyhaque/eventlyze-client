@@ -47,7 +47,7 @@ const userImages: UserImage[] = [
 
 export function HeroSection({ data }: any) {
   const events = data?.data?.data;
-  console.log(events);
+  // console.log(events);
   const [featuredEvent, setFeaturedEvent] = useState<Event | null>(null);
   useEffect(() => {
     // Select a random event from the events array
