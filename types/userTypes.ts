@@ -1,6 +1,8 @@
-export type TUser = {
-    email: string;
-    role: string;
-    iat: number;
-    exp: number;
-  };
+export type TActiveUser = {
+  name: string;
+  email: string;
+  userId: string;
+  photo?: string | null;
+  role: string;
+  status: string;
+};
