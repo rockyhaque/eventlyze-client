@@ -6,6 +6,10 @@ import { EventCountdown } from "@/components/event-countdown";
 import { EventAttendees } from "@/components/event-attendees";
 import { getSingleEvent } from "@/services/EventServices";
 import { EventDetailsHero } from "@/components/event-details-hero";
+import { getActiveUser } from "@/hooks/getActiveUser";
+
+
+
 
 export default async function EventDetailsPage({ params }: { params: any }) {
   const eventId = (await params).id;
@@ -13,9 +17,11 @@ export default async function EventDetailsPage({ params }: { params: any }) {
   const res = await getSingleEvent(eventId as string);
   const eventDetails = res.data;
 
-  
+    const activeUser = await getActiveUser()
 
-  console.log(eventDetails);
+  
+    console.log(eventDetails)
+
 
   return (
     <div className="relative min-h-screen">
@@ -41,14 +47,14 @@ export default async function EventDetailsPage({ params }: { params: any }) {
 
             <div className="lg:col-span-1">
               <div className="space-y-8">
-                <EventActions eventDetails={eventDetails} />
-                <EventAttendees />
+                <EventActions activeUser={activeUser} eventDetails={eventDetails} />
+                <EventAttendees eventDetails={eventDetails} />
               </div>
             </div>
           </div>
 
           <div className="mt-16">
-            <EventReviews eventReviews={eventDetails} />
+            <EventReviews activeUser={activeUser} eventReviews={eventDetails} />
           </div>
 
           <div className="mt-16">
