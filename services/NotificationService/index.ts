@@ -2,7 +2,6 @@
 
 import app_axios from "@/lib/axios";
 import { cookies } from "next/headers";
-import { jwtDecode } from "jwt-decode";
 import { revalidateTag } from "next/cache";
 
 
@@ -35,7 +34,6 @@ export const updateAllNotification = async (): Promise<any> => {
                 tags: ["Notification"],
                 revalidate: 10,
             },
-            // body: JSON.stringify(),
         });
         revalidateTag("Notification");
         return res.json();
@@ -59,7 +57,6 @@ export const updateSingleNotification = async (id: string): Promise<any> => {
                 tags: ["Notification"],
                 revalidate: 10,
             },
-            // body: JSON.stringify(),
         });
         console.log(res);
 

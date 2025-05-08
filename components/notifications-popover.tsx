@@ -1,7 +1,7 @@
+
 "use client"
 
 import Link from "next/link"
-
 import { useEffect, useState } from "react"
 import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -11,10 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 import { getAllNotification, updateAllNotification, updateSingleNotification } from "@/services/NotificationService"
-import Cookies from "js-cookie";
-import { getActiveUser } from "@/hooks/getActiveUser"
 import { getActiveUserClient } from "@/hooks/getActiveUserClient"
-
 
 type Notification = {
   id: string
@@ -31,23 +28,23 @@ type Notification = {
 
 interface NotificationResponse {
   data: {
-    totalUnReadNotification: number;
-    allNotifications: any
-  };
+    totalUnReadNotification: number
+    allNotifications: Notification[]
+  }
 }
 
-
 export function NotificationsPopover() {
-  const [open, setOpen] = useState(false);
-  const [user, setUser] = useState<any>();
-  const [notifs, setNotifs] = useState<NotificationResponse | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false)
+  const [user, setUser] = useState<any>()
+  const [notifs, setNotifs] = useState<NotificationResponse | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [showAll, setShowAll] = useState(false)
 
-
-  const unreadCount = notifs?.data?.totalUnReadNotification as number
-  const notifsdata = notifs?.data?.allNotifications
-  const notifsLength = notifs?.data?.allNotifications.length
+  const unreadCount = notifs?.data?.totalUnReadNotification || 0
+  const allNotifs = notifs?.data?.allNotifications || []
+  const displayedNotifs = showAll ? allNotifs : allNotifs.slice(0, 5)
+  const hasMore = allNotifs.length > 5
 
   // Current user data get
   useEffect(() => {
@@ -56,116 +53,93 @@ export function NotificationsPopover() {
         const user = await getActiveUserClient()
         setUser(user)
       } catch (err) {
-        console.error("Fetch error:", err);
-        setUser(null);
+        console.error("Fetch error:", err)
+        setUser(null)
       }
-    };
+    }
 
-    getUserData();
-  }, []);
-
-  // console.log("Current user", user?.role);
-
+    getUserData()
+  }, [])
 
   // All Notification Update
   const markAllAsReadUser = async () => {
     try {
-      const result = await updateAllNotification();
-      console.log(result);
-
+      const result = await updateAllNotification()
       result?.success
         ? toast.success(result.message)
-        : toast.error(result?.message);
-
-      console.log("Notification error", result?.message)
+        : toast.error(result?.message)
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error.message)
     }
-
   }
 
 
   // Single Notification Update
   const handleUpdateSingleNotification = async (id: string) => {
-
-    // console.log(id);
-
     try {
-      const result = await updateSingleNotification(id);
-
+      const result = await updateSingleNotification(id)
       result?.success
         ? toast.success(result.message)
-        : toast.error(result?.message);
-
-      console.log("Notification error", result?.message)
+        : toast.error(result?.message)
     } catch (error: any) {
-      toast.error(error.message);
-    }
+      toast.error(error.message)
+    } 
   }
 
-
-  // notification data fatching Function
+  // notification data fetching Function
   useEffect(() => {
     const getNotificationData = async () => {
-      setLoading(true);
-      setError(null);
+      setLoading(true)
+      setError(null)
 
       try {
-        const data = await getAllNotification();
-
+        const data = await getAllNotification()
         if (data instanceof Error) {
-          setError(data.message);
+          setError(data.message)
         } else {
-          // setNotifications(data);
-          setNotifs(data);
+          setNotifs(data)
         }
       } catch (err) {
-        console.error("Fetch error:", err);
-        setError("Failed to fetch notifications");
+        console.error("Fetch error:", err)
+        setError("Failed to fetch notifications")
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    getNotificationData();
-  }, []);
+    getNotificationData()
+  }, [])
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-
-  // date Formating
+  // date Formatting
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInMilliseconds = now.getTime() - date.getTime();
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInMilliseconds = now.getTime() - date.getTime()
 
-    const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    const diffInDays = Math.floor(diffInHours / 24);
+    const diffInSeconds = Math.floor(diffInMilliseconds / 1000)
+    const diffInMinutes = Math.floor(diffInSeconds / 60)
+    const diffInHours = Math.floor(diffInMinutes / 60)
+    const diffInDays = Math.floor(diffInHours / 24)
 
     if (diffInDays > 7) {
       return date.toLocaleDateString('en-GB', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
-      });
+      })
     } else if (diffInDays > 0) {
-
-      return `${diffInDays}d ago`;
+      return `${diffInDays}d ago`
     } else if (diffInHours > 0) {
-
-      return `${diffInHours}h ago`;
+      return `${diffInHours}h ago`
     } else if (diffInMinutes > 0) {
-
-      return `${diffInMinutes}m ago`;
+      return `${diffInMinutes}m ago`
     } else {
-
-      return 'Just now';
+      return 'Just now'
     }
-  };
+  }
 
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error}</div>
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -191,8 +165,8 @@ export function NotificationsPopover() {
 
         <ScrollArea className="h-80">
           <div className="flex flex-col">
-            {notifsLength > 0 ? (
-              notifsdata.map((notification: Notification) => (
+            {displayedNotifs.length > 0 ? (
+              displayedNotifs.map((notification) => (
                 <div
                   key={notification.id}
                   className={cn(
@@ -240,12 +214,19 @@ export function NotificationsPopover() {
           </div>
         </ScrollArea>
 
-        <div className="border-t p-2">
-          <Button variant="ghost" size="sm" className="w-full justify-center text-xs" asChild>
-            <Link href="/dashboard/notifications">View all notifications</Link>
-          </Button>
-        </div>
+        {!showAll && hasMore && (
+          <div className="border-t p-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-full justify-center text-xs"
+              onClick={() => setShowAll(true)}
+            >
+              View all notifications
+            </Button>
+          </div>
+        )}
       </PopoverContent>
-    </Popover >
+    </Popover>
   )
 }
