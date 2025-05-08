@@ -1,23 +1,17 @@
 "use client";
 
-import { JSX, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   MapPin,
   Clock,
   ChevronDown,
   ChevronUp,
-  Globe,
-  Utensils,
-  Wifi,
-  Accessibility,
-  Car,
   Tag,
   DollarSign,
   CircleCheck,
   Rows3,
   Users,
-  MessageSquare,
   Calendar,
   ArrowRight,
 } from "lucide-react";
@@ -26,16 +20,23 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TEvent } from "@/types/eventTypes";
 import moment from "moment";
-import { Card, CardContent } from "./ui/card";
+import { CardContent } from "./ui/card";
 import { Progress } from "./ui/progress";
 import { formatDate } from "./modules/Shared/DateTimeFormat/formatDate";
+import { TActiveUser } from "@/types/userTypes";
 
 export function EventDetailsContent({
   eventDetails,
+  activeUser,
 }: {
   eventDetails: TEvent;
+  activeUser: TActiveUser;
 }) {
   const [showFullDescription, setShowFullDescription] = useState(false);
+
+  
+
+
   const truncatedDescription = eventDetails?.description?.slice(0, 300) + "...";
 
   const isRegistrationOpen = moment().isBetween(
@@ -253,9 +254,7 @@ export function EventDetailsContent({
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">From</p>
                       <p className="font-medium">
-                      {
-                        formatDate(eventDetails?.registrationEnd)
-                      }
+                        {formatDate(eventDetails?.registrationEnd)}
                       </p>
                     </div>
 
@@ -264,9 +263,7 @@ export function EventDetailsContent({
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">To</p>
                       <p className="font-medium">
-                      {
-                        formatDate(eventDetails?.registrationEnd)
-                      }
+                        {formatDate(eventDetails?.registrationEnd)}
                       </p>
                     </div>
 
