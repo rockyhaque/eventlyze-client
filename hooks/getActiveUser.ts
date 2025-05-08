@@ -4,6 +4,7 @@ export const getActiveUser = async () => {
     try {
       const res = await app_axios.get(`/user/me`);
       const user = res.data.data;
+      
   
       const userData = {
         name: user.name,

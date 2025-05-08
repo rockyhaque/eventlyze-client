@@ -9,7 +9,6 @@ import { jwtDecode } from "jwt-decode";
 export const getAllNotification = async () => {
     try {
         const res = await app_axios.get(`notifications/all-notification`);
-        // console.log("notification", res);
 
         return res.data;
     } catch (error: any) {
@@ -21,17 +20,3 @@ export const getAllNotification = async () => {
     }
 };
 
-
-
-// Get Current User
-// export const getCurrentUser = async () => {
-//     const accessToken = (await cookies()).get("accessToken")?.value;
-//     let decodedData = null;
-
-//     if (accessToken) {
-//         decodedData = await jwtDecode(accessToken);
-//         return decodedData;
-//     } else {
-//         return null;
-//     }
-// };

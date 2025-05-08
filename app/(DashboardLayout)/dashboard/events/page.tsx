@@ -5,6 +5,7 @@ import { Calendar, Filter, Grid, List, Plus } from "lucide-react"
 import { DashboardEvents } from "@/components/dashboard-events"
 import Link from "next/link"
 import { getAllEvents } from "@/services/EventServices"
+import { getActiveUser } from "@/hooks/getActiveUser"
 
 
 export default async function EventsPage() {
