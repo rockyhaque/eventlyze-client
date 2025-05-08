@@ -26,6 +26,13 @@ type Notification = {
   avatarFallback: string
 }
 
+interface NotificationResponse {
+  data: {
+    totalUnReadNotification: number;
+    allNotifications: any
+  };
+}
+
 // const notifications: Notification[] = [
 //   {
 //     id: "1",
@@ -79,7 +86,8 @@ export function NotificationsPopover() {
 
   // const [notifs, setNotifs] = useState(notifications);
   // const [notificationss, setNotifications] = useState<any[]>([]);
-  const [notifs, setNotifs] = useState<any[]>([]);
+  // const [notifs, setNotifs] = useState<any[]>([]);
+  const [notifs, setNotifs] = useState<NotificationResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -93,7 +101,7 @@ export function NotificationsPopover() {
 
   // const unreadCount = notifs.filter((n) => !n.read).length
   // const unreadCount = notificationss?.data?.totalUnReadNotification
-  const unreadCount = notifs?.data?.totalUnReadNotification
+  const unreadCount = notifs?.data?.totalUnReadNotification as number
   // console.log("count notifffff",unreadCount);
 
   // console.log(notifs?.data?.allNotifications);
@@ -109,11 +117,23 @@ export function NotificationsPopover() {
 
 
 
+  // const markAllAsRead = () => {
+  //   setNotifs(notifs.data?.allNotifications.map((n: any) => ({ ...n, readUser: true })))
+  // }
+
   const markAllAsRead = () => {
-    setNotifs(notifs.data?.allNotifications.map((n: any) => ({ ...n, read: true })))
+    if (!notifs) return; // Handle null case
+
+    setNotifs({
+      ...notifs,
+      data: {
+        ...notifs.data,
+        allNotifications: notifs.data.allNotifications.map((n: Notification) => ({ ...n, readUser: true }))
+      }
+    });
   }
 
-
+  // data fatchung Function
   useEffect(() => {
     const getNotificationData = async () => {
       setLoading(true);
@@ -141,6 +161,40 @@ export function NotificationsPopover() {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+
+
+  // date Formating
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInMilliseconds = now.getTime() - date.getTime();
+
+    const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    if (diffInDays > 7) {
+      return date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } else if (diffInDays > 0) {
+
+      return `${diffInDays}d ago`;
+    } else if (diffInHours > 0) {
+
+      return `${diffInHours}h ago`;
+    } else if (diffInMinutes > 0) {
+
+      return `${diffInMinutes}m ago`;
+    } else {
+
+      return 'Just now';
+    }
+  };
+
 
 
   return (
@@ -186,7 +240,7 @@ export function NotificationsPopover() {
                     </p>
                     {/* <p className="text-xs text-muted-foreground">{notification.description}</p> */}
                     {/* <p className="text-xs text-muted-foreground">{notification?.message}</p> */}
-                    <p className="text-xs text-muted-foreground">{notification.createdAt}</p>
+                    <p className="text-xs text-muted-foreground">{formatDate(notification?.createdAt)}</p>
                   </div>
                   {!notification.readUser && <div className="h-2 w-2 rounded-full bg-primary"></div>}
                 </div>

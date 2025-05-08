@@ -1,6 +1,8 @@
 "use server"
 
 import app_axios from "@/lib/axios";
+import { cookies } from "next/headers";
+import { jwtDecode } from "jwt-decode";
 
 
 // Get all Notification
@@ -18,3 +20,18 @@ export const getAllNotification = async () => {
         return new Error(message);
     }
 };
+
+
+
+// Get Current User
+// export const getCurrentUser = async () => {
+//     const accessToken = (await cookies()).get("accessToken")?.value;
+//     let decodedData = null;
+
+//     if (accessToken) {
+//         decodedData = await jwtDecode(accessToken);
+//         return decodedData;
+//     } else {
+//         return null;
+//     }
+// };
