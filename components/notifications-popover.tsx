@@ -13,6 +13,7 @@ import { toast } from "sonner"
 import { getAllNotification } from "@/services/NotificationService"
 import Cookies from "js-cookie";
 import { getActiveUser } from "@/hooks/getActiveUser"
+import { getActiveUserClient } from "@/hooks/getActiveUserClient"
 
 
 type Notification = {
@@ -38,6 +39,24 @@ interface NotificationResponse {
 
 export function NotificationsPopover() {
   const [open, setOpen] = useState(false);
+  const [user, setUser]=useState<any>()
+
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const user = await getActiveUserClient()
+        setUser(user)
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setUser(null);
+      }
+    };
+
+    getUserData();
+  }, []);
+
+  console.log("Current user", user);
 
   const [notifs, setNotifs] = useState<NotificationResponse | null>(null);
   const [loading, setLoading] = useState(false);
