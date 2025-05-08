@@ -12,26 +12,43 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { toast } from 'sonner'
+import { changePassword } from '@/services/AuthServices'
 const UpdatePasswordForm = () => {
-   const {
-      register: registerPassword,
-      handleSubmit: handleSubmitPassword,
-    } = useForm({
-      defaultValues: {
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      },
-    })
-  
-  
-    const onPasswordSubmit = (data: any) => {
-      console.log("Password Info:", data)
+  const {
+    register: registerPassword,
+    handleSubmit: handleSubmitPassword,
+  } = useForm({
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+  })
+
+
+  const onPasswordSubmit =async (data: any) => {
+    console.log("Password Info:", data)
+    const finalData = {
+      "oldPassword": data.currentPassword,
+      "newPassword": data.newPassword
     }
-  
+
+    if (!data.confirmPassword == data.newPassword) {
+      toast.error("Confirm Password is not matching!!")
+    }
+
+    const response = await changePassword(finalData)
+    if (response.success) {
+      toast.success("Password Updated Successfully!")
+    } else {
+      toast.error("Password Updated Failed!")
+    }
+  }
+
   return (
     <div>
-     
+
       {/* Password Form */}
       <form onSubmit={handleSubmitPassword(onPasswordSubmit)}>
         <Card>
