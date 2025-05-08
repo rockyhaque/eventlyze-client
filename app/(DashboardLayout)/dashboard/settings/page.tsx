@@ -1,5 +1,5 @@
 import { PageHeader } from "@/components/page-header"
-import UpdateUserForm from "@/components/update-user-form copy";
+import UpdateUserForm from "@/components/update-user-form";
 import { getActiveUser } from "@/hooks/getActiveUser"
 
 export default async function  SettingsPage() {
