@@ -60,21 +60,13 @@ const UpdateUserForm = ({user}:any) => {
 
     console.log("User Info:", finalData)
 
-<<<<<<< HEAD
-    // const response = await updatedUser(finalData)
-    // if(response.success){
-    //   toast.success("Profile Updated Successfully!")
-    // }else{
-    //   toast.error("Profile Updated Failed!")
-    // }
-=======
     const response = await updatedUser()
     if(response.success){
       toast.success("Profile Updated Successfully!")
     }else{
       toast.error("Profile Updated Failed!")
     }
->>>>>>> 3b88569 (wip: updated profile)
+
   }
   return (
     <div>
