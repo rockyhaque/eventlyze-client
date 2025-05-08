@@ -39,6 +39,14 @@ export type TEvent = {
   status: "UPCOMING" | "ONGOING" | "COMPLETED";
   seat: number;
   ownerId: string;
+
+  owner:{
+    name:string,
+    email:string,
+    photo:string | null,
+  },
+
+
   inviteId: string | null;
   paymentId: string | null;
   reviewId: string | null;
