@@ -10,7 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
-import { getAllNotification } from "@/services/NotificationService"
+import { getAllNotification, updateAllNotification } from "@/services/NotificationService"
 import Cookies from "js-cookie";
 import { getActiveUser } from "@/hooks/getActiveUser"
 import { getActiveUserClient } from "@/hooks/getActiveUserClient"
@@ -39,9 +39,17 @@ interface NotificationResponse {
 
 export function NotificationsPopover() {
   const [open, setOpen] = useState(false);
-  const [user, setUser]=useState<any>()
+  const [user, setUser] = useState<any>();
+  const [notifs, setNotifs] = useState<NotificationResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
 
+  const unreadCount = notifs?.data?.totalUnReadNotification as number
+  const notifsdata = notifs?.data?.allNotifications
+  const notifsLength = notifs?.data?.allNotifications.length
+
+  // Current user data get
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -56,56 +64,26 @@ export function NotificationsPopover() {
     getUserData();
   }, []);
 
-  console.log("Current user", user);
-
-  const [notifs, setNotifs] = useState<NotificationResponse | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // const [user, setUser] = useState(null);
-
-  // useEffect(() => {
-  //   const getUserData = async () => {
-  //     try {
-  //       const { role } = await getActiveUser();
-  //       console.log("role", role);
-
-  //       setUser(role || null);
-  //     } catch (err) {
-  //       console.error("Fetch error:", err);
-  //       setUser(null);
-  //     }
-  //   };
-
-  //   getUserData();
-  // }, []);
-
-  // console.log("Current user", user);
+  console.log("Current user", user?.role);
 
 
-  // console.log("main notification",notifs);
-  // console.log("ss", notificationss);
 
+  const markAllAsReadUser = async () => {
+    try {
+      const result = await updateAllNotification();
+      console.log(result);
 
-  const unreadCount = notifs?.data?.totalUnReadNotification as number
-  const notifsdata = notifs?.data?.allNotifications
-  const notifsLength = notifs?.data?.allNotifications.length
+      result?.success
+        ? toast.success(result.message)
+        : toast.error(result?.message);
 
-  // const markAllAsRead = () => {
-  //   setNotifs(notifs.data?.allNotifications.map((n: any) => ({ ...n, readUser: true })))
-  // }
+      console.log("formData error", result?.message)
+    } catch (error: any) {
+      toast.error(error.message);
+    }
 
-  const markAllAsRead = () => {
-    if (!notifs) return; // Handle null case
-
-    setNotifs({
-      ...notifs,
-      data: {
-        ...notifs.data,
-        allNotifications: notifs.data.allNotifications.map((n: Notification) => ({ ...n, readUser: true }))
-      }
-    });
   }
+
 
   // notification data fatching Function
   useEffect(() => {
@@ -186,40 +164,77 @@ export function NotificationsPopover() {
         <div className="flex items-center justify-between border-b p-3">
           <h3 className="font-medium">Notifications</h3>
           {unreadCount > 0 && (
-            <Button variant="ghost" size="sm" onClick={markAllAsRead} className="h-auto text-xs">
+            <Button variant="ghost" size="sm" onClick={markAllAsReadUser} className="h-auto text-xs">
               Mark all as read
             </Button>
           )}
         </div>
 
         <ScrollArea className="h-80">
-          <div className="flex flex-col">
-            {notifsLength > 0 ? (
-              notifsdata.map((notification: Notification) => (
-                <div
-                  key={notification.id}
-                  className={cn(
-                    "flex items-start gap-3 border-b p-3 transition-colors hover:bg-muted/50",
-                    !notification.readUser && "bg-muted/30",
-                  )}
-                >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={notification.avatar || "/placeholder.svg"} alt="" />
-                    <AvatarFallback>{notification.avatarFallback}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 space-y-1">
-                    <p className={cn("text-sm font-medium", !notification.readUser && "font-semibold")}>
-                      {notification?.message}
-                    </p>
-                    <p className="text-xs text-muted-foreground">{formatDate(notification?.createdAt)}</p>
-                  </div>
-                  {!notification.readUser && <div className="h-2 w-2 rounded-full bg-primary"></div>}
-                </div>
-              ))
+          {
+            user?.role === "ADMIN" || "SUPER_ADMIN" ? (
+              <div className="flex flex-col">
+                {notifsLength > 0 ? (
+                  notifsdata.map((notification: Notification) => (
+                    <div
+                      key={notification.id}
+                      className={cn(
+                        "flex items-start gap-3 border-b p-3 transition-colors hover:bg-muted/50",
+                        !notification.read === false && "bg-muted/30",
+                      )}
+                    >
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={notification.avatar || "/placeholder.svg"} alt="" />
+                        <AvatarFallback>{notification.avatarFallback}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 space-y-1">
+                        <p className={cn("text-sm font-medium", !notification.read === false && "font-semibold")}>
+                          {notification?.message}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{formatDate(notification?.createdAt)}</p>
+                      </div>
+                      {notification.read === false && (
+                        <div className="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-8 text-center text-sm text-muted-foreground">No notifications</div>
+                )}
+              </div>
             ) : (
-              <div className="p-8 text-center text-sm text-muted-foreground">No notifications</div>
-            )}
-          </div>
+              <div className="flex flex-col">
+                {notifsLength > 0 ? (
+                  notifsdata.map((notification: Notification) => (
+                    <div
+                      key={notification.id}
+                      className={cn(
+                        "flex items-start gap-3 border-b p-3 transition-colors hover:bg-muted/50",
+                        !notification.readUser === false && "bg-muted/30",
+                      )}
+                    >
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={notification.avatar || "/placeholder.svg"} alt="" />
+                        <AvatarFallback>{notification.avatarFallback}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 space-y-1">
+                        <p className={cn("text-sm font-medium", !notification.readUser === false && "font-semibold")}>
+                          {notification?.message}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{formatDate(notification?.createdAt)}</p>
+                      </div>
+                      {notification.readUser === false && (
+                        <div className="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-8 text-center text-sm text-muted-foreground">No notifications</div>
+                )}
+              </div>
+            )
+          }
+
         </ScrollArea>
 
         <div className="border-t p-2">
@@ -228,6 +243,6 @@ export function NotificationsPopover() {
           </Button>
         </div>
       </PopoverContent>
-    </Popover>
+    </Popover >
   )
 }

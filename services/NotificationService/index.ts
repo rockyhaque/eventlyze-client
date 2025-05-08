@@ -3,6 +3,7 @@
 import app_axios from "@/lib/axios";
 import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
+import { revalidateTag } from "next/cache";
 
 
 // Get all Notification
@@ -17,6 +18,40 @@ export const getAllNotification = async () => {
             error?.response?.data?.message ||
             "Something went wrong while getting a notification!";
         return new Error(message);
+    }
+};
+
+
+// update Notification
+// export const updateAllNotification = async () => {
+//     try {
+//         const res = await app_axios.patch(`notifications/update-notification`);
+//         return res.data;
+//     } catch (error: any) {
+//         console.log("error while updating notification", error);
+//         const message =
+//             error?.response?.data?.message ||
+//             "Something went wrong while updating notification";
+//         return new Error(message);
+//     }
+// };
+
+
+export const updateAllNotification = async (): Promise<any> => {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/notifications/update-notification`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: (await cookies()).get("accessToken")!.value,
+            },
+            // body: JSON.stringify(),
+        });
+        revalidateTag("Notification");
+        return res.json();
+
+    } catch (error: any) {
+        return Error(error);
     }
 };
 
