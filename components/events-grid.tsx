@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { TEvent, TEventResponse } from "@/types/eventTypes";
+import { formatDate } from "./modules/Shared/DateTimeFormat/formatDate";
 
 export function EventsGrid({ eventsData }: { eventsData: TEventResponse }) {
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -113,7 +114,7 @@ export function EventsGrid({ eventsData }: { eventsData: TEventResponse }) {
                   <div className="mt-auto flex flex-col gap-2 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4 text-primary" />
-                      <span>{event?.registrationStart}</span>
+                      <span>{formatDate(event?.registrationStart)}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-primary" />

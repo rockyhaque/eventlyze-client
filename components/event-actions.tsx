@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { getCountdownTime } from "./modules/Shared/DateTimeFormat/getCountdownTime";
 import { TActiveUser } from "@/types/userTypes";
+import { formatDate } from "./modules/Shared/DateTimeFormat/formatDate";
 
 type EventReviewsProps = {
   eventDetails: TEvent;
@@ -31,6 +32,10 @@ type EventReviewsProps = {
 export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
   const [showRequestDialog, setShowRequestDialog] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const participantUser = eventDetails?.participant?.some(
+    (p) => p.userId === activeUser?.userId
+  );
+  const [isJoined, setIsJoined] = useState(participantUser || false)
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -40,7 +45,6 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
   });
   const [isRunning, setIsRunning] = useState(true);
 
-  const { userId } = activeUser;
 
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
@@ -49,9 +53,7 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
   //   (p) => p.userId === userId && p.status === "JOINED"
   // );
 
-  const participantUser = eventDetails?.participant?.some(
-    (p) => p.userId === userId
-  );
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -80,6 +82,7 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
 
     if (res.success) {
       toast.success(res.message);
+      setIsJoined(true)
     } else {
       toast.error(res.message);
     }
@@ -109,7 +112,7 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
       );
     }
 
-    if (participantUser) {
+    if (isJoined) {
       return (
         <Button size="lg" className="w-full" disabled>
           Already Joined
@@ -211,7 +214,7 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
           <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
             <AlertCircle className="h-4 w-4" />
             <span>
-              Registration closes on {date}-{time}
+              Registration closes on {formatDate(date)}:{time}
             </span>
           </div>
 
