@@ -13,9 +13,9 @@ export const getAllUser = async () => {
 };
 
 
-export const updatedUser = async () => {
+export const updatedUser = async (data:any) => {
     try {
-        const response = await app_axios.patch("/user/update-my-profile");
+        const response = await app_axios.patch("/user/update-my-profile", data);
         return response.data;
     } catch (error: any) {
         console.log("error while fetching user", error)
