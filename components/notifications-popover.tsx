@@ -10,7 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
-import { getAllNotification, updateAllNotification } from "@/services/NotificationService"
+import { getAllNotification, updateAllNotification, updateSingleNotification } from "@/services/NotificationService"
 import Cookies from "js-cookie";
 import { getActiveUser } from "@/hooks/getActiveUser"
 import { getActiveUserClient } from "@/hooks/getActiveUserClient"
@@ -64,10 +64,10 @@ export function NotificationsPopover() {
     getUserData();
   }, []);
 
-  console.log("Current user", user?.role);
+  // console.log("Current user", user?.role);
 
 
-
+  // All Notification Update
   const markAllAsReadUser = async () => {
     try {
       const result = await updateAllNotification();
@@ -77,11 +77,30 @@ export function NotificationsPopover() {
         ? toast.success(result.message)
         : toast.error(result?.message);
 
-      console.log("formData error", result?.message)
+      console.log("Notification error", result?.message)
     } catch (error: any) {
       toast.error(error.message);
     }
 
+  }
+
+
+  // Single Notification Update
+  const handleUpdateSingleNotification = async (id: string) => {
+
+    // console.log(id);
+
+    try {
+      const result = await updateSingleNotification(id);
+
+      result?.success
+        ? toast.success(result.message)
+        : toast.error(result?.message);
+
+      console.log("Notification error", result?.message)
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   }
 
 
@@ -171,70 +190,54 @@ export function NotificationsPopover() {
         </div>
 
         <ScrollArea className="h-80">
-          {
-            user?.role === "ADMIN" || "SUPER_ADMIN" ? (
-              <div className="flex flex-col">
-                {notifsLength > 0 ? (
-                  notifsdata.map((notification: Notification) => (
-                    <div
-                      key={notification.id}
+          <div className="flex flex-col">
+            {notifsLength > 0 ? (
+              notifsdata.map((notification: Notification) => (
+                <div
+                  key={notification.id}
+                  className={cn(
+                    "flex items-start gap-3 border-b p-3 transition-colors hover:bg-muted/50",
+                    (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN")
+                      ? !notification.read && "bg-muted/30"
+                      : !notification.readUser && "bg-muted/30"
+                  )}
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={notification.avatar || "/placeholder.svg"} alt="" />
+                    <AvatarFallback>{notification.avatarFallback}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 space-y-1">
+                    <p
+                      onClick={() => handleUpdateSingleNotification(notification.id)}
                       className={cn(
-                        "flex items-start gap-3 border-b p-3 transition-colors hover:bg-muted/50",
-                        !notification.read === false && "bg-muted/30",
+                        "text-sm font-medium hover:text-yellow-50 cursor-pointer",
+                        (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN")
+                          ? !notification.read && "font-semibold"
+                          : !notification.readUser && "font-semibold"
                       )}
                     >
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={notification.avatar || "/placeholder.svg"} alt="" />
-                        <AvatarFallback>{notification.avatarFallback}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 space-y-1">
-                        <p className={cn("text-sm font-medium", !notification.read === false && "font-semibold")}>
-                          {notification?.message}
-                        </p>
-                        <p className="text-xs text-muted-foreground">{formatDate(notification?.createdAt)}</p>
-                      </div>
-                      {notification.read === false && (
-                        <div className="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <div className="p-8 text-center text-sm text-muted-foreground">No notifications</div>
-                )}
-              </div>
+                      {notification.message}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatDate(notification.createdAt)}
+                    </p>
+                  </div>
+                  {(user?.role === "ADMIN" || user?.role === "SUPER_ADMIN")
+                    ? !notification.read && (
+                      <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                    )
+                    : !notification.readUser && (
+                      <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                    )
+                  }
+                </div>
+              ))
             ) : (
-              <div className="flex flex-col">
-                {notifsLength > 0 ? (
-                  notifsdata.map((notification: Notification) => (
-                    <div
-                      key={notification.id}
-                      className={cn(
-                        "flex items-start gap-3 border-b p-3 transition-colors hover:bg-muted/50",
-                        !notification.readUser === false && "bg-muted/30",
-                      )}
-                    >
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={notification.avatar || "/placeholder.svg"} alt="" />
-                        <AvatarFallback>{notification.avatarFallback}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 space-y-1">
-                        <p className={cn("text-sm font-medium", !notification.readUser === false && "font-semibold")}>
-                          {notification?.message}
-                        </p>
-                        <p className="text-xs text-muted-foreground">{formatDate(notification?.createdAt)}</p>
-                      </div>
-                      {notification.readUser === false && (
-                        <div className="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <div className="p-8 text-center text-sm text-muted-foreground">No notifications</div>
-                )}
+              <div className="p-8 text-center text-sm text-muted-foreground">
+                No notifications
               </div>
-            )
-          }
-
+            )}
+          </div>
         </ScrollArea>
 
         <div className="border-t p-2">
