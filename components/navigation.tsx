@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { NotificationsPopover } from "@/components/notifications-popover";
+import { NotificationsPopover } from "./notifications-popover";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -115,9 +115,7 @@ export function Navigation() {
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard">Dashboard</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard/profile">Profile</Link>
-                  </DropdownMenuItem>
+          
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/settings">Settings</Link>
                   </DropdownMenuItem>
@@ -199,13 +197,7 @@ export function Navigation() {
                 >
                   Dashboard
                 </Link>
-                <Link
-                  href="/dashboard/profile"
-                  className="flex h-12 items-center text-lg font-medium"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Profile
-                </Link>
+              
                 <Link
                   href="/dashboard/settings"
                   className="flex h-12 items-center text-lg font-medium"

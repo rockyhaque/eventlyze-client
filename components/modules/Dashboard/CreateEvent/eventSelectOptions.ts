@@ -1,10 +1,16 @@
 export const categoryOptions = [
-  { label: "Music", value: "music" },
-  { label: "Technology", value: "technology" },
-  { label: "Food & Drink", value: "food" },
-  { label: "Arts", value: "arts" },
-  { label: "Business", value: "business" },
-  { label: "Sports", value: "sports" },
+  { label: "Music", value: "MUSIC" },
+  { label: "Technology", value: "TECHNOLOGY" },
+  { label: "Food & Drink", value: "FOOD_AND_DRINK" },
+  { label: "Arts", value: "ARTS" },
+  { label: "Business", value: "BUSINESS" },
+  { label: "Sports", value: "SPORTS" },
+  { label: "Networking", value: "NETWORKING" },
+  { label: "Entertainment", value: "ENTERTAINMENT" },
+  { label: "Photography", value: "PHOTOGRAPHY" },
+  { label: "Gaming", value: "GAMING" },
+  { label: "Travel", value: "TRAVEL" },
+  { label: "Education", value: "EDUCATION" },
 ];
 
 export const eventTypeOptions =[

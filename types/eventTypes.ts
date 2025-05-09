@@ -13,6 +13,11 @@ export type TReview = {
   userId: string;
   content: string;
   rating: number;
+  user: {
+    email: string;
+    name: string;
+    photo: string;
+  };
   createdAt: string;
   updatedAt: string;
 };
@@ -34,6 +39,14 @@ export type TEvent = {
   status: "UPCOMING" | "ONGOING" | "COMPLETED";
   seat: number;
   ownerId: string;
+
+  owner:{
+    name:string,
+    email:string,
+    photo:string | null,
+  },
+
+
   inviteId: string | null;
   paymentId: string | null;
   reviewId: string | null;
@@ -58,5 +71,5 @@ export type TMeta = {
 
 export type TEventResponse = {
   data: TEvent[];
-  meta?:TMeta
+  meta?: TMeta;
 };

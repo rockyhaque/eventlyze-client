@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Users, ArrowRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/page-header";
@@ -18,7 +18,7 @@ import EFormDateInput from "@/components/modules/Shared/Form/EFormDateInput";
 import EFormTimeInput from "@/components/modules/Shared/Form/EFormTimeInput";
 import { categoryOptions, eventTypeOptions, tabs } from "@/components/modules/Dashboard/CreateEvent/eventSelectOptions";
 import EFormCheckbox from "@/components/modules/Shared/Form/EFormCheckbox";
-import { createEvent, getSingleEvent } from "@/services/EventServices";
+import { createEvent, getSingleEvent, updateEvent } from "@/services/EventServices";
 import { convertToISO } from "@/hooks/convertToDate";
 import { useParams } from "next/navigation";
 
@@ -36,13 +36,13 @@ const tabValidations = {
 };
 
 export default function EditEventPage() {
-  const [eventData, setEventData] = useState<any>(null);
   const params = useParams();
   const eventId = params?.id;
 
-  const { control, handleSubmit, setValue, watch, formState: { isSubmitting }, trigger } = useForm();
+  const form = useForm();
+  const { watch, formState: { isSubmitting }, trigger, setValue } = form;
   const { uploadImagesToCloudinary, isUploading } = useImageUploader();
-  const [eventImageUrl, setEventImageUrl] = useState<File | File[]>([]);
+  const [eventImageUrl, setEventImageUrl] = useState<any>();
   const [activeTab, setActiveTab] = useState("details");
 
   const eventType = watch("eventType");
@@ -52,36 +52,47 @@ export default function EditEventPage() {
 
   useEffect(() => {
     const getEventData = async () => {
-      const data = await getSingleEvent(eventId as string);
-      setEventData(data);
+      try {
+        const { data } = await getSingleEvent(eventId as string);
+        // Find the matching category option object
+        console.log("API Response:", data); // Debug log
+        console.log("Category Value:", data.category); // Debug log
 
-      if (data) {
-        setValue('title', data.title);
-        setValue('category', data.category);
-        setValue('description', data.description);
-        setValue('eventBanner', data.eventBanner);
-        setValue('eventType', data.eventType);
-        setValue('isPublic', data.isPublic);
-        setValue('isPaid', data.isPaid);
-        setValue('price', data.price);
-        setValue('location', data.location);
-        setValue('platform', data.platform);
-        setValue('meetingLink', data.meetingLink);
-        setValue('registrationStartDate', data.registrationStartDate);
-        setValue('registrationStartTime', data.registrationStartTime);
-        setValue('registrationEndDate', data.registrationEndDate);
-        setValue('registrationEndTime', data.registrationEndTime);
-        setValue('eventStartDate', data.eventStartDate);
-        setValue('eventStartTime', data.eventStartTime);
-        setValue('eventEndDate', data.eventEndDate);
-        setValue('eventEndTime', data.eventEndTime);
-        setValue('seat', data.seat);
-        setValue('quantity', data.quantity);
+        // Parse ISO dates to separate date/time components
+        const parseDateTime = (isoString: string) => {
+          const date = new Date(isoString);
+          return {
+            date: date.toISOString().split('T')[0],
+            time: date.toTimeString().split(' ')[0].substring(0, 5)
+          };
+        };
+
+        // Set form values
+        form.reset({
+          ...data,
+          ...parseDateTime(data.registrationStart),
+          category: data.category,
+          registrationStartDate: parseDateTime(data.registrationStart).date,
+          registrationStartTime: parseDateTime(data.registrationStart).time,
+          registrationEndDate: parseDateTime(data.registrationEnd).date,
+          registrationEndTime: parseDateTime(data.registrationEnd).time,
+          eventStartDate: parseDateTime(data.eventStartTime).date,
+          eventStartTime: parseDateTime(data.eventStartTime).time,
+          eventEndDate: parseDateTime(data.eventEndTime).date,
+          eventEndTime: parseDateTime(data.eventEndTime).time,
+        });
+
+        // Set image URL state
+        if (data.eventBanner) {
+          setEventImageUrl(data.eventBanner);
+        }
+      } catch (error) {
+        toast.error('Failed to load event data');
       }
     };
 
-    getEventData();
-  }, [eventId, setValue]);
+    if (eventId) getEventData();
+  }, [eventId, form]);
 
   useEffect(() => {
     if (!isPaid) {
@@ -106,7 +117,9 @@ export default function EditEventPage() {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const uploadedImageUrl = await uploadImagesToCloudinary(eventImageUrl, false);
+      const uploadedImageUrl = eventImageUrl instanceof File
+        ? await uploadImagesToCloudinary([eventImageUrl], false)
+        : eventImageUrl;
 
       const formData = {
         "title": data.title,
@@ -125,8 +138,12 @@ export default function EditEventPage() {
         "eventType": data.eventType,
       };
 
-      const result = await createEvent(formData);
-      result?.success ? toast.success(result.message) : toast.error(result?.message);
+      const result = await updateEvent(eventId as string, formData);
+      result?.success
+        ? toast.success(result.message)
+        : toast.error(result?.message);
+      console.log("formData submitted", formData)
+      console.log("formData error", result?.message)
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -154,8 +171,8 @@ export default function EditEventPage() {
           ))}
         </TabsList>
 
-        <Form>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* Event Details Tab */}
             <TabsContent value="details">
               <Card className="shadow-md border-border/50">
@@ -170,36 +187,35 @@ export default function EditEventPage() {
                     name="title"
                     label="Event Name *"
                     placeholder="Event Name"
-                    control={control}
-                    defaultValue={eventData?.title}
+                    control={form.control}
                     required
                   />
+
                   <EFormSelect
                     name="category"
                     label="Category *"
-                    control={control}
+                    control={form.control}
                     options={categoryOptions}
-                    defaultValue={eventData?.category}
                     required
                   />
+
                   <EFormTextarea
                     name="description"
                     label="Description *"
                     placeholder="Describe your event..."
-                    control={control}
-                    defaultValue={eventData?.description}
+                    control={form.control}
                     required
                   />
+
                   <div className="space-y-2">
                     <Label htmlFor="image">Event Banner *</Label>
                     <div className="border-2 border-dashed rounded-lg p-12 text-center border-border hover:border-primary/50 transition-colors cursor-pointer">
                       <EFormImageUpload
-                        control={control}
+                        control={form.control}
                         name="eventBanner"
-                        multiple={false}
                         onImageUpload={setEventImageUrl}
-                        defaultValue={eventData?.eventBanner}
                         required
+                        uploadImage={eventImageUrl}
                       />
                     </div>
                   </div>
@@ -212,7 +228,223 @@ export default function EditEventPage() {
               </Card>
             </TabsContent>
 
-            {/* Other tabs (types, schedule, tickets) remain the same */}
+            {/* Event Type Tab */}
+            <TabsContent value="types">
+              <Card className="shadow-md border-border/50">
+                <CardHeader>
+                  <CardTitle>Event Type</CardTitle>
+                  <CardDescription>
+                    Configure how people will join your event
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <EFormSelect
+                    name="eventType"
+                    label="Event Type *"
+                    control={form.control}
+                    options={eventTypeOptions}
+                    required
+                  />
+
+                  {isOffline && (
+                    <EFormInput
+                      name="location"
+                      label="Venue Address *"
+                      placeholder="Enter physical location"
+                      control={form.control}
+                      required
+                    />
+                  )}
+
+                  {isOnline && (
+                    <>
+                      <EFormInput
+                        name="platform"
+                        label="Platform *"
+                        placeholder="Zoom, Google Meet, etc."
+                        control={form.control}
+                        required
+                      />
+                      <EFormInput
+                        name="meetingLink"
+                        label="Meeting URL *"
+                        placeholder="Paste meeting link"
+                        control={form.control}
+                        required
+                      />
+                    </>
+                  )}
+
+                  <EFormCheckbox
+                    control={form.control}
+                    name="isPublic"
+                    label={
+                      <div className="flex items-center gap-2">
+                        Public Event
+                        <Info size={16} className="text-muted-foreground" />
+                      </div>
+                    }
+                    description="Visible to everyone. Uncheck for private event (invite-only)."
+                  />
+
+                  <EFormCheckbox
+                    control={form.control}
+                    name="isPaid"
+                    label={
+                      <div className="flex items-center gap-2">
+                        Paid Event
+                        <Info size={16} className="text-muted-foreground" />
+                      </div>
+                    }
+                    description="Requires ticket purchase. Uncheck for free event."
+                  />
+                </CardContent>
+                <CardFooter className="flex justify-between pt-4">
+                  <Button variant="outline" onClick={() => setActiveTab("details")}>
+                    Back
+                  </Button>
+                  <Button onClick={handleNext} type="button">
+                    Next: Schedule <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+
+            {/* Schedule Tab */}
+            <TabsContent value="schedule">
+              <Card className="shadow-md border-border/50">
+                <CardHeader>
+                  <CardTitle>Schedule</CardTitle>
+                  <CardDescription>
+                    Set dates and times for registrations and the event itself
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="space-y-4">
+                    <h4 className="font-medium">Registration Period</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <EFormDateInput
+                        name="registrationStartDate"
+                        label="Start Date *"
+                        control={form.control}
+                        required
+                      />
+                      <EFormTimeInput
+                        name="registrationStartTime"
+                        label="Start Time *"
+                        control={form.control}
+                        required
+                      />
+                      <EFormDateInput
+                        name="registrationEndDate"
+                        label="End Date *"
+                        control={form.control}
+                        required
+                      />
+                      <EFormTimeInput
+                        name="registrationEndTime"
+                        label="End Time *"
+                        control={form.control}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="font-medium">Event Period</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <EFormDateInput
+                        name="eventStartDate"
+                        label="Start Date *"
+                        control={form.control}
+                        required
+                      />
+                      <EFormTimeInput
+                        name="eventStartTime"
+                        label="Start Time *"
+                        control={form.control}
+                        required
+                      />
+                      <EFormDateInput
+                        name="eventEndDate"
+                        label="End Date *"
+                        control={form.control}
+                        required
+                      />
+                      <EFormTimeInput
+                        name="eventEndTime"
+                        label="End Time *"
+                        control={form.control}
+                        required
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter className="flex justify-between pt-4">
+                  <Button variant="outline" onClick={() => setActiveTab("types")}>
+                    Back
+                  </Button>
+                  <Button onClick={handleNext} type="button">
+                    Next: Tickets <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+
+            {/* Tickets Tab */}
+            <TabsContent value="tickets">
+              <Card className="shadow-md border-border/50">
+                <CardHeader>
+                  <CardTitle>Tickets</CardTitle>
+                  <CardDescription>
+                    Configure pricing and availability for event tickets
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <EFormInput
+                    name="seat"
+                    label="Total Capacity *"
+                    placeholder="Maximum attendees"
+                    type="number"
+                    control={form.control}
+                    icon={<Users size={20} />}
+                    required
+                  />
+
+                  <div className="border rounded-lg p-4 shadow-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <EFormInput
+                        name="price"
+                        label={`Ticket Price ${isPaid ? '*' : ''}`}
+                        placeholder="0.00"
+                        type="number"
+                        control={form.control}
+                        disabled={!isPaid}
+                        required={isPaid}
+                        min={0}
+                      />
+                      <EFormInput
+                        name="quantity"
+                        label="Available Tickets *"
+                        placeholder="Number of tickets"
+                        type="number"
+                        control={form.control}
+                        required
+                        min={1}
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter className="flex justify-between pt-4">
+                  <Button variant="outline" onClick={() => setActiveTab("schedule")}>
+                    Back
+                  </Button>
+                  <Button type="submit" disabled={isSubmitting || isUploading}>
+                    {isSubmitting ? "Editing Event..." : "Publish Event"}
+                  </Button>
+                </CardFooter>
+              </Card>
+            </TabsContent>
           </form>
         </Form>
       </Tabs>

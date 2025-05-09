@@ -12,18 +12,7 @@ export function DashboardHeader() {
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="icon">
-          <Calendar className="h-4 w-4" />
-          <span className="sr-only">Calendar</span>
-        </Button>
-        <Button variant="outline" size="icon">
-          <Bell className="h-4 w-4" />
-          <span className="sr-only">Notifications</span>
-        </Button>
-        <Button variant="outline" size="icon">
-          <Settings className="h-4 w-4" />
-          <span className="sr-only">Settings</span>
-        </Button>
+       
         <Button>
           <Link href="/dashboard/create-event">Create Event</Link>
         </Button>

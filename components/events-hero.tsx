@@ -1,16 +1,48 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Search, MapPin, Calendar, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { motion } from "framer-motion";
+import { Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useQueryState } from "nuqs";
 
-export function EventsHero() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [location, setLocation] = useState("")
-  const [date, setDate] = useState("")
+const categories = [
+  { name: "Music", value: "MUSIC" },
+  { name: "Technology", value: "TECHNOLOGY" },
+  { name: "Art", value: "ART" },
+  { name: "Business", value: "BUSINESS" },
+  { name: "Food & Drink", value: "FOOD-AND-DRINK" },
+];
+
+interface IEventsFilterParams {
+  refetchEvents: () => Promise<void>;
+}
+
+export function EventsHero({ refetchEvents }: IEventsFilterParams) {
+  const [categoryState, setCategory] = useQueryState("category", {
+    defaultValue: "",
+  });
+  const [date, setDate] = useQueryState("date", { defaultValue: "" });
+
+  const handleCategory = (value: string) => {
+    setCategory(value);
+    setTimeout(() => {
+      refetchEvents();
+    }, 100);
+  };
+
+  const handleDate = (value: string) => {
+    setDate(value);
+    setTimeout(() => {
+      refetchEvents();
+    }, 100);
+  };
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-16 md:py-24">
@@ -27,8 +59,8 @@ export function EventsHero() {
         </div>
       </div>
 
-      <div className="container">
-        <div className="mx-auto max-w-4xl text-center">
+      <div className="container ">
+        <div className="mx-auto max-w-4xl text-center justify-center">
           <motion.h1
             className="font-display text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl"
             initial={{ opacity: 0, y: 20 }}
@@ -44,8 +76,8 @@ export function EventsHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            Find and join events that match your interests, connect with like-minded people, and create unforgettable
-            memories
+            Find and join events that match your interests, connect with
+            like-minded people, and create unforgettable memories
           </motion.p>
 
           <motion.div
@@ -54,73 +86,42 @@ export function EventsHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="grid gap-4 md:grid-cols-[1fr_1fr_auto]">
+            <div className=" ">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder="Search events..."
-                  className="pl-9"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+                <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Select value={date} onValueChange={handleDate}>
+                  <SelectTrigger className="pl-9">
+                    <SelectValue placeholder="Date" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="today">Today</SelectItem>
+                    <SelectItem value="tomorrow">Tomorrow</SelectItem>
+                    <SelectItem value="this-week">This Week</SelectItem>
+                    <SelectItem value="this-weekend">This Weekend</SelectItem>
+                    <SelectItem value="this-month">This Month</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Select value={location} onValueChange={setLocation}>
-                    <SelectTrigger className="pl-9">
-                      <SelectValue placeholder="Location" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="new-york">New York</SelectItem>
-                      <SelectItem value="los-angeles">Los Angeles</SelectItem>
-                      <SelectItem value="chicago">Chicago</SelectItem>
-                      <SelectItem value="miami">Miami</SelectItem>
-                      <SelectItem value="austin">Austin</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Select value={date} onValueChange={setDate}>
-                    <SelectTrigger className="pl-9">
-                      <SelectValue placeholder="Date" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="today">Today</SelectItem>
-                      <SelectItem value="tomorrow">Tomorrow</SelectItem>
-                      <SelectItem value="this-week">This Week</SelectItem>
-                      <SelectItem value="this-weekend">This Weekend</SelectItem>
-                      <SelectItem value="this-month">This Month</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <Button className="gap-2 h-full gap-2">
-                <span>Search</span>
-                <ArrowRight className="h-4 w-4" />
-              </Button>
             </div>
 
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" className="">
-                Music
-              </Button>
-              <Button variant="outline" size="sm" className="">
-                Technology
-              </Button>
-              <Button variant="outline" size="sm" className="">
-                Food & Drink
-              </Button>
-              <Button variant="outline" size="sm" className="">
-                Arts
-              </Button>
-              <Button variant="outline" size="sm" className="">
-                Business
-              </Button>
+            <div className="mt-4 flex flex-wrap gap-2 justify-center">
+              {categories.map((category) => (
+                <Button
+                  key={category.value}
+                  onClick={() => handleCategory(category.value)}
+                  variant={
+                    category.value === categoryState ? "default" : "outline"
+                  }
+                  size="sm"
+                  className={
+                    category.value === categoryState
+                      ? "bg-primary text-white"
+                      : ""
+                  }
+                >
+                  {category.name}
+                </Button>
+              ))}
             </div>
           </motion.div>
 
@@ -152,5 +153,5 @@ export function EventsHero() {
         </div>
       </div>
     </section>
-  )
+  );
 }

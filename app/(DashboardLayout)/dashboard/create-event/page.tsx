@@ -38,7 +38,7 @@ export default function CreateEventPage() {
   const { uploadImagesToCloudinary, isUploading } = useImageUploader();
   const form = useForm();
   const { watch, formState: { isSubmitting }, trigger, setValue } = form;
-  const [eventImageUrl, setEventImageUrl] = useState<File | File[]>([]);
+  const [eventImageUrl, setEventImageUrl] = useState<any>();
   const [activeTab, setActiveTab] = useState("details");
 
   const eventType = watch("eventType");
@@ -163,7 +163,6 @@ export default function CreateEventPage() {
                       <EFormImageUpload
                         control={form.control}
                         name="eventBanner"
-                        multiple={false}
                         onImageUpload={setEventImageUrl}
                         required
                       />

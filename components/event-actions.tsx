@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Users, DollarSign, Clock, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,52 +12,158 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { TEvent } from "@/types/eventTypes";
 
-import PaymentDialog from "./PaymentDialog";
 import RequestDialog from "./RequestDialog";
 import { formatDateTime } from "./modules/Shared/DateTimeFormat/formatDateTime";
-import { joinFreeEvent } from "@/services/Participant";
+import { createPayment, joinFreeEvent } from "@/services/Participant";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { getCountdownTime } from "./modules/Shared/DateTimeFormat/getCountdownTime";
+import { TActiveUser } from "@/types/userTypes";
+import { formatDate } from "./modules/Shared/DateTimeFormat/formatDate";
+import InvitationForm from "./modules/Invaitation/InvitationForm";
 
-export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
-  const [showRequestDialog, setShowRequestDialog] = useState(false);
-  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+type EventReviewsProps = {
+  eventDetails: TEvent;
+  activeUser: TActiveUser;
+};
+
+export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
+  const participantUser = eventDetails?.participant?.some(
+    (p) => p.userId === activeUser?.userId
+  );
+  const [isJoined, setIsJoined] = useState(participantUser || false)
+
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [isRunning, setIsRunning] = useState(true);
+
+  const isOwner = eventDetails?.ownerId === activeUser?.userId
+
+
+
+  // const participantUser = eventReviews?.participant?.some(
+  //   (p) => p.userId === userId && p.status === "JOINED"
+  // );
+
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const { days, hours, minutes, seconds, isExpired } = getCountdownTime(
+        eventDetails?.registrationEnd
+      );
+
+      setTimeLeft({ days, hours, minutes, seconds });
+      if (isExpired) {
+        setIsRunning(false);
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [eventDetails?.registrationStart]);
+
+  const router = useRouter();
 
   const handleJoinFreeEvent = async (id: string) => {
+    const JoinedEventId = {
+      eventId: id,
+    };
 
-    console.log({id},"from button")
-    const res = await joinFreeEvent(id);
+    const res = await joinFreeEvent(JoinedEventId);
 
-    console.log(res)
+    if (res.success) {
+      toast.success(res.message);
+      setIsJoined(true)
+    } else {
+      toast.error(res.message);
+    }
+  };
+
+  const handlePayment = async (id: string) => {
+    const JoinedEventId = {
+      eventId: id,
+    };
+
+    const res = await createPayment(JoinedEventId);
+
+    if (res.success) {
+      toast.success(res.message);
+      router.push(res?.data?.paymentUrl);
+    } else {
+      toast.error(res.message);
+    }
   };
 
   const getActionButton = () => {
+
+
+    if (isOwner) {
+      return (
+        <InvitationForm eventId={eventDetails?.id} />
+      );
+    }
+
+    if (!isRunning) {
+      return (
+        <Button size="lg" className="w-full" disabled>
+          Event Ended
+        </Button>
+      );
+    }
+
+    if (isJoined) {
+      return (
+        <Button size="lg" className="w-full" disabled>
+          Already Joined
+        </Button>
+      );
+    }
+
     if (eventDetails?.isPaid) {
       return (
-        <PaymentDialog
-          open={showPaymentDialog}
-          onOpenChange={setShowPaymentDialog}
-          price={Number(eventDetails?.price)}
-        />
+        // <PaymentDialog
+        //   open={showPaymentDialog}
+        //   onOpenChange={setShowPaymentDialog}
+        //   price={Number(eventDetails?.price)}
+        // />
+        <Button
+          onClick={() => handlePayment(eventDetails?.id)}
+          size="lg"
+          className="w-full"
+        >
+          Pay & Join
+        </Button>
       );
     } else if (!eventDetails?.isPublic) {
       return (
-        <RequestDialog
-          open={showRequestDialog}
-          onOpenChange={setShowRequestDialog}
-        />
+        // <RequestDialog
+        //   open={showRequestDialog}
+        //   onOpenChange={setShowRequestDialog}
+        // />
+
+        <Button
+        size="lg"
+        className="w-full"
+        onClick={() => handleJoinFreeEvent(eventDetails?.id)}
+      >
+        Request for join
+      </Button>
       );
     } else {
       return (
-        <Button size="lg" className="w-full" onClick={()=>handleJoinFreeEvent(eventDetails?.id)}>
+        <Button
+          size="lg"
+          className="w-full"
+          onClick={() => handleJoinFreeEvent(eventDetails?.id)}
+        >
           Join Event
         </Button>
       );
@@ -115,11 +221,11 @@ export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
           <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
             <AlertCircle className="h-4 w-4" />
             <span>
-              Registration closes on {date}-{time}
+              Registration closes on {formatDate(date)}:{time}
             </span>
           </div>
 
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="tickets">Number of Tickets</Label>
             <Select defaultValue="1">
               <SelectTrigger id="tickets">
@@ -133,7 +239,7 @@ export function EventActions({ eventDetails }: { eventDetails: TEvent }) {
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
         </CardContent>
         <CardFooter className="flex flex-col">
           {getActionButton()}

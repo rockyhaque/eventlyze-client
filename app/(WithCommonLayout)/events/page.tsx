@@ -8,23 +8,51 @@ import { UpcomingEvents } from "@/components/upcoming-events";
 import { Newsletter } from "@/components/newsletter";
 import { getAllEvents } from "@/services/EventServices";
 
-export default async function EventsPage() {
-  const events = await getAllEvents();
+import { loadSearchParams } from "../search-params";
+import type { SearchParams } from "nuqs/server";
+import { revalidateTag } from "next/cache";
+import { NotFoundData } from "@/components/modules/Shared/NotFoundData/NotFoundData";
 
-  // if (events instanceof Error) {
-  //   console.error(events.message);
-  // }
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+export default async function EventsPage({ searchParams }: PageProps) {
+  const { searchTerm, isPaid, sortBy, sortOrder, category } =
+    await loadSearchParams(searchParams);
+
+  const events = await getAllEvents({
+    searchTerm,
+    isPaid,
+    sortBy,
+    sortOrder,
+    category,
+  });
+
+  async function refetchEvents() {
+    "use server";
+
+    revalidateTag("events");
+  }
+
+  // console.log(events)
 
   return (
     <div>
-      <EventsHero />
+      <EventsHero refetchEvents={refetchEvents} />
       <div className="container max-w-7xl py-10">
         <PageHeader
           title="Discover Events"
           description="Find and join amazing events happening around you"
         />
-        <EventsFilter />
-        <EventsGrid eventsData={events?.data} />
+
+        <EventsFilter refetchEvents={refetchEvents} />
+
+        {!events || !events?.data || events?.data?.length === 0 ? (
+          <NotFoundData />
+        ) : (
+          <EventsGrid eventsData={events?.data} />
+        )}
       </div>
       <EventCategories />
       <UpcomingEvents />

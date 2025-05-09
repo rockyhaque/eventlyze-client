@@ -12,61 +12,37 @@ import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import { ChangeEvent, InputHTMLAttributes, useEffect, useState } from "react";
-import { toast } from "sonner";
 
 interface IFormImageUploadProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "name" | "onChange"> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "name" | "onChange" | "multiple"> {
   name: string;
   label?: string;
   control: any;
-  multiple?: boolean;
-  onImageUpload: (files: File[] | File) => void;
+  onImageUpload: (file: File) => void;
+  uploadImage?: string;
 }
 
 const EFormImageUpload = ({
   name,
   label,
   control,
-  multiple = false,
   onImageUpload,
+  uploadImage,
   ...rest
 }: IFormImageUploadProps) => {
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-
-  useEffect(() => {
-    setPreviewImages([]);
-  }, []);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    if (multiple && selectedFiles.length + files.length > 5) {
-      toast.warning("You can only upload a maximum of 5 images.");
-      return;
-    }
-
-    const newPreviewImages: string[] = [];
-    const newFiles: File[] = [];
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      newPreviewImages.push(URL.createObjectURL(file));
-      newFiles.push(file);
-    }
-
-    setPreviewImages((prev) =>
-      multiple ? [...prev, ...newPreviewImages] : newPreviewImages
-    );
-    setSelectedFiles((prev) => (multiple ? [...prev, ...newFiles] : newFiles));
-
-    onImageUpload(multiple ? [...selectedFiles, ...newFiles] : newFiles);
+    const imageURL = URL.createObjectURL(file);
+    setPreviewImage(imageURL);
+    onImageUpload(file);
   };
 
-  const handleRemoveImage = (index: number) => {
-    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
-    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  const handleRemoveImage = () => {
+    setPreviewImage(null);
   };
 
   return (
@@ -80,33 +56,39 @@ const EFormImageUpload = ({
             <Input
               type="file"
               accept="image/*"
-              multiple={multiple}
               onChange={handleImageChange}
               {...rest}
             />
           </FormControl>
 
-          <div className="grid grid-cols-3 gap-3 mt-2">
-            {previewImages.map((src, index) => (
-              <div key={index} className="relative">
-                <Image
-                  src={src}
-                  alt={`Preview ${index}`}
-                  width={250}
-                  height={100}
-                  className="rounded-md border"
-                />
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  className="absolute top-0 right-0 p-1 bg-red-600 rounded-full shadow-md hover:scale-110 transition-transform"
-                  onClick={() => handleRemoveImage(index)}
-                >
-                  <Trash2 size={14} />
-                </Button>
-              </div>
-            ))}
-          </div>
+          {(previewImage || uploadImage) ? (
+            <div className="relative mt-2 w-fit">
+              <Image
+                src={previewImage || uploadImage || "/placeholder.svg"}
+                alt="Preview"
+                width={250}
+                height={100}
+                className="rounded-md border h-[200px]"
+              />
+              <Button
+                variant="destructive"
+                size="icon"
+                className="absolute  rounded-md top-1 right-1 p-1 bg-red-600 shadow-md transition-transform"
+                onClick={handleRemoveImage}
+              >
+                <Trash2 size={14} />
+              </Button>
+            </div>
+          ) : null
+          
+          // <Image
+          //   src="/placeholder.svg"
+          //   alt="Preview"
+          //   width={250}
+          //   height={100}
+          //   className="rounded-md border animate-pulse h-[200px]"
+          // />
+          }
 
           <FormMessage />
         </FormItem>
