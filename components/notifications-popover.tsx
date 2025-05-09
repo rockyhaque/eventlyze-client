@@ -56,8 +56,22 @@ export function NotificationsPopover() {
         console.error("Fetch error:", err)
         setUser(null)
       }
-    }
+    };
 
+    getUserData();
+  }, []);
+
+
+  const [notifs, setNotifs] = useState<NotificationResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+
+
+
+  const unreadCount = notifs?.data?.totalUnReadNotification as number
+  const notifsdata = notifs?.data?.allNotifications
+  const notifsLength = notifs?.data?.allNotifications.length
     getUserData()
   }, [])
 
