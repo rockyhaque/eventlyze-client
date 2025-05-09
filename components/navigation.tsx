@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { NotificationsPopover } from "./notifications-popover";
+import { handleClientLogout } from "@/hooks/handleClientLogout";
+import { toast } from "sonner";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,7 +30,9 @@ export function Navigation() {
   const signOut = () => {
     Cookies.remove("accessToken");
     setIsLoggedIn(false);
-  }; // Replace with real auth check
+    handleClientLogout()
+    toast.success("Logout Successful!")
+  };
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);

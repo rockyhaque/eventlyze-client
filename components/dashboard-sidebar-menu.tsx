@@ -21,6 +21,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { handleClientLogout } from "@/hooks/handleClientLogout";
+import { toast } from "sonner";
 
 export function DashboardSidebarMenu({ data }: any) {
   const pathname = usePathname();
@@ -88,7 +89,10 @@ export function DashboardSidebarMenu({ data }: any) {
     },
   ];
 
-
+  const handleLogout = () => {
+    handleClientLogout()
+    toast.success("Logout Successful!")
+  }
   return (
     <div className="fixed left-0 top-0 w-full max-w-[300px]">
       <div className="flex flex-col border-r h-screen w-full">
@@ -168,7 +172,7 @@ export function DashboardSidebarMenu({ data }: any) {
 
               </Button>
               <Button
-                onClick={handleClientLogout}
+                onClick={handleLogout}
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 text-muted-foreground"

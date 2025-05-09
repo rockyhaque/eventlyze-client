@@ -8,24 +8,21 @@ import {
   User,
   Mail,
   Lock,
-  Github,
-  Twitter,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "@/components/modules/Auth/signUp/signupValidation";
 import { Form } from "@/components/ui/form";
 import EFormInput from "@/components/modules/Shared/Form/EFormInput";
-
-import GoogleLoginBtn from "@/components/modules/Shared/SocialLogin/GoogleLoginBtn";
 import { signUpUser } from "@/services/AuthServices";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
+  const router = useRouter()
   const form = useForm({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -45,8 +42,9 @@ export default function SignupPage() {
       };
       const result = await signUpUser(formData);
       if (result?.success) {
-        toast.success(result.message || "User signed up successfully!");
+        toast.success(result.message || "Account Created successfully!");
         form.reset();
+        router.push("/login")
       }
     } catch (error: any) {
       toast.error(error.message || "Error signing up. Please try again.");
@@ -107,127 +105,84 @@ export default function SignupPage() {
                 Sign up to start creating and joining events
               </p>
             </div>
-            <Tabs defaultValue="email" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="email">Email</TabsTrigger>
-                <TabsTrigger value="social">Social</TabsTrigger>
-              </TabsList>
-              <TabsContent value="email" className="mt-4">
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        {/* input for name */}
-                        <EFormInput
-                          name="name"
-                          label="Full Name"
-                          placeholder="Your Name"
-                          type="text"
-                          control={form.control}
-                          icon={<User size={20} />}
-                          required={true}
-                        />
-                      </div>
-                      {/*  input for email */}
-                      <div className="space-y-2">
-                        <EFormInput
-                          name="email"
-                          label="Email"
-                          placeholder="Your Email"
-                          type="text"
-                          control={form.control}
-                          icon={<Mail size={20} />}
-                          required={true}
-                        />
-                      </div>
-                      {/*  input for password */}
-                      <div className="space-y-2">
-                        <EFormInput
-                          name="password"
-                          label="Password"
-                          placeholder="password"
-                          type="password"
-                          control={form.control}
-                          icon={<Lock size={20} />}
-                          required={true}
-                        />
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="terms" required />
-                        <Label htmlFor="terms" className="text-sm font-normal">
-                          I agree to the{" "}
-                          <Link
-                            href="/terms"
-                            className="text-primary underline-offset-4 hover:underline"
-                          >
-                            Terms of Service
-                          </Link>{" "}
-                          and{" "}
-                          <Link
-                            href="/privacy"
-                            className="text-primary underline-offset-4 hover:underline"
-                          >
-                            Privacy Policy
-                          </Link>
-                        </Label>
-                      </div>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    {/* input for name */}
+                    <EFormInput
+                      name="name"
+                      label="Full Name"
+                      placeholder="Your Name"
+                      type="text"
+                      control={form.control}
+                      icon={<User size={20} />}
+                      required={true}
+                    />
+                  </div>
+                  {/*  input for email */}
+                  <div className="space-y-2">
+                    <EFormInput
+                      name="email"
+                      label="Email"
+                      placeholder="Your Email"
+                      type="text"
+                      control={form.control}
+                      icon={<Mail size={20} />}
+                      required={true}
+                    />
+                  </div>
+                  {/*  input for password */}
+                  <div className="space-y-2">
+                    <EFormInput
+                      name="password"
+                      label="Password"
+                      placeholder="password"
+                      type="password"
+                      control={form.control}
+                      icon={<Lock size={20} />}
+                      required={true}
+                    />
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="terms" required />
+                    <Label htmlFor="terms" className="text-sm font-normal">
+                      I agree to the{" "}
+                      <Link
+                        href="/terms"
+                        className="text-primary underline-offset-4 hover:underline"
+                      >
+                        Terms of Service
+                      </Link>{" "}
+                      and{" "}
+                      <Link
+                        href="/privacy"
+                        className="text-primary underline-offset-4 hover:underline"
+                      >
+                        Privacy Policy
+                      </Link>
+                    </Label>
+                  </div>
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      <span>Signing in...</span>
                     </div>
-                    <Button
-                      type="submit"
-                      className="w-full"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <div className="flex items-center gap-2">
-                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                          <span>Signing in...</span>
-                        </div>
-                      ) : (
-                        <span>Sign Up</span>
-                      )}
-                    </Button>
-                  </form>
-                </Form>
-              </TabsContent>
-              <TabsContent value="social" className="mt-4 space-y-4">
-                <div className="grid gap-3">
-                  <GoogleLoginBtn />
-                  <Button
-                    variant="outline"
-                    className="h-11 w-full gap-2 bg-[#1DA1F2] text-white hover:bg-[#1DA1F2]/90 hover:text-white"
-                  >
-                    <Twitter className="h-5 w-5" />
-                    <span>Sign up with Twitter</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="h-11 w-full gap-2 bg-[#24292E] text-white hover:bg-[#24292E]/90 hover:text-white"
-                  >
-                    <Github className="h-5 w-5" />
-                    <span>Sign up with GitHub</span>
-                  </Button>
-                </div>
-                <div className="text-center text-xs text-muted-foreground">
-                  By signing up with social login, you agree to our{" "}
-                  <Link
-                    href="/terms"
-                    className="text-primary underline-offset-4 hover:underline"
-                  >
-                    Terms of Service
-                  </Link>{" "}
-                  and{" "}
-                  <Link
-                    href="/privacy"
-                    className="text-primary underline-offset-4 hover:underline"
-                  >
-                    Privacy Policy
-                  </Link>
-                </div>
-              </TabsContent>
-            </Tabs>
+                  ) : (
+                    <span>Sign Up</span>
+                  )}
+                </Button>
+              </form>
+            </Form>
             <p className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}
               <Link
