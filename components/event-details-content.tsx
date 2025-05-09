@@ -322,7 +322,7 @@ export function EventDetailsContent({
                     </div>
 
                     <div className="text-sm text-muted-foreground text-center mt-2">
-                      {eventDetails.seat - eventDetails?.participant?.length}{" "}
+                      {eventDetails?.seat - eventDetails?.participant?.length}{" "}
                       seats remaining
                     </div>
                   </div>
@@ -348,15 +348,15 @@ export function EventDetailsContent({
                     Event Location
                   </p>
                   <p className="font-medium">
-                    {eventDetails.eventType === "ONLINE"
+                    {eventDetails?.eventType === "ONLINE"
                       ? "Online Event"
-                      : eventDetails.location}
+                      : eventDetails?.location}
                   </p>
                 </div>
               </div>
 
-              {eventDetails.eventType === "ONLINE" &&
-                eventDetails.meetingLink && (
+              {eventDetails?.eventType === "ONLINE" &&
+                eventDetails?.meetingLink && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-start space-x-3  p-4 rounded-lg">
                       <MapPin className="h-5 w-5 text-violet-500 mt-0.5" />
@@ -364,7 +364,7 @@ export function EventDetailsContent({
                         <p className="text-sm text-muted-foreground">
                           Platform
                         </p>
-                        <p className="font-medium">{eventDetails.platform}</p>
+                        <p className="font-medium">{eventDetails?.platform}</p>
                       </div>
                     </div>
 
@@ -375,7 +375,7 @@ export function EventDetailsContent({
                           Meeting Link
                         </p>
                         <a
-                          href={eventDetails.meetingLink}
+                          href={eventDetails?.meetingLink}
                           className="text-blue-500 underline font-medium"
                           target="_blank"
                           rel="noopener noreferrer"
@@ -385,7 +385,7 @@ export function EventDetailsContent({
                       </div>
                     </div>
 
-                    {eventDetails.meetingLinkPassword && (
+                    {eventDetails?.meetingLinkPassword && (
                       <div className="flex items-start space-x-3  p-4 rounded-lg md:col-span-2">
                         <MapPin className="h-5 w-5 text-violet-500 mt-0.5" />
                         <div>
@@ -393,7 +393,7 @@ export function EventDetailsContent({
                             Password
                           </p>
                           <p className="font-medium">
-                            {eventDetails.meetingLinkPassword}
+                            {eventDetails?.meetingLinkPassword}
                           </p>
                         </div>
                       </div>

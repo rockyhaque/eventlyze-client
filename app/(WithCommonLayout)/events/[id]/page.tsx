@@ -12,11 +12,11 @@ export default async function EventDetailsPage({ params }: { params: any }) {
   const eventId = (await params).id;
 
   const res = await getSingleEvent(eventId as string);
-  const eventDetails = res.data;
+  const eventDetails = res?.data?.event;
 
   const activeUser = await getActiveUser();
 
-  console.log(eventDetails);
+  console.log(res?.data);
 
   return (
     <div className="relative min-h-screen">
@@ -38,7 +38,10 @@ export default async function EventDetailsPage({ params }: { params: any }) {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div className="lg:col-span-2">
               {activeUser && (
-                <EventDetailsContent activeUser={activeUser} eventDetails={eventDetails} />
+                <EventDetailsContent
+                  activeUser={activeUser}
+                  eventDetails={eventDetails}
+                />
               )}
             </div>
 
@@ -63,9 +66,14 @@ export default async function EventDetailsPage({ params }: { params: any }) {
               />
             )}
           </div>
-
           <div className="mt-16">
-            <RelatedEvents />
+            {res?.data?.relatedEvents?.length > 0 ? (
+              <RelatedEvents relatedData={res.data.relatedEvents} />
+            ) : (
+              <p className="text-center text-gray-500">
+                No related data available here.
+              </p>
+            )}
           </div>
         </div>
       </div>

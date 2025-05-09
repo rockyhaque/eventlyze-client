@@ -81,7 +81,7 @@ export function FeaturedCategories() {
 
   // Filter categories based on search
   const filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    category.name.toUpperCase().includes(searchQuery.toUpperCase()),
   )
 
   useEffect(() => {
