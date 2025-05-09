@@ -9,13 +9,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  //   const user = decodedToken(token);
+  if (request.nextUrl.pathname.startsWith("/payment-status")) {
+    // Handle payment callbacks
+    return NextResponse.next();
+  }
 
-  //   console.log(user)
-
-  //   const isProtectedPath = request.nextUrl.pathname.startsWith("/dashboard");
-
-  // Redirect if user is not authorized
   if (!token) {
     return NextResponse.redirect(new URL("/", request.url));
   }

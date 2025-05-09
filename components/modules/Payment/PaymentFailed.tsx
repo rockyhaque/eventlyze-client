@@ -1,10 +1,11 @@
+"use client"
 import Link from "next/link"
 import { AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
-export default function PaymentFailedPage() {
+export default function PaymentFailed() {
   return (
     <div className="container flex items-center justify-center min-h-[80vh] px-4 py-12">
       <Card className="w-full max-w-md border-0 shadow-lg">
