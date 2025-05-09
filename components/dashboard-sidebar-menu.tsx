@@ -14,6 +14,7 @@ import {
   CalendarPlus,
   UserCog,
   DollarSign,
+  HomeIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -21,7 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { handleClientLogout } from "@/hooks/handleClientLogout";
 
-export function DashboardSidebarMenu({data}:any) {
+export function DashboardSidebarMenu({ data }: any) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -49,7 +50,6 @@ export function DashboardSidebarMenu({data}:any) {
       icon: Users,
       href: "/dashboard/invitations",
       color: "text-pink-500",
-      badge: 3,
     },
     {
       label: "Payments",
@@ -72,13 +72,13 @@ export function DashboardSidebarMenu({data}:any) {
     },
     ...(data.role === "ADMIN"
       ? [
-          {
-            label: "User Management",
-            icon: UserCog,
-            href: "/dashboard/manage-users",
-            color: "text-primary",
-          },
-        ]
+        {
+          label: "User Management",
+          icon: UserCog,
+          href: "/dashboard/manage-users",
+          color: "text-primary",
+        },
+      ]
       : []),
 
     {
@@ -152,11 +152,11 @@ export function DashboardSidebarMenu({data}:any) {
           >
             <div className="flex items-center gap-2">
               <Avatar className="h-8 w-8">
-              
+
                 <AvatarFallback>{data?.name?.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className={cn(isCollapsed && "hidden")}>
-              <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   {data?.name}
                 </p>
                 <p className="text-xs text-muted-foreground">
@@ -164,15 +164,29 @@ export function DashboardSidebarMenu({data}:any) {
                 </p>
               </div>
             </div>
-            <Button
-              onClick={handleClientLogout}
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-muted-foreground"
-            >
-              <LogOut className="h-4 w-4" />
-              <span className="sr-only">Log out</span>
-            </Button>
+
+            <div className="flex gap-2">
+              <Button
+
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 text-muted-foreground"
+              >
+                <Link href="/">
+                  <HomeIcon className="h-4 w-4" />
+                </Link>
+
+              </Button>
+              <Button
+                onClick={handleClientLogout}
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 text-muted-foreground"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="sr-only">Log out</span>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
