@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { NotificationsPopover } from "@/components/notifications-popover";
+import { NotificationsPopover } from "./notifications-popover";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
