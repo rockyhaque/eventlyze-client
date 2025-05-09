@@ -18,6 +18,7 @@ const categories = [
   { name: "Art", value: "ART" },
   { name: "Business", value: "BUSINESS" },
   { name: "Food & Drink", value: "FOOD-AND-DRINK" },
+  { name: "SPORTS", value: "SPORTS" },
 ];
 
 interface IEventsFilterParams {
