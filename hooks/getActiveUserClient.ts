@@ -6,7 +6,6 @@ export const getActiveUserClient = async () => {
   try {
     const token = Cookies.get("accessToken");
 
-    console.log("token", token)
     const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API}/user/me`, {
       headers: {
         Authorization: `${token}`,
@@ -14,7 +13,6 @@ export const getActiveUserClient = async () => {
     });
 
     const user = res.data.data;
-console.log("client user", user)
     const userData = {
       name: user.name,
       email: user.email,

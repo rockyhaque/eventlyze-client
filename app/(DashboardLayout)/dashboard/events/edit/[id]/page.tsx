@@ -54,11 +54,6 @@ export default function EditEventPage() {
     const getEventData = async () => {
       try {
         const { data } = await getSingleEvent(eventId as string);
-        // Find the matching category option object
-        console.log("API Response:", data); // Debug log
-        console.log("Category Value:", data.category); // Debug log
-
-        // Parse ISO dates to separate date/time components
         const parseDateTime = (isoString: string) => {
           const date = new Date(isoString);
           return {
@@ -142,8 +137,7 @@ export default function EditEventPage() {
       result?.success
         ? toast.success(result.message)
         : toast.error(result?.message);
-      console.log("formData submitted", formData)
-      console.log("formData error", result?.message)
+    
     } catch (error: any) {
       toast.error(error.message);
     }

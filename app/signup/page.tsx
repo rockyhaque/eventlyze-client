@@ -48,7 +48,6 @@ export default function SignupPage() {
       }
     } catch (error: any) {
       toast.error(error.message || "Error signing up. Please try again.");
-      console.log(error);
     }
   };
 

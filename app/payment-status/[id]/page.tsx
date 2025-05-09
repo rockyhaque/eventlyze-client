@@ -9,13 +9,9 @@ import { useEffect, useState } from "react";
 export default  function PaymentStatus() {
   const params = useParams();
   const id = params.id
-
-  console.log(id)
-
-
   const [paymentDetails, setPaymentDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-
+// TODO: HAVE TO ADD AXIOS AND SERVER URL FORM ENV 
   useEffect(() => {
     if (!id) {
       console.warn("No transaction ID found in query parameters.");
@@ -28,19 +24,12 @@ export default  function PaymentStatus() {
         const res = await fetch(
           `http://localhost:5000/api/v1/payments/${id}`
         );
-
         if (!res.ok) {
           throw new Error(
             "Payment status fetch failed with status " + res.status
           );
         }
-
         const data = await res.json();
-
-        console.log("Payment verification response:", data);
-
-        // Example: assuming your backend returns { success: true, data: {...} }
-
         setPaymentDetails(data.data || null);
       } catch (error) {
         console.error("Error verifying payment:", error);

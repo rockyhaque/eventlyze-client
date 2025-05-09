@@ -38,7 +38,6 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await signInUser(data);
-      console.log(res);
       if (res.success) {
         toast.success("Login successful!");
         router.push("/");

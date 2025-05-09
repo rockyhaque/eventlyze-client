@@ -28,7 +28,6 @@ const UpdatePasswordForm = () => {
 
 
   const onPasswordSubmit =async (data: any) => {
-    console.log("Password Info:", data)
     const finalData = {
       "oldPassword": data.currentPassword,
       "newPassword": data.newPassword

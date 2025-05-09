@@ -10,14 +10,9 @@ import { getActiveUser } from "@/hooks/getActiveUser";
 
 export default async function EventDetailsPage({ params }: { params: any }) {
   const eventId = (await params).id;
-
   const res = await getSingleEvent(eventId as string);
   const eventDetails = res?.data?.event;
-
   const activeUser = await getActiveUser();
-
-  console.log(res?.data);
-
   return (
     <div className="relative min-h-screen">
       <div className="absolute inset-0 h-[70vh] overflow-hidden pointer-events-none"></div>

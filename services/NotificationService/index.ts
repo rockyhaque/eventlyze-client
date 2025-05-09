@@ -12,7 +12,6 @@ export const getAllNotification = async () => {
 
         return res.data;
     } catch (error: any) {
-        console.log("error while getting all notification", error);
         const message =
             error?.response?.data?.message ||
             "Something went wrong while getting a notification!";
@@ -58,7 +57,6 @@ export const updateSingleNotification = async (id: string): Promise<any> => {
                 revalidate: 10,
             },
         });
-        console.log(res);
 
         revalidateTag("Notification");
         return res.json();

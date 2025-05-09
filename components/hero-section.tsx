@@ -47,7 +47,6 @@ const userImages: UserImage[] = [
 
 export function HeroSection({ data }: any) {
   const events = data?.data?.data;
-  // console.log(events);
   const [featuredEvent, setFeaturedEvent] = useState<Event | null>(null);
   useEffect(() => {
     // Select a random event from the events array
@@ -56,8 +55,6 @@ export function HeroSection({ data }: any) {
       setFeaturedEvent(events[randomIndex]);
     }
   }, []);
-
-  console.log(featuredEvent);
 
   return (
     <section className="relative overflow-hidden pt-16 md:pt-24">

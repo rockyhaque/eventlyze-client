@@ -194,10 +194,6 @@ export function EventSlider({ data }: any) {
         rating: 0, // CHANGE: Added default rating since API doesn't provide it
       })) || [];
 
-  // real data
-  // const realData = data;
-  // console.log("event data", realData);
-
   // Motion values for parallax effect
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);

@@ -52,7 +52,6 @@ export default function ContactUsPage() {
       }
     } catch (error: any) {
       toast.error(error.message || "Error sending message. Please try again.");
-      console.log(error);
     }
   };
 
