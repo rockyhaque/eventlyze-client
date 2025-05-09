@@ -1,13 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export function ReviewsList({reviews}:any) {
 
-  if (reviews.length === 0) {
+  if (reviews?.length < 1 || !reviews) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
         <div className="text-4xl">⭐</div>
-        <h3 className="mt-4 text-lg font-medium">No reviews</h3>
+        <h3 className="mt-4 text-lg font-medium text-white">No reviews</h3>
         <p className="mt-2 text-sm text-muted-foreground">
             You haven't received any reviews yet.
         </p>
@@ -17,7 +17,7 @@ export function ReviewsList({reviews}:any) {
 
   return (
     <div className="space-y-4">
-      {reviews.map((review: any) => (
+      {reviews?.map((review: any) => (
         <Card key={review.id}>
           <CardContent className="p-4 sm:p-6">
             <div className="flex flex-col gap-4">

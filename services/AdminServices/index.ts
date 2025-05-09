@@ -5,7 +5,7 @@ export const getStats = async () => {
       const res = await app_axios.get(`/admin/stats`);
       return res.data
     } catch (error: any) {
-      console.log("error while getting single", error);
+      console.log("error while getting stats ", error);
       const message =
         error?.response?.data?.message ||
         "Something went wrong while getting stats!";

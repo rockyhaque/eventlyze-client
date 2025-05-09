@@ -125,7 +125,9 @@ export function DashboardSidebarMenu({ data }: any) {
                 )}
               >
                 <route.icon className={cn("h-5 w-5", route.color)} />
-               
+                <span className={cn(isCollapsed && "hidden")}>
+                  {route.label}
+                </span>
               </Link>
             ))}
           </nav>
