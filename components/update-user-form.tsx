@@ -58,8 +58,6 @@ const UpdateUserForm = ({user}:any) => {
       photo: userImage,
     }
 
-    console.log("User Info:", finalData)
-
     const response = await updatedUser(finalData)
     if(response.success){
       toast.success("Profile Updated Successfully!")

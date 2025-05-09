@@ -35,7 +35,6 @@ export function InvitationsList({ status, data }: InvitationsListProps) {
     try {
       const response = await updatePerticipentsStatus(payload)
 
-      console.log("update response client", response)
       setLocalData((prev: any[]) =>
         prev.map(inv =>
           inv.id === id ? { ...inv, status: newStatus } : inv

@@ -27,8 +27,8 @@ export default function LoginPage() {
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "ran@gmail.com",
-      password: "000000",
+      email: "",
+      password: "",
     },
   });
   const {
@@ -38,15 +38,14 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await signInUser(data);
-      console.log(res);
       if (res.success) {
         toast.success("Login successful!");
         router.push("/");
-      } else {
-        toast.error(res.message || "Login failed. Please try again.");
+      }else{
+        toast.error("Invalid Credentials!");
       }
     } catch (error: any) {
-      toast.error(error.message || "Login failed. Please try again.");
+      toast.error("Something went wrong!");
     }
   };
 
@@ -164,7 +163,7 @@ export default function LoginPage() {
             </h2>
             <p className="mb-4 max-w-md text-sm text-white/80">
               Join thousands of event enthusiasts and create unforgettable
-              memories with Eventify.
+              memories with Eventilyze.
             </p>
             <Button variant="secondary" className="gap-2">
               <span>Explore Events</span>

@@ -5,7 +5,6 @@ import { getAllReviews } from "@/services/Reviews"
 export default async function ReviewsPage() {
   const reviewData = await getAllReviews()
   const reviews = reviewData?.data
-  console.log("reveiws", reviews)
   return (
     <div>
       <PageHeader title="Reviews" description="Manage reviews for your events and your reviews of other events" />

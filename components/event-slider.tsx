@@ -23,141 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-// Sample event data
-// const events = [
-//   {
-//     id: 1,
-//     title: "Tech Conference 2023",
-//     image: "/placeholder.svg?height=400&width=600&text=Tech+Conference",
-//     date: "May 20-22, 2023",
-//     location: "San Francisco, CA",
-//     price: "$299",
-//     category: "Technology",
-//     attendees: 1200,
-//     rating: 4.8,
-//     featured: true,
-//   },
-//   {
-//     id: 2,
-//     title: "Summer Music Festival",
-//     image: "/placeholder.svg?height=400&width=600&text=Music+Festival",
-//     date: "June 15-18, 2023",
-//     location: "Central Park, NY",
-//     price: "$149",
-//     category: "Music",
-//     attendees: 5000,
-//     rating: 4.9,
-//     featured: true,
-//   },
-//   {
-//     id: 3,
-//     title: "Food & Wine Expo",
-//     image: "/placeholder.svg?height=400&width=600&text=Food+Expo",
-//     date: "July 8-10, 2023",
-//     location: "Chicago, IL",
-//     price: "$79",
-//     category: "Food & Drink",
-//     attendees: 3000,
-//     rating: 4.7,
-//     featured: false,
-//   },
-//   {
-//     id: 4,
-//     title: "Art Gallery Opening",
-//     image: "/placeholder.svg?height=400&width=600&text=Art+Gallery",
-//     date: "August 5, 2023",
-//     location: "Los Angeles, CA",
-//     price: "Free",
-//     category: "Art",
-//     attendees: 500,
-//     rating: 4.5,
-//     featured: false,
-//   },
-//   {
-//     id: 5,
-//     title: "Startup Pitch Competition",
-//     image: "/placeholder.svg?height=400&width=600&text=Startup+Pitch",
-//     date: "September 12, 2023",
-//     location: "Austin, TX",
-//     price: "$49",
-//     category: "Business",
-//     attendees: 800,
-//     rating: 4.6,
-//     featured: true,
-//   },
-//   {
-//     id: 6,
-//     title: "Yoga & Wellness Retreat",
-//     image: "/placeholder.svg?height=400&width=600&text=Wellness+Retreat",
-//     date: "October 1-3, 2023",
-//     location: "Sedona, AZ",
-//     price: "$399",
-//     category: "Wellness",
-//     attendees: 150,
-//     rating: 4.9,
-//     featured: false,
-//   },
-//   {
-//     id: 7,
-//     title: "Gaming Convention",
-//     image: "/placeholder.svg?height=400&width=600&text=Gaming+Convention",
-//     date: "November 18-20, 2023",
-//     location: "Seattle, WA",
-//     price: "$89",
-//     category: "Gaming",
-//     attendees: 2500,
-//     rating: 4.7,
-//     featured: true,
-//   },
-//   {
-//     id: 8,
-//     title: "Winter Fashion Show",
-//     image: "/placeholder.svg?height=400&width=600&text=Fashion+Show",
-//     date: "December 5, 2023",
-//     location: "Miami, FL",
-//     price: "$129",
-//     category: "Fashion",
-//     attendees: 1000,
-//     rating: 4.8,
-//     featured: false,
-//   },
-//   {
-//     id: 9,
-//     title: "New Year's Eve Gala",
-//     image: "/placeholder.svg?height=400&width=600&text=NYE+Gala",
-//     date: "December 31, 2023",
-//     location: "Las Vegas, NV",
-//     price: "$199",
-//     category: "Nightlife",
-//     attendees: 1500,
-//     rating: 4.9,
-//     featured: true,
-//   },
-// ];
-
-// CHANGE: Updated Event interface to match API data structure
-interface Event {
-  id: string;
-  title: string;
-  eventBanner: string | null;
-  eventStartTime: string;
-  location: string;
-  price: number;
-  category: string;
-  seat: number;
-  status: string;
-}
-
-// CHANGE: Updated ApiResponse interface to reflect the API structure
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data: {
-    meta: Record<string, any>;
-    data: Event[];
-  };
-}
+import { TEvent } from "@/types/eventTypes";
 
 export function EventSlider({ data }: any) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -167,7 +33,6 @@ export function EventSlider({ data }: any) {
   const containerRef = useRef<HTMLDivElement>(null);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
-  // CHANGE: Process API data, sort by eventStartTime, limit to 5 events, and map to component's expected format
   const events =
     data?.data?.data
       ?.slice()
@@ -177,7 +42,7 @@ export function EventSlider({ data }: any) {
           new Date(a.eventStartTime).getTime()
       )
       .slice(0, 5)
-      .map((event: any) => ({
+      .map((event: TEvent) => ({
         id: event.id,
         title: event.title,
         image: event.eventBanner || "/placeholder.svg",
@@ -189,14 +54,10 @@ export function EventSlider({ data }: any) {
         location: event.location,
         price: `$${event.price}`,
         category: event.category.toLowerCase(),
-        attendees: event.seat,
+        attendees: event.participant.length || 0,
         featured: event.status === "UPCOMING",
         rating: 0, // CHANGE: Added default rating since API doesn't provide it
       })) || [];
-
-  // real data
-  // const realData = data;
-  // console.log("event data", realData);
 
   // Motion values for parallax effect
   const mouseX = useMotionValue(0);
@@ -504,22 +365,6 @@ function EventCard({ event, isActive, mouseX, mouseY }: EventCardProps) {
               </Badge>
             )}
           </div>
-
-          <div className="absolute right-4 top-4 z-10">
-            <Badge
-              variant="outline"
-              className="bg-black/30 text-white backdrop-blur-sm hover:bg-black/50"
-            >
-              {event.price}
-            </Badge>
-          </div>
-
-          {/* Rating */}
-          {/* change */}
-          {/* <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1 rounded-full bg-black/30 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm">
-            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-            {event.rating}
-          </div> */}
         </div>
 
         {/* Content section with parallax */}
@@ -545,7 +390,7 @@ function EventCard({ event, isActive, mouseX, mouseY }: EventCardProps) {
             </div>
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4 text-primary" />
-              <span>{event.attendees.toLocaleString()} attendees</span>
+              <span>{event.attendees} attendees</span>
             </div>
           </div>
 

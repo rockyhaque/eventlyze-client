@@ -66,7 +66,7 @@ export function EventDetailsHero({ eventDetails }: { eventDetails: TEvent }) {
       </motion.div>
 
       {/* Floating action buttons */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
@@ -111,7 +111,7 @@ export function EventDetailsHero({ eventDetails }: { eventDetails: TEvent }) {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-      </motion.div>
+      </motion.div> */}
 
       {/* Background image with parallax */}
       <div className="relative h-[70vh] w-full overflow-hidden">

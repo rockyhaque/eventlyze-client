@@ -21,17 +21,12 @@ export const signInUser = async (userData: FieldValues) => {
   try {
     const res = await app_axios.post("/auth/login", userData);
     const result = res.data;
-
-    console.log(result);
-
     if (result?.success) {
       (await cookies()).set("accessToken", result?.data?.accessToken);
     }
-
     return result;
   } catch (error: any) {
     console.error(error);
-
     const message = error?.response?.data?.message || "Something went wrong!";
     return new Error(message);
   }

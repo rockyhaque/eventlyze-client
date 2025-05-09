@@ -31,9 +31,7 @@ export const getAllInvitesForPerticipents = async ()=>{
 
 export const updatePerticipentsStatus = async (data: any)=>{
   try {
-    console.log("payload Data",data)
     const res = await app_axios.patch(`/invitation/update-status`, data);
-    console.log("update response server", res)
     return res;
   } catch (error: any) {
     const message =

@@ -10,7 +10,7 @@ const testimonials = [
   {
     id: 1,
     content:
-      "Eventify has completely transformed how I discover and attend events. The platform is intuitive, and I've connected with amazing people through the events I've attended.",
+      "Eventilyze has completely transformed how I discover and attend events. The platform is intuitive, and I've connected with amazing people through the events I've attended.",
     author: {
       name: "Sarah Johnson",
       role: "Marketing Director",
@@ -21,7 +21,7 @@ const testimonials = [
   {
     id: 2,
     content:
-      "As an event organizer, Eventify has made it incredibly easy to create, promote, and manage my events. The analytics and attendee management features are top-notch!",
+      "As an event organizer, Eventilyze has made it incredibly easy to create, promote, and manage my events. The analytics and attendee management features are top-notch!",
     author: {
       name: "Michael Chen",
       role: "Event Coordinator",
@@ -32,7 +32,7 @@ const testimonials = [
   {
     id: 3,
     content:
-      "I've discovered so many unique experiences through Eventify that I would have never found otherwise. The personalized recommendations are spot on!",
+      "I've discovered so many unique experiences through Eventilyze that I would have never found otherwise. The personalized recommendations are spot on!",
     author: {
       name: "Jessica Williams",
       role: "Travel Blogger",
@@ -65,7 +65,7 @@ export function Testimonials() {
             What Our Users Say
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Hear from people who love using Eventify
+            Hear from people who love using Eventilyze
           </p>
         </div>
 

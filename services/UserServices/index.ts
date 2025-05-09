@@ -6,7 +6,6 @@ export const getAllUser = async () => {
     const response = await app_axios.get("/user/all-users");
     return response.data;
   } catch (error: any) {
-    console.log("error while fetching user", error);
     const message = error?.response?.data?.message || "Something went wrong!";
     return new Error(message);
   }
@@ -17,7 +16,6 @@ export const getSingleUser = async (email:string) => {
     const response = await app_axios.get("/user/all-users");
     return response.data;
   } catch (error: any) {
-    console.log("error while fetching user", error);
     const message = error?.response?.data?.message || "Something went wrong!";
     return new Error(message);
   }
@@ -28,7 +26,6 @@ export const updatedUser = async (data:any) => {
         const response = await app_axios.patch("/user/update-my-profile", data);
         return response.data;
     } catch (error: any) {
-        console.log("error while fetching user", error)
         const message = error?.response?.data?.message || "Something went wrong updating user!";
         return new Error(message);
     }
@@ -55,7 +52,6 @@ export const updatedUserRole = async (id: string, data: any) => {
     });
     return response.data;
   } catch (error: any) {
-    console.log("error while fetching user", error);
     const message =
       error?.response?.data?.message ||
       "Something went wrong while updating user role!";
@@ -68,7 +64,6 @@ export const softDeleteUser = async (id: string, data: any) => {
     const response = await app_axios.patch(`/user/update-role/${id}`, data);
     return response.data;
   } catch (error: any) {
-    console.log("error while fetching user", error);
     const message =
       error?.response?.data?.message ||
       "Something went wrong while updating user role!";

@@ -6,8 +6,6 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 
 export default function PaymentSuccess({paymentDetails}:{paymentDetails:any}) {
 
-  console.log(paymentDetails)
-
   return (
     <div className="container flex items-center justify-center min-h-[80vh] px-4 py-12">
       <Card className="w-full max-w-md border-0 shadow-lg">

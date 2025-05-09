@@ -48,7 +48,6 @@ export default function SignupPage() {
       }
     } catch (error: any) {
       toast.error(error.message || "Error signing up. Please try again.");
-      console.log(error);
     }
   };
 
@@ -83,8 +82,11 @@ export default function SignupPage() {
               exciting events happening around you.
             </p>
             <Button variant="secondary" className="gap-2">
+              <Link href="/about-us" className="flex gap-2 items-center">
               <span>Learn More</span>
               <ArrowRight className="h-4 w-4" />
+              </Link>
+             
             </Button>
           </div>
         </motion.div>
@@ -152,14 +154,14 @@ export default function SignupPage() {
                     <Label htmlFor="terms" className="text-sm font-normal">
                       I agree to the{" "}
                       <Link
-                        href="/terms"
+                        href="/terms-of-service"
                         className="text-primary underline-offset-4 hover:underline"
                       >
                         Terms of Service
                       </Link>{" "}
                       and{" "}
                       <Link
-                        href="/privacy"
+                        href="/privacy-policy"
                         className="text-primary underline-offset-4 hover:underline"
                       >
                         Privacy Policy

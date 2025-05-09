@@ -51,7 +51,7 @@ export function HowItWorks() {
       <div className="container">
         <div className="mb-10 text-center">
           <h2 className="font-display text-3xl font-bold md:text-4xl">How It Works</h2>
-          <p className="mt-2 text-muted-foreground">Simple steps to get started with Eventify</p>
+          <p className="mt-2 text-muted-foreground">Simple steps to get started with Eventilyze</p>
         </div>
 
         <motion.div

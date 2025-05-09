@@ -19,8 +19,6 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function DashboardCategoryChart({ data }: any) {
-
-  console.log(data)
   return (
     <Card className="p-5">
       <PageHeader title="Yearly Events" description="Number of events created over the year." />

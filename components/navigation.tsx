@@ -56,7 +56,7 @@ export function Navigation() {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Events", href: "/events" },
-    { name: "Create Event", href: "/create-event" },
+    { name: "Create Event", href: "/dashboard/create-event" },
     { name: "About", href: "/about" },
   ];
 
@@ -78,7 +78,7 @@ export function Navigation() {
             <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-white">
               <Calendar className="h-4 w-4" />
             </div>
-            <span className="font-display text-xl font-bold">Eventify</span>
+            <span className="font-display text-xl font-bold">Eventilyze</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
@@ -164,7 +164,7 @@ export function Navigation() {
               <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-white">
                 <Calendar className="h-4 w-4" />
               </div>
-              <span className="font-display text-xl font-bold">Eventify</span>
+              <span className="font-display text-xl font-bold">Eventilyze</span>
             </Link>
 
             <Button

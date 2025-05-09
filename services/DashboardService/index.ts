@@ -6,7 +6,6 @@ export const getChartData = async () =>{
         const res = await app_axios.get(`/dashboard/chart`);
         return res.data
       } catch (error: any) {
-        console.log("error while getting single chart data", error);
         const message =
           error?.response?.data?.message ||
           "Something went wrong while getting a event!";

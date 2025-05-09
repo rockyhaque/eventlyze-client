@@ -7,14 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
-type Event = {
-  image: string;
-  title: string;
-  category: string;
-  eventStartTime: string;
-  location: string;
-};
-
 interface UserImage {
   id: number;
   src: string;
@@ -47,8 +39,7 @@ const userImages: UserImage[] = [
 
 export function HeroSection({ data }: any) {
   const events = data?.data?.data;
-  // console.log(events);
-  const [featuredEvent, setFeaturedEvent] = useState<Event | null>(null);
+  const [featuredEvent, setFeaturedEvent] = useState<any | null>(null);
   useEffect(() => {
     // Select a random event from the events array
     if (events && events.length > 0) {
@@ -57,8 +48,8 @@ export function HeroSection({ data }: any) {
     }
   }, []);
 
-  console.log(featuredEvent);
 
+  console.log("feature events", featuredEvent)
   return (
     <section className="relative overflow-hidden pt-16 md:pt-24">
       {/* Background elements */}
@@ -100,7 +91,7 @@ export function HeroSection({ data }: any) {
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/create-event">Create Your Event</Link>
+              <Link href="/dashboard/create-event">Create Your Event</Link>
             </Button>
           </div>
 
@@ -142,8 +133,8 @@ export function HeroSection({ data }: any) {
               <>
                 <Image
                   src={
-                    featuredEvent.image ||
-                    "https://img.freepik.com/free-photo/landscape-morning-fog-mountains-with-hot-air-balloons-sunrise_335224-794.jpg?t=st=1746527742~exp=1746531342~hmac=bbdd21966166c500675997bdb239d71d43bf1a538c9e582560c96f23bf0ba26d&w=996"
+                    featuredEvent?.eventBanner ||
+                    "/placeholder.svg"
                   }
                   alt={featuredEvent.title}
                   width={800}
@@ -204,9 +195,19 @@ export function HeroSection({ data }: any) {
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg">
               <div className="text-center">
                 <div className="font-display text-xl font-bold text-primary">
-                  15
+                  {new Date(
+                    featuredEvent?.eventStartTime
+                  ).toLocaleDateString("en-US", {
+                    day: "numeric",
+                  })}
                 </div>
-                <div className="text-xs font-medium text-primary">June</div>
+                <div className="text-xs font-medium text-primary">
+                  {new Date(
+                    featuredEvent?.eventStartTime
+                  ).toLocaleDateString("en-US", {
+                    month: "long",
+                  })}
+                </div>
               </div>
             </div>
           </div>

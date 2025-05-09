@@ -245,7 +245,7 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
           {getActionButton()}
           <p className="mt-4 text-center text-xs text-muted-foreground">
             By joining this event, you agree to the{" "}
-            <a href="#" className="underline underline-offset-2">
+            <a href="/terms-of-service" className="underline underline-offset-2">
               Terms & Conditions
             </a>
           </p>

@@ -13,12 +13,13 @@ import {
 import { useQueryState } from "nuqs";
 
 const categories = [
+  { name: "All", value: "ALL" },
   { name: "Music", value: "MUSIC" },
   { name: "Technology", value: "TECHNOLOGY" },
   { name: "Art", value: "ART" },
   { name: "Business", value: "BUSINESS" },
   { name: "Food & Drink", value: "FOOD-AND-DRINK" },
-  { name: "SPORTS", value: "SPORTS" },
+  { name: "Sports", value: "SPORTS" },
 ];
 
 interface IEventsFilterParams {
@@ -29,21 +30,17 @@ export function EventsHero({ refetchEvents }: IEventsFilterParams) {
   const [categoryState, setCategory] = useQueryState("category", {
     defaultValue: "",
   });
-  const [date, setDate] = useQueryState("date", { defaultValue: "" });
 
   const handleCategory = (value: string) => {
+    if(value == "ALL") {
+      setCategory(null)
+    }
     setCategory(value);
     setTimeout(() => {
       refetchEvents();
     }, 100);
   };
 
-  const handleDate = (value: string) => {
-    setDate(value);
-    setTimeout(() => {
-      refetchEvents();
-    }, 100);
-  };
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-16 md:py-24">
@@ -87,7 +84,7 @@ export function EventsHero({ refetchEvents }: IEventsFilterParams) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className=" ">
+            {/* <div className=" ">
               <div className="relative">
                 <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Select value={date} onValueChange={handleDate}>
@@ -103,7 +100,7 @@ export function EventsHero({ refetchEvents }: IEventsFilterParams) {
                   </SelectContent>
                 </Select>
               </div>
-            </div>
+            </div> */}
 
             <div className="mt-4 flex flex-wrap gap-2 justify-center">
               {categories.map((category) => (
@@ -132,24 +129,7 @@ export function EventsHero({ refetchEvents }: IEventsFilterParams) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <span>Popular searches:</span>
-            <div className="flex flex-wrap gap-2">
-              <a href="#" className="hover:text-primary hover:underline">
-                Concerts
-              </a>
-              <span>•</span>
-              <a href="#" className="hover:text-primary hover:underline">
-                Workshops
-              </a>
-              <span>•</span>
-              <a href="#" className="hover:text-primary hover:underline">
-                Conferences
-              </a>
-              <span>•</span>
-              <a href="#" className="hover:text-primary hover:underline">
-                Festivals
-              </a>
-            </div>
+        
           </motion.div>
         </div>
       </div>
