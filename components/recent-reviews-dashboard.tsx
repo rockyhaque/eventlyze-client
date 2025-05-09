@@ -4,7 +4,7 @@ import { PageHeader } from "./page-header"
 
 export function RecentReviewsDashboard({ reviews }: any) {
 
-  if (reviews?.length === 0) {
+  if (reviews?.length < 1 || !reviews) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
         <div className="text-4xl">⭐</div>

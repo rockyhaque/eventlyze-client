@@ -5,10 +5,13 @@ import { RecentReviewsDashboard } from "@/components/recent-reviews-dashboard"
 import { RecentSubscriber } from "@/components/recent-subscriber"
 import { getActiveUser } from "@/hooks/getActiveUser"
 import { getStats } from "@/services/AdminServices"
-import { getAllReviews, getChartData } from "@/services/DashboardService"
+import { getChartData } from "@/services/DashboardService"
+import { getAllReviews } from "@/services/Reviews"
 
 export default async function DashboardPage() {
-  const {role} = await getActiveUser()
+  const user = await getActiveUser()
+  const role = user?.role || "USER"
+
   const stats = await getStats()
   const chartData = await getChartData()
   const reviewData = await getAllReviews()

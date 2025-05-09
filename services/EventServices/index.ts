@@ -66,7 +66,7 @@ export const getSingleEvent = async (id: string) => {
     const res = await app_axios.get(`/event/${id}`);
     return res.data;
   } catch (error: any) {
-    console.log("error while getting single", error);
+    console.log("error while getting single event", error);
     const message =
       error?.response?.data?.message ||
       "Something went wrong while getting a event!";

@@ -11,3 +11,18 @@ export function formatDateTime(input: string | undefined): { date: string; time:
     return { date, time }
   }
   
+
+  export function formatTime(time: string | undefined) {
+    if (!time) return null;
+  
+    const parsedDate = new Date(time);
+  
+    if (isNaN(parsedDate.getTime())) return null;
+  
+    return parsedDate.toLocaleTimeString(undefined, {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+  }
+  

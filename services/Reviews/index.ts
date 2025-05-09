@@ -25,7 +25,7 @@ export const getAllReviews = async () => {
     const res = await app_axios.get(`/reviews`);
     return res.data;
   } catch (error: any) {
-    console.log("error while getting single", error);
+    console.log("error while getting all reviews", error);
     const message =
       error?.response?.data?.message ||
       "Something went wrong while getting stats!";
