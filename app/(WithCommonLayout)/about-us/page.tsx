@@ -38,10 +38,10 @@ export default function AboutPage() {
                 asChild
                 className="rounded-md bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
               >
-                <Link href="/create-event">Create Your Event</Link>
+                <Link href="/dashboard/create-event">Create Your Event</Link>
               </Button>
               <Button size="lg" variant="outline" asChild className="rounded-md">
-                <Link href="/dashboard">Explore Events</Link>
+                <Link href="/events">Explore Events</Link>
               </Button>
             </div>
           </div>

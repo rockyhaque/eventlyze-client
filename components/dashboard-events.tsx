@@ -49,7 +49,7 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
           {type === "completed" && "You don't have any completed events."}
         </p>
         <Button className="mt-4" asChild>
-          <Link href="/create-event">Create an Event</Link>
+          <Link href="/dashboard/create-event">Create an Event</Link>
         </Button>
       </div>
     )

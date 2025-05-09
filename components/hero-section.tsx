@@ -97,7 +97,7 @@ export function HeroSection({ data }: any) {
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/create-event">Create Your Event</Link>
+              <Link href="/dashboard/create-event">Create Your Event</Link>
             </Button>
           </div>
 

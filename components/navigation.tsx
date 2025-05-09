@@ -56,7 +56,7 @@ export function Navigation() {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Events", href: "/events" },
-    { name: "Create Event", href: "/create-event" },
+    { name: "Create Event", href: "/dashboard/create-event" },
     { name: "About", href: "/about" },
   ];
 
