@@ -27,8 +27,8 @@ export default function LoginPage() {
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "ran@gmail.com",
-      password: "000000",
+      email: "",
+      password: "",
     },
   });
   const {
@@ -41,11 +41,11 @@ export default function LoginPage() {
       if (res.success) {
         toast.success("Login successful!");
         router.push("/");
-      } else {
-        toast.error(res.message || "Login failed. Please try again.");
+      }else{
+        toast.error("Invalid Credentials!");
       }
     } catch (error: any) {
-      toast.error(error.message || "Login failed. Please try again.");
+      toast.error("Something went wrong!");
     }
   };
 
