@@ -24,13 +24,13 @@ export function RelatedEvents({relatedData}:{
       <div className="mb-8 flex items-center justify-between">
         <h2 className="font-display text-2xl font-bold">Related Events</h2>
         <Button variant="ghost" size="sm" className="gap-1">
-          <span>View All</span>
-          <ArrowRight className="h-4 w-4" />
+         <Link href="/events" className="flex gap-2 items-center"> <span>View All</span>
+         <ArrowRight className="h-4 w-4" /></Link>
         </Button>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {relatedData?.map((event, index) => (
+        {relatedData?.slice(0,3).map((event, index) => (
           <motion.div
             key={event.id}
             initial={{ opacity: 0, y: 20 }}

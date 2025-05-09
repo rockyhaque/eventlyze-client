@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CheckCircle2 } from "lucide-react"
 import { addNewsLetter } from "@/services/NewsLetterSerice"
+import Link from "next/link"
 
 export function Newsletter() {
   const [email, setEmail] = useState("")
@@ -77,14 +78,14 @@ export function Newsletter() {
               </div>
               <p className="mt-2 text-center text-xs text-muted-foreground">
                 By subscribing, you agree to our{" "}
-                <a href="#" className="underline underline-offset-2">
+                <Link href="/terms-of-service" className="underline underline-offset-2">
                   Terms & Conditions
-                </a>{" "}
+                </Link>{" "}
                 and{" "}
-                <a href="#" className="underline underline-offset-2">
+                <Link href="/privacy-policy" className="underline underline-offset-2">
                   Privacy Policy
-                </a>
-                .
+                </Link>
+                
               </p>
             </form>
 

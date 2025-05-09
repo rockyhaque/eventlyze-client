@@ -371,7 +371,7 @@ export function UpcomingEvents() {
               </TabsList>
             </Tabs>
 
-            <Button variant="outline" className="gap-2" onClick={() => setShowFilters(!showFilters)}>
+            {/* <Button variant="outline" className="gap-2" onClick={() => setShowFilters(!showFilters)}>
               <Filter className={cn("h-4 w-4", showFilters && "text-primary")} />
               Filters
               {activeFilters.length > 0 && (
@@ -379,7 +379,7 @@ export function UpcomingEvents() {
                   {activeFilters.length}
                 </Badge>
               )}
-            </Button>
+            </Button> */}
           </div>
         </motion.div>
 
