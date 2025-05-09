@@ -38,11 +38,7 @@ const EFormInput = ({
 
   return (
     <div className="relative">
-      {icon && (
-        <div className="absolute left-3 top-3/4 h-4 w-4 -translate-y-1/2 text-muted-foreground pb-5">
-          {icon}
-        </div>
-      )}
+
       <FormField
         control={control}
         name={name}
@@ -51,7 +47,12 @@ const EFormInput = ({
           <FormItem>
             {label && <FormLabel>{label}</FormLabel>}
             <FormControl>
-              <div>
+              <div className="relative">
+                {icon && (
+                  <div className="absolute left-3 top-0 h-4 w-4 translate-y-1/2 text-muted-foreground pb-5">
+                    {icon}
+                  </div>
+                )}
                 <Input
                   placeholder={placeholder}
                   type={type === "password" && showPassword ? "text" : type}
@@ -65,7 +66,7 @@ const EFormInput = ({
                   <button
                     type="button"
                     onClick={handleTogglePassword}
-                    className="absolute right-3 top-3/4 transform -translate-y-1/2 text-muted-foreground"
+                    className="absolute right-3 top-0 transform translate-y-1/2 text-muted-foreground"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>

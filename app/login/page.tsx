@@ -89,14 +89,7 @@ export default function LoginPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Link
-                        href="/forgot-password"
-                        className="text-xs text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
-                      >
-                        Forgot password?
-                      </Link>
-                    </div>
+          
 
                     {/* Form input */}
                     <EFormInput
