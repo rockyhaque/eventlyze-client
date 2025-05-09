@@ -26,13 +26,18 @@ import { signUpUser } from "@/services/AuthServices";
 import { toast } from "sonner";
 
 export default function SignupPage() {
-  const form = useForm({resolver: zodResolver(signupSchema),  defaultValues: {
-    name: "",
-    email: "",
-    password: "",
-  },});
+  const form = useForm({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  });
 
-  const {formState: { isSubmitting }} = form;
+  const {
+    formState: { isSubmitting },
+  } = form;
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const formData = {
@@ -41,9 +46,9 @@ export default function SignupPage() {
       const result = await signUpUser(formData);
       if (result?.success) {
         toast.success(result.message || "User signed up successfully!");
-        form.reset()
+        form.reset();
       }
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.message || "Error signing up. Please try again.");
       console.log(error);
     }
@@ -61,7 +66,7 @@ export default function SignupPage() {
         >
           <div className="absolute inset-0 bg-gradient-to-br from-secondary/20 via-primary/20 to-background"></div>
           <Image
-            src="/placeholder.svg?height=800&width=600&text=Event+Signup"
+            src="https://images.unsplash.com/photo-1558008258-3256797b43f3?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Sign Up"
             width={600}
             height={800}
