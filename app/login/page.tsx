@@ -163,7 +163,7 @@ export default function LoginPage() {
             </h2>
             <p className="mb-4 max-w-md text-sm text-white/80">
               Join thousands of event enthusiasts and create unforgettable
-              memories with Eventify.
+              memories with Eventilyze.
             </p>
             <Button variant="secondary" className="gap-2">
               <span>Explore Events</span>

@@ -8,19 +8,19 @@ export default function TermsOfServicePage() {
         </p>
         <p className="mb-4">
           Welcome to{" "}
-          <a href="https://www.eventify.com" className="hover:underline">
-            eventify.com
+          <a href="https://www.eventilyze.com" className="hover:underline">
+            eventilyze.com
           </a>{" "}
-          ("Eventify," "we," "us," or "our"). These Terms of Service ("Terms")
+          ("Eventilyze," "we," "us," or "our"). These Terms of Service ("Terms")
           govern your access to and use of our website, services, and platform
           for event management, including event creation, registration, and
-          ticketing. By accessing or using Eventify, you agree to be bound by
+          ticketing. By accessing or using Eventilyze, you agree to be bound by
           these Terms. If you do not agree, please do not use our services.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">1. Use of Our Services</h2>
         <p className="mb-4">
-          Eventify provides a platform for users to create, promote, manage, and
+          Eventilyze provides a platform for users to create, promote, manage, and
           attend events. To use our services, you must:
         </p>
         <ul className="list-disc pl-6 mb-4">
@@ -53,8 +53,8 @@ export default function TermsOfServicePage() {
           </li>
           <li>
             Notifying us immediately at{" "}
-            <a href="mailto:support@eventify.com" className="hover:underline">
-              support@eventify.com
+            <a href="mailto:support@eventilyze.com" className="hover:underline">
+              support@eventilyze.com
             </a>{" "}
             if you suspect unauthorized access to your account.
           </li>
@@ -64,7 +64,7 @@ export default function TermsOfServicePage() {
           3. Event Creation and Management
         </h2>
         <p className="mb-4">
-          If you use Eventify to create or manage events, you agree to:
+          If you use Eventilyze to create or manage events, you agree to:
         </p>
         <ul className="list-disc pl-6 mb-4">
           <li>
@@ -85,13 +85,13 @@ export default function TermsOfServicePage() {
           </li>
         </ul>
         <p className="mb-4">
-          Eventify reserves the right to remove or suspend events that violate
+          Eventilyze reserves the right to remove or suspend events that violate
           these Terms or our policies.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">4. Payments and Fees</h2>
         <p className="mb-4">
-          Eventify facilitates payments for event tickets through third-party
+          Eventilyze facilitates payments for event tickets through third-party
           payment processors. You agree to:
         </p>
         <ul className="list-disc pl-6 mb-4">
@@ -100,25 +100,25 @@ export default function TermsOfServicePage() {
             event creation or ticket purchase.
           </li>
           <li>
-            Provide accurate payment information and authorize Eventify and our
+            Provide accurate payment information and authorize Eventilyze and our
             payment processors to charge your payment method.
           </li>
           <li>
             Understand that ticket purchases are subject to the event
-            organizer’s refund policy, and Eventify is not responsible for
+            organizer’s refund policy, and Eventilyze is not responsible for
             processing refunds unless explicitly stated.
           </li>
         </ul>
 
         <h2 className="text-xl font-semibold mb-2">5. User Content</h2>
         <p className="mb-4">
-          You may submit content to Eventify, such as event descriptions,
+          You may submit content to Eventilyze, such as event descriptions,
           reviews, or feedback ("User Content"). By submitting User Content,
           you:
         </p>
         <ul className="list-disc pl-6 mb-4">
           <li>
-            Grant Eventify a non-exclusive, worldwide, royalty-free license to
+            Grant Eventilyze a non-exclusive, worldwide, royalty-free license to
             use, display, and distribute your User Content in connection with
             our services.
           </li>
@@ -128,27 +128,27 @@ export default function TermsOfServicePage() {
             rights.
           </li>
           <li>
-            Acknowledge that Eventify may remove or modify User Content that
+            Acknowledge that Eventilyze may remove or modify User Content that
             violates these Terms or our policies.
           </li>
         </ul>
 
         <h2 className="text-xl font-semibold mb-2">6. Intellectual Property</h2>
         <p className="mb-4">
-          All content, logos, trademarks, and software on Eventify, excluding
-          User Content, are owned by or licensed to Eventify. You may not copy,
+          All content, logos, trademarks, and software on Eventilyze, excluding
+          User Content, are owned by or licensed to Eventilyze. You may not copy,
           modify, distribute, or reproduce our intellectual property without
           prior written consent.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">7. Termination</h2>
         <p className="mb-4">
-          We may suspend or terminate your access to Eventify at our discretion,
+          We may suspend or terminate your access to Eventilyze at our discretion,
           with or without notice, if you violate these Terms or engage in
-          conduct that harms Eventify, its users, or third parties. You may
+          conduct that harms Eventilyze, its users, or third parties. You may
           terminate your account at any time by contacting us at{" "}
-          <a href="mailto:support@eventify.com" className="hover:underline">
-            support@eventify.com
+          <a href="mailto:support@eventilyze.com" className="hover:underline">
+            support@eventilyze.com
           </a>
           .
         </p>
@@ -157,7 +157,7 @@ export default function TermsOfServicePage() {
           8. Limitation of Liability
         </h2>
         <p className="mb-4">
-          To the fullest extent permitted by law, Eventify and its affiliates,
+          To the fullest extent permitted by law, Eventilyze and its affiliates,
           officers, and employees will not be liable for:
         </p>
         <ul className="list-disc pl-6 mb-4">
@@ -181,7 +181,7 @@ export default function TermsOfServicePage() {
 
         <h2 className="text-xl font-semibold mb-2">9. Indemnification</h2>
         <p className="mb-4">
-          You agree to indemnify and hold Eventify harmless from any claims,
+          You agree to indemnify and hold Eventilyze harmless from any claims,
           damages, or losses arising from your use of our services, violation of
           these Terms, or infringement of third-party rights.
         </p>
@@ -192,9 +192,9 @@ export default function TermsOfServicePage() {
         <p className="mb-4">
           These Terms are governed by the laws of [Your Jurisdiction, e.g.,
           Delaware, USA]. Any disputes arising from these Terms or your use of
-          Eventify will be resolved through binding arbitration in [Your
+          Eventilyze will be resolved through binding arbitration in [Your
           City/State], except where prohibited by law. You waive any right to
-          participate in className action lawsuits against Eventify.
+          participate in className action lawsuits against Eventilyze.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">
@@ -211,8 +211,8 @@ export default function TermsOfServicePage() {
         <h2 className="text-xl font-semibold mb-2">12. Contact Us</h2>
         <p className="mb-4">
           For questions or concerns about these Terms, please contact us at{" "}
-          <a href="mailto:support@eventify.com" className="hover:underline">
-            support@eventify.com
+          <a href="mailto:support@eventilyze.com" className="hover:underline">
+            support@eventilyze.com
           </a>
           .
         </p>

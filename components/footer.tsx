@@ -11,7 +11,7 @@ export function Footer() {
               <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-white">
                 <Calendar className="h-4 w-4" />
               </div>
-              <span className="font-display text-xl font-bold">Eventify</span>
+              <span className="font-display text-xl font-bold">Eventilyze</span>
             </Link>
             <p className="mb-4 max-w-xs text-muted-foreground">
               Discover, create, and join amazing events. Connect with like-minded people and create unforgettable
@@ -151,7 +151,7 @@ export function Footer() {
       <div className="border-t py-6">
         <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-center text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Eventify. All rights reserved.
+            &copy; {new Date().getFullYear()} Eventilyze. All rights reserved.
           </p>
           <div className="flex gap-4">
             <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-foreground">

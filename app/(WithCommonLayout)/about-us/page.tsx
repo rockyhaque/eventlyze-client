@@ -13,7 +13,7 @@ export default function AboutPage() {
       <div className="flex-1 p-6 md:p-8 overflow-hidden container">
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            About Eventify
+            About Eventilyze
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Connecting people through extraordinary events and creating unforgettable experiences.
@@ -24,13 +24,13 @@ export default function AboutPage() {
           <div>
             <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
             <p className="text-lg text-muted-foreground mb-6">
-              At Eventify, we believe that events have the power to transform lives, build communities, and create
+              At Eventilyze, we believe that events have the power to transform lives, build communities, and create
               lasting memories. Our mission is to make event discovery, creation, and management seamless and accessible
               to everyone.
             </p>
             <p className="text-lg text-muted-foreground mb-6">
               Whether you're looking to attend a local workshop, organize a major conference, or simply connect with
-              like-minded individuals, Eventify provides the tools and platform to make it happen.
+              like-minded individuals, Eventilyze provides the tools and platform to make it happen.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <Button
@@ -51,7 +51,7 @@ export default function AboutPage() {
         </div>
 
         <div className="mb-20">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose Eventify</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose Eventilyze</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="shadow-md hover:shadow-lg transition-all duration-300 group">
               <CardHeader className="pb-2">
@@ -129,8 +129,8 @@ export default function AboutPage() {
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-muted-foreground">
-                  <a href="mailto:contact@eventify.com" className="hover:underline">
-                    contact@eventify.com
+                  <a href="mailto:contact@eventilyze.com" className="hover:underline">
+                    contact@eventilyze.com
                   </a>
                 </p>
               </CardContent>

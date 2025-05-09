@@ -13,7 +13,7 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "Eventify - Event Planner & Participation System",
+  title: "Eventilyze - Event Planner & Participation System",
   description: "Discover, create, and join amazing events",
   generator: "v0.dev",
 };

@@ -36,7 +36,7 @@ export function Newsletter() {
       <div className="container">
         <div className="mx-auto max-w-3xl rounded-2xl bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 p-8 md:p-12">
           <div className="text-center">
-            <h2 className="font-display text-2xl font-bold md:text-3xl">Stay Updated with Eventify</h2>
+            <h2 className="font-display text-2xl font-bold md:text-3xl">Stay Updated with Eventilyze</h2>
             <p className="mt-2 text-muted-foreground">Subscribe to our newsletter for the latest events and updates</p>
           </div>
 

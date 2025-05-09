@@ -8,8 +8,8 @@ export default function PrivacyPolicyPage() {
         </p>
         <p className="mb-4">
           At{" "}
-          <a href="https://www.eventify.com" className="hover:underline">
-            eventify.com
+          <a href="https://www.eventilyze.com" className="hover:underline">
+            eventilyze.com
           </a>
           , we are dedicated to safeguarding your privacy. This Privacy Policy
           outlines how we collect, use, share, and protect your personal
@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
           </li>
           <li>
             Comply with legal obligations or protect the rights and safety of
-            Eventify, our users, or others.
+            Eventilyze, our users, or others.
           </li>
         </ul>
 
@@ -102,7 +102,7 @@ export default function PrivacyPolicyPage() {
           <li>
             <span className="font-medium">Legal Authorities:</span> When
             required by law or to protect the safety, rights, or property of
-            Eventify or others.
+            Eventilyze or others.
           </li>
         </ul>
 
@@ -124,8 +124,8 @@ export default function PrivacyPolicyPage() {
             <span className="font-medium">Access and Deletion:</span> Request
             access to, correction of, or deletion of your personal information
             by contacting us at{" "}
-            <a href="mailto:privacy@eventify.com" className="hover:underline">
-              privacy@eventify.com
+            <a href="mailto:privacy@eventilyze.com" className="hover:underline">
+              privacy@eventilyze.com
             </a>
             .
           </li>
@@ -174,8 +174,8 @@ export default function PrivacyPolicyPage() {
         <p className="mb-4">
           For questions or concerns about this Privacy Policy, please contact us
           at{" "}
-          <a href="mailto:privacy@eventify.com" className="hover:underline">
-            privacy@eventify.com
+          <a href="mailto:privacy@eventilyze.com" className="hover:underline">
+            privacy@eventilyze.com
           </a>
           .
         </p>
