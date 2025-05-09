@@ -125,19 +125,7 @@ export function DashboardSidebarMenu({ data }: any) {
                 )}
               >
                 <route.icon className={cn("h-5 w-5", route.color)} />
-                <span className={cn(isCollapsed && "hidden")}>
-                  {route.label}
-                </span>
-                {route.badge && (
-                  <span
-                    className={cn(
-                      "ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground",
-                      isCollapsed && "hidden"
-                    )}
-                  >
-                    {route.badge}
-                  </span>
-                )}
+               
               </Link>
             ))}
           </nav>
