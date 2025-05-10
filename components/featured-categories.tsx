@@ -7,14 +7,16 @@ import { motion, useAnimation, useInView, AnimatePresence } from "framer-motion"
 import { Search, ArrowRight, Plus, Music, Code, Utensils, Palette, Briefcase, Trophy } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import { eventCategoryStats } from "@/services/EventServices"
 
-// Sample categories data with enhanced metadata
-const categories = [
+
+const initialCategories = [
   {
     id: 1,
     name: "Music",
+    key: "MUSIC",
     image: "/placeholder.svg?height=400&width=600&text=Music",
-    count: 120,
+    count: 0,
     color: "from-purple-500 to-pink-500",
     icon: Music,
     description: "Concerts, festivals, live performances, and musical experiences",
@@ -23,8 +25,9 @@ const categories = [
   {
     id: 2,
     name: "Technology",
+    key: "TECHNOLOGY",
     image: "/placeholder.svg?height=400&width=600&text=Technology",
-    count: 85,
+    count: 0,
     color: "from-blue-500 to-cyan-500",
     icon: Code,
     description: "Conferences, workshops, hackathons, and tech meetups",
@@ -33,8 +36,9 @@ const categories = [
   {
     id: 3,
     name: "Food & Drink",
+    key: "FOOD_AND_DRINK",
     image: "/placeholder.svg?height=400&width=600&text=Food",
-    count: 64,
+    count: 0,
     color: "from-orange-500 to-amber-500",
     icon: Utensils,
     description: "Tastings, cooking classes, food festivals, and culinary tours",
@@ -43,8 +47,9 @@ const categories = [
   {
     id: 4,
     name: "Arts",
+    key: "ARTS",
     image: "/placeholder.svg?height=400&width=600&text=Arts",
-    count: 42,
+    count: 0,
     color: "from-rose-500 to-red-500",
     icon: Palette,
     description: "Exhibitions, gallery openings, art workshops, and creative showcases",
@@ -53,8 +58,9 @@ const categories = [
   {
     id: 5,
     name: "Business",
+    key: "BUSINESS",
     image: "/placeholder.svg?height=400&width=600&text=Business",
-    count: 56,
+    count: 0,
     color: "from-emerald-500 to-green-500",
     icon: Briefcase,
     description: "Networking events, conferences, seminars, and professional meetups",
@@ -63,16 +69,18 @@ const categories = [
   {
     id: 6,
     name: "Sports",
+    key: "SPORTS",
     image: "/placeholder.svg?height=400&width=600&text=Sports",
-    count: 38,
+    count: 0,
     color: "from-sky-500 to-indigo-500",
     icon: Trophy,
     description: "Games, tournaments, fitness classes, and sporting events",
     trending: false,
   },
-]
+];
 
 export function FeaturedCategories() {
+  const [categories, setCategories] = useState(initialCategories);
   const [activeCategory, setActiveCategory] = useState<number | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const containerRef = useRef<HTMLDivElement>(null)
@@ -83,6 +91,22 @@ export function FeaturedCategories() {
   const filteredCategories = categories.filter((category) =>
     category.name.toUpperCase().includes(searchQuery.toUpperCase()),
   )
+
+    // Fetch and merge category counts
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const res = await eventCategoryStats();
+      if (res?.success && res?.data) {
+        setCategories((prev) =>
+          prev.map((cat) => ({
+            ...cat,
+            count: res.data[cat.key] ?? 0,
+          }))
+        );
+      }
+    };
+    fetchCounts();
+  }, []);
 
   useEffect(() => {
     if (isInView) {
@@ -197,7 +221,7 @@ function GridView({
               <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white">
                 <category.icon className="mb-3 h-10 w-10" />
                 <h3 className="text-center font-display text-2xl font-bold">{category.name}</h3>
-                <p className="mt-2 text-center text-sm">{category.count} events</p>
+                <p className="mt-2 text-center text-lg">{category.count} events</p>
               </div>
 
               {category.trending && (
