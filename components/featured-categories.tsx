@@ -79,6 +79,14 @@ const initialCategories = [
   },
 ];
 
+export function capitalizeWords(str: string) {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
 export function FeaturedCategories() {
   const [categories, setCategories] = useState(initialCategories);
   const [activeCategory, setActiveCategory] = useState<number | null>(null)
@@ -92,7 +100,7 @@ export function FeaturedCategories() {
     category.name.toUpperCase().includes(searchQuery.toUpperCase()),
   )
 
-    // Fetch and merge category counts
+  // Fetch and merge category counts
   useEffect(() => {
     const fetchCounts = async () => {
       const res = await eventCategoryStats();
@@ -220,7 +228,7 @@ function GridView({
 
               <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-white">
                 <category.icon className="mb-3 h-10 w-10" />
-                <h3 className="text-center font-display text-2xl font-bold">{category.name}</h3>
+                <h3 className="text-center font-display text-2xl font-bold">{capitalizeWords(category.name)}</h3>
                 <p className="mt-2 text-center text-lg">{category.count} events</p>
               </div>
 
