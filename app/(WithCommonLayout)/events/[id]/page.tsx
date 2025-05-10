@@ -32,22 +32,19 @@ export default async function EventDetailsPage({ params }: { params: any }) {
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div className="lg:col-span-2">
-              {activeUser && (
                 <EventDetailsContent
-                  activeUser={activeUser}
                   eventDetails={eventDetails}
                 />
-              )}
             </div>
 
             <div className="lg:col-span-1">
               <div className="space-y-8">
-                {activeUser && (
+               
                   <EventActions
                     activeUser={activeUser}
                     eventDetails={eventDetails}
                   />
-                )}
+              
                 <EventAttendees eventDetails={eventDetails} />
               </div>
             </div>

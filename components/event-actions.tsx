@@ -24,10 +24,11 @@ import { getCountdownTime } from "./modules/Shared/DateTimeFormat/getCountdownTi
 import { TActiveUser } from "@/types/userTypes";
 import { formatDate } from "./modules/Shared/DateTimeFormat/formatDate";
 import InvitationForm from "./modules/Invaitation/InvitationForm";
+import Link from "next/link";
 
 type EventReviewsProps = {
   eventDetails: TEvent;
-  activeUser: TActiveUser;
+  activeUser: TActiveUser | null | undefined;
 };
 
 export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
@@ -43,7 +44,7 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
     seconds: 0,
   });
   const [isRunning, setIsRunning] = useState(true);
-
+ const isLoggedIn = activeUser
   const isOwner = eventDetails?.ownerId === activeUser?.userId
 
 
@@ -103,7 +104,13 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
   };
 
   const getActionButton = () => {
-
+    if(!isLoggedIn){
+      return (
+        <Button size="lg" className="w-full">
+          <Link href="/signup">Register To Join</Link>
+        </Button>
+      );
+    }
 
     if (isOwner) {
       return (
@@ -129,11 +136,6 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
 
     if (eventDetails?.isPaid) {
       return (
-        // <PaymentDialog
-        //   open={showPaymentDialog}
-        //   onOpenChange={setShowPaymentDialog}
-        //   price={Number(eventDetails?.price)}
-        // />
         <Button
           onClick={() => handlePayment(eventDetails?.id)}
           size="lg"
@@ -144,11 +146,6 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
       );
     } else if (!eventDetails?.isPublic) {
       return (
-        // <RequestDialog
-        //   open={showRequestDialog}
-        //   onOpenChange={setShowRequestDialog}
-        // />
-
         <Button
         size="lg"
         className="w-full"
@@ -224,22 +221,6 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
               Registration closes on {formatDate(date)}:{time}
             </span>
           </div>
-
-          {/* <div className="space-y-2">
-            <Label htmlFor="tickets">Number of Tickets</Label>
-            <Select defaultValue="1">
-              <SelectTrigger id="tickets">
-                <SelectValue placeholder="Select tickets" />
-              </SelectTrigger>
-              <SelectContent>
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <SelectItem key={n} value={n.toString()}>
-                    {n} Ticket{n > 1 ? "s" : ""}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div> */}
         </CardContent>
         <CardFooter className="flex flex-col">
           {getActionButton()}
