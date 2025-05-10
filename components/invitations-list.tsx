@@ -1,5 +1,5 @@
 "use client"
-import { useState, useMemo } from "react"
+import { useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -12,41 +12,24 @@ type InvitationStatus = "pending" | "accepted" | "rejected"
 
 interface InvitationsListProps {
   status: InvitationStatus
-  data: any,
-  setLocalData: any
+  data: any[]
+  onStatusChange: (id: string, newStatus: InvitationStatus) => void
 }
 
-export function InvitationsList({ status, data, setLocalData }: InvitationsListProps) {
-
-
-  const invitations = useMemo(() => ({
-    accepted: data.filter((invitation: any) => invitation.status.toLowerCase() === "accepted"),
-    pending: data.filter((invitation: any) => invitation.status.toLowerCase() === "pending"),
-    rejected: data.filter((invitation: any) => invitation.status.toLowerCase() === "rejected"),
-  }), [data])
-
-  const currentInvitations = invitations[status]
-
-  const handleStatusChange = async (id: string, newStatus: InvitationStatus) => {
-    const payload = {
-      invitationId: id,
-      status: newStatus.toUpperCase(),
-    }
-
+export function InvitationsList({ status, data, onStatusChange }: InvitationsListProps) {
+  const handleStatusChange = useCallback(async (id: string, newStatus: InvitationStatus) => {
     try {
-      const response = await updatePerticipentsStatus(payload)
-    console.log("accept data", response)
-      setLocalData((prev: any[]) =>
-        prev.map(inv =>
-          inv.id === id ? { ...inv, status: newStatus } : inv
-        )
-      )
+      await updatePerticipentsStatus({
+        invitationId: id,
+        status: newStatus.toUpperCase(),
+      })
+      onStatusChange(id, newStatus)
     } catch (error) {
-      console.error("Failed to update status:", error)
+      console.error("Update failed:", error)
     }
-  }
+  }, [onStatusChange])
 
-  if (currentInvitations.length === 0) {
+  if (data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
         <div className="text-4xl">📩</div>
@@ -62,20 +45,22 @@ export function InvitationsList({ status, data, setLocalData }: InvitationsListP
 
   return (
     <div className="space-y-4">
-      {currentInvitations.map((invitation: any) => (
+      {data.map((invitation: any) => (
         <Card key={invitation.id}>
           <CardContent className="p-4 sm:p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
               <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
-                <AvatarFallback>{invitation.senderInitials || "AA"}</AvatarFallback>
+                <AvatarFallback>{invitation.host?.name?.charAt(0)}</AvatarFallback>
               </Avatar>
 
               <div className="flex-1 space-y-4">
                 <div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">{invitation.senderName || "Sender Name"}</p>
-                      <p className="text-sm text-muted-foreground">Invited you to {invitation.event.title}</p>
+                      <p className="font-medium">{invitation.host.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Invited you to {invitation.event.title}
+                      </p>
                     </div>
                     <p className="text-xs text-muted-foreground">{invitation.sentAt}</p>
                   </div>
