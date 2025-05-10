@@ -12,17 +12,18 @@ type InvitationStatus = "pending" | "accepted" | "rejected"
 
 interface InvitationsListProps {
   status: InvitationStatus
-  data: any
+  data: any,
+  setLocalData: any
 }
 
-export function InvitationsList({ status, data }: InvitationsListProps) {
-  const [localData, setLocalData] = useState(data)
+export function InvitationsList({ status, data, setLocalData }: InvitationsListProps) {
+
 
   const invitations = useMemo(() => ({
-    accepted: localData.filter((invitation: any) => invitation.status.toLowerCase() === "accepted"),
-    pending: localData.filter((invitation: any) => invitation.status.toLowerCase() === "pending"),
-    rejected: localData.filter((invitation: any) => invitation.status.toLowerCase() === "rejected"),
-  }), [localData])
+    accepted: data.filter((invitation: any) => invitation.status.toLowerCase() === "accepted"),
+    pending: data.filter((invitation: any) => invitation.status.toLowerCase() === "pending"),
+    rejected: data.filter((invitation: any) => invitation.status.toLowerCase() === "rejected"),
+  }), [data])
 
   const currentInvitations = invitations[status]
 
@@ -34,7 +35,7 @@ export function InvitationsList({ status, data }: InvitationsListProps) {
 
     try {
       const response = await updatePerticipentsStatus(payload)
-
+    console.log("accept data", response)
       setLocalData((prev: any[]) =>
         prev.map(inv =>
           inv.id === id ? { ...inv, status: newStatus } : inv
