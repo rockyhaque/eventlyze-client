@@ -27,16 +27,10 @@ import { TActiveUser } from "@/types/userTypes";
 
 export function EventDetailsContent({
   eventDetails,
-  activeUser,
 }: {
   eventDetails: TEvent;
-  activeUser: TActiveUser;
 }) {
   const [showFullDescription, setShowFullDescription] = useState(false);
-
-  
-
-
   const truncatedDescription = eventDetails?.description?.slice(0, 300) + "...";
 
   const isRegistrationOpen = moment().isBetween(
