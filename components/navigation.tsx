@@ -58,6 +58,7 @@ export function Navigation() {
     { name: "Events", href: "/events" },
     { name: "Create Event", href: "/dashboard/create-event" },
     { name: "About", href: "/about-us" },
+    { name: "Contact Us", href: "/contact-us" },
   ];
 
   return (
