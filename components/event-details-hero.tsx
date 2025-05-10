@@ -207,8 +207,8 @@ export function EventDetailsHero({ eventDetails }: { eventDetails: TEvent }) {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="mt-8 flex items-center gap-4"
             >
-              <Avatar className="h-12 w-12 border-2 border-white">
-                <AvatarImage src={eventDetails?.owner?.photo || "/placeholder.svg"} alt={eventDetails?.owner?.name} />
+              <Avatar className="h-12 w-12 border-2 ">
+                <AvatarImage src={eventDetails?.owner?.photo || "https://cdn-icons-png.flaticon.com/128/16869/16869838.png"} alt={eventDetails?.owner?.name} />
                 <AvatarFallback>{eventDetails?.owner?.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>
