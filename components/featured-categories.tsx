@@ -205,7 +205,7 @@ function GridView({
 
         >
           <Link
-            href={`/events?category=${category.name}`}
+            href={`/events?category=${category.key}`}
             className="block h-full overflow-hidden rounded-xl transition-all duration-300"
             onMouseEnter={() => setActiveCategory(category.id)}
             onMouseLeave={() => setActiveCategory(null)}
