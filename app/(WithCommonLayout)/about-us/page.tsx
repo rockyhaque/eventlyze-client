@@ -46,7 +46,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="relative h-[400px] rounded-xl overflow-hidden shadow-xl">
-            <Image src="/placeholder.svg" alt="People at an event" fill className="object-cover" />
+            <Image src="https://images.unsplash.com/photo-1561489396-888724a1543d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGV2ZW50fGVufDB8fDB8fHww" alt="People at an event" fill className="object-cover" />
           </div>
         </div>
 
@@ -97,14 +97,14 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold text-center mb-12">Our Team</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { name: "Sarah Johnson", role: "CEO & Founder" },
-              { name: "Michael Chen", role: "CTO" },
-              { name: "Priya Patel", role: "Head of Design" },
-              { name: "David Wilson", role: "Head of Marketing" },
-            ].map((member) => (
+              { name: "Sarah Johnson", role: "CEO & Founder", image: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80' },
+              { name: "Michael Chen", role: "CTO", image: "https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80" },
+              { name: "Priya Patel", role: "Head of Design", image: "https://images.unsplash.com/photo-1488508872907-592763824245?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" },
+              { name: "David Wilson", role: "Head of Marketing", image: "https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg" },
+            ].map((member: any) => (
               <div key={member.name} className="text-center group">
                 <div className="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 bg-muted border-2 border-primary/20 group-hover:border-primary transition-colors duration-300">
-                  <Image src="/placeholder.svg" alt={member.name} width={160} height={160} className="object-cover" />
+                  <Image src={member?.image} alt={member.name} width={160} height={160} className="object-cover" />
                 </div>
                 <h3 className="font-bold text-lg">{member.name}</h3>
                 <p className="text-muted-foreground">{member.role}</p>

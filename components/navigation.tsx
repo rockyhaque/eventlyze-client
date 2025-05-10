@@ -57,7 +57,7 @@ export function Navigation() {
     { name: "Home", href: "/" },
     { name: "Events", href: "/events" },
     { name: "Create Event", href: "/dashboard/create-event" },
-    { name: "About", href: "/about" },
+    { name: "About", href: "/about-us" },
   ];
 
   return (
