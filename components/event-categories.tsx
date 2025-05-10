@@ -1,6 +1,7 @@
+
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import {
@@ -19,22 +20,39 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { eventCategoryStats } from "@/services/EventServices"
 
-// Sample categories data
-const categories = [
+interface Category {
+  id: number
+  name: string
+  image: string
+  count: number
+  color: string
+  icon: React.ComponentType<{ className?: string }>
+}
+
+export function capitalizeWords(str: string) {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+const initialCategories: Category[] = [
   {
     id: 1,
     name: "Music",
     image: "/placeholder.svg?height=400&width=600&text=Music",
-    count: 120,
+    count: 0,
     color: "bg-purple-500",
     icon: Music,
   },
   {
     id: 2,
-    name: "Technology",
+    name: "TECHNOLOGY",
     image: "/placeholder.svg?height=400&width=600&text=Technology",
-    count: 85,
+    count: 0,
     color: "bg-blue-500",
     icon: Code,
   },
@@ -42,7 +60,7 @@ const categories = [
     id: 3,
     name: "Food & Drink",
     image: "/placeholder.svg?height=400&width=600&text=Food",
-    count: 64,
+    count: 0,
     color: "bg-orange-500",
     icon: Utensils,
   },
@@ -50,7 +68,7 @@ const categories = [
     id: 4,
     name: "Arts",
     image: "/placeholder.svg?height=400&width=600&text=Arts",
-    count: 42,
+    count: 0,
     color: "bg-rose-500",
     icon: Palette,
   },
@@ -58,7 +76,7 @@ const categories = [
     id: 5,
     name: "Business",
     image: "/placeholder.svg?height=400&width=600&text=Business",
-    count: 56,
+    count: 0,
     color: "bg-emerald-500",
     icon: Briefcase,
   },
@@ -66,7 +84,7 @@ const categories = [
     id: 6,
     name: "Sports",
     image: "/placeholder.svg?height=400&width=600&text=Sports",
-    count: 38,
+    count: 0,
     color: "bg-sky-500",
     icon: Trophy,
   },
@@ -74,7 +92,7 @@ const categories = [
     id: 7,
     name: "Networking",
     image: "/placeholder.svg?height=400&width=600&text=Networking",
-    count: 45,
+    count: 0,
     color: "bg-indigo-500",
     icon: Users,
   },
@@ -82,7 +100,7 @@ const categories = [
     id: 8,
     name: "Entertainment",
     image: "/placeholder.svg?height=400&width=600&text=Entertainment",
-    count: 72,
+    count: 0,
     color: "bg-pink-500",
     icon: Ticket,
   },
@@ -90,7 +108,7 @@ const categories = [
     id: 9,
     name: "Photography",
     image: "/placeholder.svg?height=400&width=600&text=Photography",
-    count: 29,
+    count: 0,
     color: "bg-amber-500",
     icon: Camera,
   },
@@ -98,7 +116,7 @@ const categories = [
     id: 10,
     name: "Gaming",
     image: "/placeholder.svg?height=400&width=600&text=Gaming",
-    count: 51,
+    count: 0,
     color: "bg-red-500",
     icon: Gamepad,
   },
@@ -106,7 +124,7 @@ const categories = [
     id: 11,
     name: "Travel",
     image: "/placeholder.svg?height=400&width=600&text=Travel",
-    count: 33,
+    count: 0,
     color: "bg-cyan-500",
     icon: Plane,
   },
@@ -114,7 +132,7 @@ const categories = [
     id: 12,
     name: "Education",
     image: "/placeholder.svg?height=400&width=600&text=Education",
-    count: 47,
+    count: 0,
     color: "bg-lime-500",
     icon: Book,
   },
@@ -122,6 +140,41 @@ const categories = [
 
 export function EventCategories() {
   const [hoveredCategory, setHoveredCategory] = useState<number | null>(null)
+  const [categories, setCategories] = useState<Category[]>(initialCategories)
+
+  // Fetch and merge category counts
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const res = await eventCategoryStats()
+        console.log("API Response:", res) // Debug log
+
+        if (res?.success && res?.data) {
+          setCategories(prev =>
+            prev.map(cat => {
+              // Try matching by ID first, then by uppercase name, then by lowercase name
+              const count =
+                res.data[cat.id] ??
+                res.data[cat.name.toUpperCase()] ??
+                res.data[cat.name.toLowerCase()] ??
+                0
+
+              return {
+                ...cat,
+                count
+              }
+            })
+          )
+        }
+      } catch (error) {
+        console.error("Failed to fetch category stats:", error)
+      }
+    }
+
+    fetchCounts()
+  }, [])
+
+
 
   return (
     <section className="py-16 bg-muted/30">
@@ -144,7 +197,7 @@ export function EventCategories() {
               onHoverEnd={() => setHoveredCategory(null)}
             >
               <Link
-                href={`/events?category=${category.name}`}
+                href={`/events?category=${encodeURIComponent(category.name)}`}
                 className="flex flex-col items-center rounded-xl border bg-card p-6 text-center transition-all hover:border-primary hover:shadow-md"
               >
                 <div
@@ -155,7 +208,7 @@ export function EventCategories() {
                 >
                   <category.icon className="h-8 w-8" />
                 </div>
-                <h3 className="mb-1 font-display font-bold">{category.name}</h3>
+                <h3 className="mb-1 font-display font-bold ">{capitalizeWords(category.name)}</h3>
                 <p className="text-xs text-muted-foreground">{category.count} events</p>
 
                 <motion.div
@@ -166,7 +219,7 @@ export function EventCategories() {
                   }}
                   className="mt-3"
                 >
-                  <Button variant="outline" size="sm" className="">
+                  <Button variant="outline" size="sm">
                     View Events
                   </Button>
                 </motion.div>
