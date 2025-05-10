@@ -37,7 +37,7 @@ export function EventsHero({ refetchEvents }: IEventsFilterParams) {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-16 md:py-24">
+    <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-4">
       {/* Background elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-[10%] -right-[10%] h-[500px] w-[500px] rounded-full bg-primary/10 blur-[100px]" />
