@@ -1,5 +1,6 @@
 "use client"
 
+
 import PaymentCancelled from "@/components/modules/Payment/PaymentCancelled";
 import PaymentSuccess from "@/components/modules/Payment/PaymentSuccess";
 import { Loader2 } from "lucide-react";

@@ -67,3 +67,83 @@ export default function PaymentSuccess({paymentDetails}:{paymentDetails:any}) {
     </div>
   )
 }
+
+
+// "use client"
+
+// import { veryfyPayment } from "@/services/PaymentService";
+// import { useSearchParams } from "next/navigation";
+// import { useEffect, useState } from "react";
+
+
+// export interface PaymentData {
+//   total_amount: number | undefined;
+//   currency: string;
+//   tran_id: string;
+//   success_url: string;
+//   fail_url: string;
+//   cancel_url: string;
+//   ipn_url: string;
+//   shipping_method: string;
+//   product_name: string;
+//   product_category: string;
+//   product_profile: string;
+//   cus_name: string;
+//   cus_email: string;
+//   cus_add1: string;
+//   cus_add2: string;
+//   cus_city: string;
+//   cus_state: string;
+//   cus_postcode: string;
+//   cus_country: string;
+//   cus_phone: string;
+//   cus_fax: string;
+//   ship_name: string;
+//   ship_add1: string;
+//   ship_add2: string;
+//   ship_city: string;
+//   ship_state: string;
+//   ship_postcode: number;
+//   ship_country: string;
+// }
+
+
+// const PaymentSuccess = () => {
+
+//   const searchParams = useSearchParams();
+//   const tran_id = searchParams.get("tran_id");
+
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [data, setData] = useState<PaymentData | null>(null);
+
+//   useEffect(() => {
+//     const fetchOrder = async () => {
+//       try {
+//         setIsLoading(true);
+//         const response = await veryfyPayment(tran_id || "");
+
+//         setData(response.data?.[0]);
+//       } catch (error) {
+//         console.error("Error fetching order:", error);
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+
+//     if (tran_id) {
+//       fetchOrder();
+//     }
+//   }, [tran_id]);
+
+//   if (isLoading) {
+//     return <div>amar suner bangla</div>;
+//   }
+
+//   return (
+//     <div>
+//       <div> The Component is Start PaymentSuccess </div>
+//     </div>
+//   );
+// };
+
+// export default PaymentSuccess;
