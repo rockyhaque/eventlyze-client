@@ -69,32 +69,23 @@ export function EventsFilter({ refetchEvents }: IEventsFilterParams) {
               <SelectItem value="false">Free Event</SelectItem>
             </SelectContent>
           </Select>
-
-          {/* <Select value={sortOrder} onValueChange={(val) => handlePriceSort(val)}>
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="Sort by Price" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="asc">Price (Low to High)</SelectItem>
-              <SelectItem value="desc">Price (High to Low)</SelectItem>
-            </SelectContent>
-          </Select> */}
-
           <Select
             onValueChange={(val) => {
               const [field, order] = val.split(":");
               handleSortChange(field, order);
             }}
-            value={`${sortBy}:${sortOrder}`}
+            value={`${sortBy || "price"}:${sortOrder || "asc"}`}
           >
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Sort events" />
+              <SelectValue placeholder="Sort events">
+                {!sortBy ? "Price (Low to High)" : undefined}
+              </SelectValue>
             </SelectTrigger>
-            <SelectContent className="text-white">
+            <SelectContent>
               <SelectItem value="price:asc">Price (Low to High)</SelectItem>
               <SelectItem value="price:desc">Price (High to Low)</SelectItem>
               <SelectItem value="seat:asc">Seat (Low to High)</SelectItem>
-              <SelectItem value="seat:desc">Seat (High to High)</SelectItem>
+              <SelectItem value="seat:desc">Seat (High to Low)</SelectItem>
             </SelectContent>
           </Select>
         </div>
