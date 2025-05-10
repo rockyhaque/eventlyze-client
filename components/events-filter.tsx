@@ -90,7 +90,7 @@ export function EventsFilter({ refetchEvents }: IEventsFilterParams) {
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder="Sort events" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="text-white">
               <SelectItem value="price:asc">Price (Low to High)</SelectItem>
               <SelectItem value="price:desc">Price (High to Low)</SelectItem>
               <SelectItem value="seat:asc">Seat (Low to High)</SelectItem>
