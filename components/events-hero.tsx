@@ -1,15 +1,9 @@
+
+
 "use client";
 
 import { motion } from "framer-motion";
-import { Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useQueryState } from "nuqs";
 
 const categories = [
@@ -32,15 +26,16 @@ export function EventsHero({ refetchEvents }: IEventsFilterParams) {
   });
 
   const handleCategory = (value: string) => {
-    if(value == "ALL") {
-      setCategory(null)
+    if (value === "ALL") {
+      setCategory(null).then(() => {
+        refetchEvents();
+      });
+    } else {
+      setCategory(value).then(() => {
+        refetchEvents();
+      });
     }
-    setCategory(value);
-    setTimeout(() => {
-      refetchEvents();
-    }, 100);
   };
-
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background py-16 md:py-24">
@@ -84,35 +79,22 @@ export function EventsHero({ refetchEvents }: IEventsFilterParams) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            {/* <div className=" ">
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Select value={date} onValueChange={handleDate}>
-                  <SelectTrigger className="pl-9">
-                    <SelectValue placeholder="Date" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="today">Today</SelectItem>
-                    <SelectItem value="tomorrow">Tomorrow</SelectItem>
-                    <SelectItem value="this-week">This Week</SelectItem>
-                    <SelectItem value="this-weekend">This Weekend</SelectItem>
-                    <SelectItem value="this-month">This Month</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div> */}
-
             <div className="mt-4 flex flex-wrap gap-2 justify-center">
               {categories.map((category) => (
                 <Button
                   key={category.value}
                   onClick={() => handleCategory(category.value)}
                   variant={
-                    category.value === categoryState ? "default" : "outline"
+                    category.value === "ALL" && !categoryState
+                      ? "default"
+                      : category.value === categoryState
+                        ? "default"
+                        : "outline"
                   }
                   size="sm"
                   className={
-                    category.value === categoryState
+                    (category.value === "ALL" && !categoryState) ||
+                      category.value === categoryState
                       ? "bg-primary text-white"
                       : ""
                   }
@@ -128,9 +110,7 @@ export function EventsHero({ refetchEvents }: IEventsFilterParams) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-          >
-        
-          </motion.div>
+          ></motion.div>
         </div>
       </div>
     </section>
