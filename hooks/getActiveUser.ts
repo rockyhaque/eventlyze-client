@@ -14,18 +14,15 @@ export const getActiveUser = async () => {
           status: user?.status,
           contactNumber: user?.contactNumber
         };
-    
         return userData;
       }
   
       return null
   
     } catch (error: any) {
-      console.error("Error while getting user:", error);
       const message =
         error?.response?.data?.message ||
         "Something went wrong while getting profile and role!";
-      throw new Error(message);
     }
   };
   
