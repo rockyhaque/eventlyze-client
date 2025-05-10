@@ -42,7 +42,7 @@ export function capitalizeWords(str: string) {
 const initialCategories: Category[] = [
   {
     id: 1,
-    name: "Music",
+    name: "MUSIC",
     image: "/placeholder.svg?height=400&width=600&text=Music",
     count: 0,
     color: "bg-purple-500",
@@ -58,7 +58,7 @@ const initialCategories: Category[] = [
   },
   {
     id: 3,
-    name: "Food & Drink",
+    name: "FOOD & DRINK",
     image: "/placeholder.svg?height=400&width=600&text=Food",
     count: 0,
     color: "bg-orange-500",
@@ -66,7 +66,7 @@ const initialCategories: Category[] = [
   },
   {
     id: 4,
-    name: "Arts",
+    name: "ARTS",
     image: "/placeholder.svg?height=400&width=600&text=Arts",
     count: 0,
     color: "bg-rose-500",
@@ -74,7 +74,7 @@ const initialCategories: Category[] = [
   },
   {
     id: 5,
-    name: "Business",
+    name: "BUSINESS",
     image: "/placeholder.svg?height=400&width=600&text=Business",
     count: 0,
     color: "bg-emerald-500",
@@ -82,7 +82,7 @@ const initialCategories: Category[] = [
   },
   {
     id: 6,
-    name: "Sports",
+    name: "SPORTS",
     image: "/placeholder.svg?height=400&width=600&text=Sports",
     count: 0,
     color: "bg-sky-500",
@@ -90,7 +90,7 @@ const initialCategories: Category[] = [
   },
   {
     id: 7,
-    name: "Networking",
+    name: "NETWORKING",
     image: "/placeholder.svg?height=400&width=600&text=Networking",
     count: 0,
     color: "bg-indigo-500",
@@ -98,7 +98,7 @@ const initialCategories: Category[] = [
   },
   {
     id: 8,
-    name: "Entertainment",
+    name: "ENTERTAINMENT",
     image: "/placeholder.svg?height=400&width=600&text=Entertainment",
     count: 0,
     color: "bg-pink-500",
@@ -106,7 +106,7 @@ const initialCategories: Category[] = [
   },
   {
     id: 9,
-    name: "Photography",
+    name: "PHOTOGRAPHY",
     image: "/placeholder.svg?height=400&width=600&text=Photography",
     count: 0,
     color: "bg-amber-500",
@@ -114,7 +114,7 @@ const initialCategories: Category[] = [
   },
   {
     id: 10,
-    name: "Gaming",
+    name: "GAMING",
     image: "/placeholder.svg?height=400&width=600&text=Gaming",
     count: 0,
     color: "bg-red-500",
@@ -122,7 +122,7 @@ const initialCategories: Category[] = [
   },
   {
     id: 11,
-    name: "Travel",
+    name: "TRAVEL",
     image: "/placeholder.svg?height=400&width=600&text=Travel",
     count: 0,
     color: "bg-cyan-500",
@@ -130,7 +130,7 @@ const initialCategories: Category[] = [
   },
   {
     id: 12,
-    name: "Education",
+    name: "EDUCATION",
     image: "/placeholder.svg?height=400&width=600&text=Education",
     count: 0,
     color: "bg-lime-500",
