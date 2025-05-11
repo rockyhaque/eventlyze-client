@@ -40,3 +40,19 @@ export const getAllParticipants = async () => {
     return new Error(message);
   }
 };
+
+
+// Participator status update
+export const updatedParticipatStatus = async (id: string, data: any) => {
+  try {
+    const response = await app_axios.patch(`/participation/update-status/${id}`, {
+      role: data,
+    });
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      "Something went wrong while updating user role!";
+    return new Error(message);
+  }
+};

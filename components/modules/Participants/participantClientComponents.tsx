@@ -6,11 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TParticipantUser } from "@/types/participantType";
-import {  Search } from "lucide-react";
+import { Eye, Search } from "lucide-react";
 import { useState } from "react";
 import { formatDate } from "../Shared/DateTimeFormat/formatDate";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
 interface TParticipantProps {
     participant: TParticipantUser[];
@@ -106,7 +108,6 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Participantor</TableHead>
-                                    <TableHead>P. Email</TableHead>
                                     <TableHead>Event Name</TableHead>
                                     <TableHead>Category</TableHead>
                                     <TableHead>Status</TableHead>
@@ -128,9 +129,21 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                                     filteredParticipants.map((parti) => (
                                         <TableRow key={parti.id}>
                                             <TableCell className="font-medium">
-                                                {parti.user.name}
+                                                <div className="flex items-center gap-2">
+                                                    <Avatar className="h-8 w-8">
+
+                                                        <AvatarFallback>{ parti?.user?.name.charAt(0)}</AvatarFallback>
+                                                    </Avatar>
+                                                    <div >
+                                                        <p className="text-xs text-muted-foreground">
+                                                            {parti?.user?.name}
+                                                        </p>
+                                                        <p className="text-xs text-muted-foreground text-yellow-600">
+                                                            {parti?.user?.email}
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </TableCell>
-                                            <TableCell>{parti.user.email}</TableCell>
                                             <TableCell
                                                 className="max-w-[150px] truncate"
                                                 title={parti.event.title}
@@ -152,7 +165,7 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                                                         variant="ghost"
                                                         className=" rounded-full just"
                                                     >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-eye-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" /></svg>
+                                                        <Eye />
                                                     </Button>
                                                 </TableCell>
                                             </Link>
