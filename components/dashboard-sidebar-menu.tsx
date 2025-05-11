@@ -35,14 +35,19 @@ export function DashboardSidebarMenu({ data }: any) {
       href: "/dashboard",
       color: "text-sky-500",
     },
+    ...(data.role === "USER"
+      ? [
+        {
+          label: "Create Event",
+          icon: CalendarPlus,
+          href: "/dashboard/create-event",
+          color: "text-violet-500",
+        },
+      ]
+      : []),
+   
     {
-      label: "Create Event",
-      icon: CalendarPlus,
-      href: "/dashboard/create-event",
-      color: "text-violet-500",
-    },
-    {
-      label: "My Events",
+      label: `${data.role === "USER" ? "My" : "All"} Events`,
       icon: Calendar,
       href: "/dashboard/events",
       color: "text-violet-500",

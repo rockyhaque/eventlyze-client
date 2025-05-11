@@ -10,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { formatDate } from "./modules/Shared/DateTimeFormat/formatDate"
 import { deleteEvent } from "@/services/EventServices"
 import { toast } from "sonner"
+import { getActiveUserClient } from "@/hooks/getActiveUserClient"
 
 type EventType = "upcoming" | "pending" | "canceled" | "ongoing" | "completed"
 
@@ -19,7 +20,16 @@ interface DashboardEventsProps {
 }
 
 export function DashboardEvents({ type, data }: DashboardEventsProps) {
+  const [user, setUser] = useState<any>()
   const allEvents = data
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const user = await getActiveUserClient();
+      setUser(user);
+    };
+    loadUser();
+  }, []);
 
   const events = useMemo(() => ({
     upcoming: allEvents.filter((event: any) => event.status === "UPCOMING"),
@@ -36,17 +46,16 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
   }, [type, events])
 
   const handleDelete = async (id: string) => {
-    console.log("event id", id)
     try {
       const deleteResponse = await deleteEvent(id)
       console.log("delete response client", deleteResponse)
-      if(deleteResponse.success){
+      if (deleteResponse.success) {
         setDisplayEvents((prev: any) => prev.filter((event: any) => event.id !== id))
         toast.success("Event Deleted Successfully!")
-      }else{
+      } else {
         toast.error("Failed to delete event!!")
       }
-     
+
     } catch (error) {
       toast.error("Failed to delete event!!")
     }
@@ -64,9 +73,14 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
           {type === "ongoing" && "You don't have any ongoing events."}
           {type === "completed" && "You don't have any completed events."}
         </p>
-        <Button className="mt-4" asChild>
-          <Link href="/dashboard/create-event">Create an Event</Link>
-        </Button>
+
+        {
+
+          user?.role == "USER" && <Button className="mt-4" asChild>
+            <Link href="/dashboard/create-event">Create an Event</Link>
+          </Button>
+        }
+
       </div>
     )
   }
@@ -96,12 +110,15 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
-                    <Link href={`/dashboard/events/edit/${event.id}`}>
-                      <Edit className="mr-2 h-4 w-4" />
-                      Edit
-                    </Link>
-                  </DropdownMenuItem>
+                  {
+                    user?.role == "USER" && <DropdownMenuItem asChild>
+                      <Link href={`/dashboard/events/edit/${event.id}`}>
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit
+                      </Link>
+                    </DropdownMenuItem>
+                  }
+
                   <DropdownMenuItem
                     onClick={() => handleDelete(event?.id)}
                     className="text-destructive focus:text-destructive"
@@ -138,9 +155,12 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
               <Button variant="outline" size="sm" className="flex-1" asChild>
                 <Link href={`/events/${event.id}`}>View</Link>
               </Button>
-              <Button size="sm" className="flex-1" asChild>
-                <Link href={`/dashboard/events/edit/${event.id}`}>Manage</Link>
-              </Button>
+              {
+                user?.role == "USER" && <Button size="sm" className="flex-1" asChild>
+                  <Link href={`/dashboard/events/edit/${event.id}`}>Manage</Link>
+                </Button>
+              }
+
             </div>
           </CardContent>
         </Card>
