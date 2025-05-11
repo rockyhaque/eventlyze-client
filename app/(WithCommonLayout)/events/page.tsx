@@ -18,8 +18,7 @@ type PageProps = {
 };
 
 export default async function EventsPage({ searchParams }: PageProps) {
-  const { searchTerm, isPaid, sortBy, sortOrder, category } =
-    await loadSearchParams(searchParams);
+  const { searchTerm, isPaid, sortBy, sortOrder, category } = await loadSearchParams(searchParams);
 
   const events = await getAllEvents({
     searchTerm,
@@ -34,7 +33,6 @@ export default async function EventsPage({ searchParams }: PageProps) {
 
     revalidateTag("events");
   }
-
 
   return (
     <div>
@@ -54,7 +52,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
         )}
       </div>
       <EventCategories />
-      <UpcomingEvents />
+      <UpcomingEvents data={events?.data} />
       <FeaturedOrganizers />
       <Newsletter />
     </div>
