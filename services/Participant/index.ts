@@ -24,3 +24,19 @@ export const createPayment = async (eventId: any) => {
     return new Error(message);
   }
 };
+
+
+
+// Get all Participant
+export const getAllParticipants = async () => {
+  try {
+    const res = await app_axios.get(`participation/all-participants`);
+
+    return res.data;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      "Something went wrong while getting a notification!";
+    return new Error(message);
+  }
+};
