@@ -549,7 +549,7 @@ function GridView({
               >
                 <div className="relative aspect-[16/9] w-full overflow-hidden">
                   <Image
-                    src={event.image}
+                    src={event.image || "https://images.unsplash.com/photo-1561489396-888724a1543d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
                     alt={event.title}
                     width={600}
                     height={400}
