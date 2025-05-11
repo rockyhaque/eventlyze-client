@@ -2,7 +2,7 @@ export type TParticipant = {
   id: string;
   eventId: string;
   userId: string;
-  status: "JOINED" | "PENDING" | "REJECTED"; // Adjust if needed
+  status: "JOINED" | "REQUESTED" | "APPROVED" | "REJECTED"; // Adjust if needed
   createdAt: string;
   updatedAt: string;
 };
