@@ -132,7 +132,7 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                                                 <div className="flex items-center gap-2">
                                                     <Avatar className="h-8 w-8">
 
-                                                        <AvatarFallback>{parti?.user?.photo || parti?.user?.name.charAt(0)}</AvatarFallback>
+                                                        <AvatarFallback>{ parti?.user?.name.charAt(0)}</AvatarFallback>
                                                     </Avatar>
                                                     <div >
                                                         <p className="text-xs text-muted-foreground">
