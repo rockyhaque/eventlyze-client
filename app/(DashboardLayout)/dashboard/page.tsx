@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { DashboardCategoryChart } from "@/components/dashboard-category-chart"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { DashboardStats } from "@/components/dashboard-stats"

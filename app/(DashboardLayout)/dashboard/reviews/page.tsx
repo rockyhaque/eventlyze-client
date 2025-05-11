@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { PageHeader } from "@/components/page-header"
 import { ReviewsList } from "@/components/reviews-list"
 import {  getAllReviewsByParticipant } from "@/services/Reviews"

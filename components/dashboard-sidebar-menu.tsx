@@ -35,7 +35,7 @@ export function DashboardSidebarMenu({ data }: any) {
       href: "/dashboard",
       color: "text-sky-500",
     },
-    ...(data.role === "USER"
+    ...(data?.role === "USER"
       ? [
         {
           label: "Create Event",
@@ -47,7 +47,7 @@ export function DashboardSidebarMenu({ data }: any) {
       : []),
    
     {
-      label: `${data.role === "USER" ? "My" : "All"} Events`,
+      label: `${data?.role === "USER" ? "My" : "All"} Events`,
       icon: Calendar,
       href: "/dashboard/events",
       color: "text-violet-500",
@@ -83,7 +83,7 @@ export function DashboardSidebarMenu({ data }: any) {
       href: "/dashboard/reviews",
       color: "text-yellow-500",
     },
-    ...(data.role === "ADMIN"
+    ...(data?.role === "ADMIN"
       ? [
         {
           label: "User Management",

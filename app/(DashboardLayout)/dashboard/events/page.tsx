@@ -1,7 +1,8 @@
 import { PageHeader } from "@/components/page-header"
+export const dynamic = "force-dynamic";
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Calendar, Filter, Grid, List, Plus } from "lucide-react"
+import {Plus } from "lucide-react"
 import { DashboardEvents } from "@/components/dashboard-events"
 import Link from "next/link"
 import { getAllUserEvents } from "@/services/EventServices"

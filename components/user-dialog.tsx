@@ -1,5 +1,5 @@
 "use client"
-
+export const dynamic = "force-dynamic"; 
 import { useEffect, useState } from "react"
 import {
   Dialog,
@@ -73,7 +73,7 @@ export function UserDialog({ open, onOpenChange, user, onClose, action, setUsers
             singleUser.id === user.id
               ? {
                   ...singleUser,
-                  role: (role?.toUpperCase() as IUser["role"]) || singleUser.role
+                  role: (role?.toUpperCase() as IUser["role"]) || singleUser?.role
                 }
               : singleUser
           )

@@ -1,5 +1,5 @@
-"use client"
-
+"use client";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react"
 import { UserTable } from "@/components/user-table"
 import { Input } from "@/components/ui/input"
@@ -59,8 +59,7 @@ export default function UsersPage() {
 
   return (
     <>
-
-      <div className="flex-1">
+       <div className="flex-1">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
@@ -94,7 +93,7 @@ export default function UsersPage() {
                 </SelectContent>
               </Select>
             </div>
-            <UserTable searchQuery={searchQuery} roleFilter={roleFilter} onEdit={handleOpenDialog} users={users} setUsers={setUsers}/>
+            <UserTable searchQuery={searchQuery} roleFilter={roleFilter} onEdit={handleOpenDialog} users={users} setUsers={setUsers} />
           </>
         )}
 
@@ -106,14 +105,13 @@ export default function UsersPage() {
           onClose={handleCloseDialog}
           setUsers={setUsers}
         />
-      </div>
+      </div> 
     </>
   )
 }
 
 
 
-import { Skeleton } from "@/components/ui/skeleton";
 
 function UserTableSkeleton() {
   return (

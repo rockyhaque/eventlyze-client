@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { PageHeader } from "@/components/page-header"
 import UpdatePasswordForm from "@/components/update-password-form";
 import UpdateUserForm from "@/components/update-user-form";

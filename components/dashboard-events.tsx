@@ -48,7 +48,6 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
   const handleDelete = async (id: string) => {
     try {
       const deleteResponse = await deleteEvent(id)
-      console.log("delete response client", deleteResponse)
       if (deleteResponse.success) {
         setDisplayEvents((prev: any) => prev.filter((event: any) => event.id !== id))
         toast.success("Event Deleted Successfully!")

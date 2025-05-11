@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { PageHeader } from "@/components/page-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -6,6 +7,7 @@ import { MessageList } from "@/components/message-list"
 import { Plus, Search } from "lucide-react"
 
 export default function MessagesPage() {
+  return null
   return (
     <div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
