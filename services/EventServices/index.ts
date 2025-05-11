@@ -91,6 +91,7 @@ export const updateEvent = async (id: string, data: any) => {
 export const deleteEvent = async (id: string) => {
   try {
     const res = await app_axios.delete(`/event/${id}`);
+    console.log("delete event response", res.data)
     return res.data;
   } catch (error: any) {
     const message =

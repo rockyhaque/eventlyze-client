@@ -32,27 +32,13 @@ export default async function EventsPage() {
             <TabsTrigger value="ongoing">Ongoing</TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>
           </TabsList>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
-              <Filter className="mr-2 h-4 w-4" />
-              Filter
-            </Button>
-            <Button variant="outline" size="icon" className="h-8 w-8">
-              <Grid className="h-4 w-4" />
-              <span className="sr-only">Grid view</span>
-            </Button>
-            <Button variant="outline" size="icon" className="h-8 w-8">
-              <List className="h-4 w-4" />
-              <span className="sr-only">List view</span>
-            </Button>
-            <Button variant="outline" size="icon" className="h-8 w-8">
-              <Calendar className="h-4 w-4" />
-              <span className="sr-only">Calendar view</span>
-            </Button>
-          </div>
+          
         </div>
         <TabsContent value="upcoming" className="mt-6">
           <DashboardEvents data={data} type="upcoming" />
+        </TabsContent>
+        <TabsContent value="canceled" className="mt-6">
+          <DashboardEvents data={data} type="canceled" />
         </TabsContent>
         <TabsContent value="pending" className="mt-6">
           <DashboardEvents data={data} type="pending" />
