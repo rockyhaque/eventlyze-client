@@ -12,13 +12,13 @@ export const getActiveUserClient = async () => {
       },
     });
 
-    const user = res.data.data;
+    const user = res?.data?.data;
     const userData = {
-      name: user.name,
-      email: user.email,
-      userId: user.id,
-      role: user.role,
-      status: user.status,
+      name: user?.name,
+      email: user?.email,
+      userId: user?.id,
+      role: user?.role,
+      status: user?.status,
     };
 
     return userData;
@@ -27,6 +27,5 @@ export const getActiveUserClient = async () => {
     const message =
       error?.response?.data?.message ||
       "Something went wrong while getting profile and role!";
-    throw new Error(message);
   }
 };

@@ -1,5 +1,5 @@
 "use client"
-
+export const dynamic = "force-dynamic"; 
 import { useState } from "react"
 import {
   Table,
@@ -72,7 +72,7 @@ export function UserTable({ searchQuery, roleFilter, onEdit, users, setUsers }: 
   const filteredUsers = users.filter((user:IUser) => {
     const matchesSearch = user?.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          user.email.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesRole = roleFilter === "all" || user.role === roleFilter
+    const matchesRole = roleFilter === "all" || user?.role === roleFilter
     return matchesSearch && matchesRole
   })
 

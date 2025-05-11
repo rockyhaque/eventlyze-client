@@ -1,4 +1,4 @@
-
+export const dynamic = "force-dynamic";
 
 import ParticipantClientComponents from "@/components/modules/Participants/participantClientComponents";
 import { getAllParticipants } from "@/services/Participant";

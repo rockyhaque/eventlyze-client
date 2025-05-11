@@ -120,7 +120,7 @@ export function Testimonials() {
                       {testimonial.author.name}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      {testimonial.author.role}
+                      {testimonial.author?.role}
                     </div>
                   </div>
                 </div>

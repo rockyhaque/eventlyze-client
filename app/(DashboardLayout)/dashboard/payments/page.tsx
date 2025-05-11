@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { DashboardPayments } from "@/components/dashboard-payments";
 import { getAllPayments } from "@/services/PaymentsServices";
 

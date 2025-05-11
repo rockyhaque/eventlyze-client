@@ -5,17 +5,7 @@ import { InvitationsList } from "@/components/invitations-list"
 import { useState, useMemo, useCallback } from "react"
 
 const InvitationWrapper = ({ data }: any) => {
-  const [localData, setLocalData] = useState(() => {
-    try {
-      return JSON.parse(JSON.stringify(data)).map((invitation: any) => ({
-        ...invitation,
-        status: invitation.status.toLowerCase()
-      }))
-    } catch (e) {
-      console.error("Data cloning error:", e)
-      return []
-    }
-  })
+  const [localData, setLocalData] = useState(data)
 
   const categorizedInvitations = useMemo(() => {
     return localData.reduce((acc: Record<string, any[]>, invitation: any) => {

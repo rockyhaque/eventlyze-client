@@ -73,7 +73,7 @@ export function EventAttendees({ eventDetails }: EventDetailsProps) {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
 
-  const roles = [...new Set(attendees.map((a) => a.role))];
+  const roles = [...new Set(attendees.map((a) => a?.role))];
 
   const toggleRole = (role: string) => {
     setSelectedRoles((prev) =>
@@ -85,7 +85,7 @@ export function EventAttendees({ eventDetails }: EventDetailsProps) {
     const matchesSearch =
       attendee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       attendee.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      attendee.role.toLowerCase().includes(searchQuery.toLowerCase());
+      attendee?.role.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesRole =
       selectedRoles.length === 0 || selectedRoles.includes(attendee.role);

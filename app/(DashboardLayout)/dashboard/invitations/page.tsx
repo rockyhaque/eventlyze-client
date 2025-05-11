@@ -1,4 +1,4 @@
-
+export const dynamic = "force-dynamic";
 import { getAllInvitesForPerticipents } from "@/services/Invitation"
 import InvitationWrapper from "@/components/invitation-wrapper"
 
