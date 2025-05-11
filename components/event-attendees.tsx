@@ -108,52 +108,8 @@ export function EventAttendees({ eventDetails }: EventDetailsProps) {
             {eventDetails?.participant?.length}
           </Badge>
         </div>
-        {/* <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setShowFilters(!showFilters)}>
-          <Filter className={cn("h-4 w-4", showFilters && "text-primary")} />
-        </Button> */}
       </div>
 
-      {/* <div className="mb-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Search attendees..."
-            className="pl-9"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-      </div> */}
-
-      {/* <AnimatePresence>
-        {showFilters && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mb-4 overflow-hidden"
-          >
-            <div className="rounded-lg border bg-muted/50 p-3">
-              <h3 className="mb-2 text-sm font-medium">Filter by role</h3>
-              <div className="flex flex-wrap gap-2">
-                {roles.map((role) => (
-                  <Badge
-                    key={role}
-                    variant={
-                      selectedRoles.includes(role) ? "default" : "outline"
-                    }
-                    className="cursor-pointer"
-                    onClick={() => toggleRole(role)}
-                  >
-                    {role}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence> */}
 
       <ScrollArea className="h-[300px] pr-4">
         <div className="space-y-3">
@@ -169,10 +125,6 @@ export function EventAttendees({ eventDetails }: EventDetailsProps) {
               >
                 <div className="flex items-center gap-3">
                   <Avatar>
-                    <AvatarImage
-                      // src={attendee.image || "/placeholder.svg"}
-                      alt="attendee"
-                    />
                     <AvatarFallback>{attendee.status.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div>
@@ -182,13 +134,13 @@ export function EventAttendees({ eventDetails }: EventDetailsProps) {
                     </div> */}
                   </div>
                 </div>
-                <Button
+                {/* <Button
                   variant={attendee.status === "JOINED" ? "default" : "outline"}
                   size="sm"
                   className="h-8 text-xs cursor-default"
                 >
                   {attendee.status === "JOINED" ? "Connected" : "Connect"}
-                </Button>
+                </Button> */}
               </motion.div>
             ))
           ) : (
