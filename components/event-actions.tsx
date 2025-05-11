@@ -33,9 +33,10 @@ type EventReviewsProps = {
 
 export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
   const participantUser = eventDetails?.participant?.some(
-    (p) => p.userId === activeUser?.userId
+    (p) => p.userId === activeUser?.userId && p.status === "JOINED" || p.status === "APPROVED" || p.status === "REQUESTED"
   );
   const [isJoined, setIsJoined] = useState(participantUser || false)
+
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -126,7 +127,7 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
       );
     }
 
-    if (isJoined) {
+    if (isJoined || participantUser) {
       return (
         <Button size="lg" className="w-full" disabled>
           Already Joined

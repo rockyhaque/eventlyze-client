@@ -12,6 +12,7 @@ export default async function EventDetailsPage({ params }: { params: any }) {
   const eventId = (await params).id;
   const res = await getSingleEvent(eventId as string);
   const eventDetails = res?.data?.event;
+  console.log(" eventDetails:", eventDetails)
   const activeUser = await getActiveUser();
   return (
     <div className="relative min-h-screen">
