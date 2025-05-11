@@ -16,6 +16,7 @@ export const createReview = async (reviewData: FieldValues) => {
   }
 };
 
+
 export const getAllReviews = async () => {
   try {
     const res = await app_axios.get(`/reviews`);
@@ -27,3 +28,16 @@ export const getAllReviews = async () => {
     return new Error(message);
   }
 };
+
+export const getAllReviewsByParticipant = async () => {
+  try {
+    const res = await app_axios.get(`/reviews/participant`);
+    return res.data;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      "Something went wrong while getting stats!";
+    return new Error(message);
+  }
+};
+
