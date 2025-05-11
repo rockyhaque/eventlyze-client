@@ -18,9 +18,9 @@ import EFormDateInput from "@/components/modules/Shared/Form/EFormDateInput";
 import EFormTimeInput from "@/components/modules/Shared/Form/EFormTimeInput";
 import { categoryOptions, eventTypeOptions, tabs } from "@/components/modules/Dashboard/CreateEvent/eventSelectOptions";
 import EFormCheckbox from "@/components/modules/Shared/Form/EFormCheckbox";
-import {  getSingleEvent, updateEvent } from "@/services/EventServices";
+import { getSingleEvent, updateEvent } from "@/services/EventServices";
 import { convertToISO } from "@/hooks/convertToDate";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 // Validation requirements for each tab
 const tabValidations = {
@@ -38,7 +38,7 @@ const tabValidations = {
 export default function EditEventPage() {
   const params = useParams();
   const eventId = params?.id;
-
+  const router = useRouter()
   const form = useForm();
   const { watch, formState: { isSubmitting }, trigger, setValue } = form;
   const { uploadImagesToCloudinary, isUploading } = useImageUploader();
@@ -53,7 +53,8 @@ export default function EditEventPage() {
   useEffect(() => {
     const getEventData = async () => {
       try {
-        const { data } = await getSingleEvent(eventId as string);
+        const eventData = await getSingleEvent(eventId as string);
+        const data = eventData?.data?.event
         const parseDateTime = (isoString: string) => {
           const date = new Date(isoString);
           return {
@@ -75,6 +76,7 @@ export default function EditEventPage() {
           eventStartTime: parseDateTime(data.eventStartTime).time,
           eventEndDate: parseDateTime(data.eventEndTime).date,
           eventEndTime: parseDateTime(data.eventEndTime).time,
+          quantity: data.seat
         });
 
         // Set image URL state
@@ -134,10 +136,15 @@ export default function EditEventPage() {
       };
 
       const result = await updateEvent(eventId as string, formData);
+
+      
       result?.success
         ? toast.success(result.message)
         : toast.error(result?.message);
     
+      if(result.success){
+        router.push(`/events/${data.id}`)
+      }
     } catch (error: any) {
       toast.error(error.message);
     }

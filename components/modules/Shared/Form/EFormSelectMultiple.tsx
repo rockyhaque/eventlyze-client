@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Controller, Control } from "react-hook-form";
 import Select, { MultiValue, SingleValue, ActionMeta, Props as SelectProps } from "react-select";
 
@@ -24,6 +25,15 @@ const EFormSelect = ({
   multiple = false,
   ...rest
 }: IFormSelectProps) => {
+
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null; // Or a skeleton loader
   return (
     <Controller
       control={control}

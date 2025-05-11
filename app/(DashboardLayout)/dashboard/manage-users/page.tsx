@@ -94,7 +94,7 @@ export default function UsersPage() {
                 </SelectContent>
               </Select>
             </div>
-            <UserTable searchQuery={searchQuery} roleFilter={roleFilter} onEdit={handleOpenDialog} users={users} />
+            <UserTable searchQuery={searchQuery} roleFilter={roleFilter} onEdit={handleOpenDialog} users={users} setUsers={setUsers}/>
           </>
         )}
 
@@ -104,6 +104,7 @@ export default function UsersPage() {
           user={editingUser}
           action={action}
           onClose={handleCloseDialog}
+          setUsers={setUsers}
         />
       </div>
     </>

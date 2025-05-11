@@ -91,6 +91,7 @@ export const updateEvent = async (id: string, data: any) => {
 export const deleteEvent = async (id: string) => {
   try {
     const res = await app_axios.delete(`/event/${id}`);
+    console.log("delete event response", res.data)
     return res.data;
   } catch (error: any) {
     const message =
@@ -99,3 +100,16 @@ export const deleteEvent = async (id: string) => {
     return new Error(message);
   }
 };
+
+
+export const getAllUserEvents = async() => {
+  try {
+    const res = await app_axios.get(`/event/my-created-events`);
+    return res.data;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      "Something went wrong while getting events!";
+    return new Error(message);
+  }
+}

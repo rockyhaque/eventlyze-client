@@ -37,10 +37,11 @@ interface UserTableProps {
   searchQuery: string
   roleFilter: string
   onEdit: (user: IUser, actionType: "role" | "status" | null) => void
-  users: IUser[]
+  users: IUser[],
+  setUsers: React.Dispatch<React.SetStateAction<IUser[]>>
 }
 
-export function UserTable({ searchQuery, roleFilter, onEdit, users }: UserTableProps) {
+export function UserTable({ searchQuery, roleFilter, onEdit, users, setUsers }: UserTableProps) {
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [userToDelete, setUserToDelete] = useState<string | null>(null)
@@ -56,6 +57,9 @@ export function UserTable({ searchQuery, roleFilter, onEdit, users }: UserTableP
     try {
       await softDeleteUser(userToDelete, { status: "DELETED" })
       toast.success(`User deleted successfully.`)
+      setUsers((prev) =>
+        prev.map((user) => (user.id === userToDelete ? { ...user, status: "DELETED" } : user))
+      )
     } catch (error) {
       console.error("Error deleting user:", error)
       toast.error(`Failed to delete user.`)
@@ -135,8 +139,8 @@ export function UserTable({ searchQuery, roleFilter, onEdit, users }: UserTableP
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="h-8 w-8 border border-border">
-                        <AvatarImage src={user.photo || "/placeholder.svg"} alt={user.name || ""} />
-                 
+                        <AvatarImage src={user.photo ||""} alt={user.name || ""} />
+                        <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="font-medium">{user.name}</p>
