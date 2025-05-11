@@ -35,14 +35,8 @@ import { TPayment } from "@/types/paymentTypes";
 import { formatDate } from "./modules/Shared/DateTimeFormat/formatDate";
 import Link from "next/link";
 
-
-type TPaymentsParams = {
-  payments: TPayment[];
-};
-
 export function DashboardPayments({ payments }: TPaymentsParams) {
   const [searchQuery, setSearchQuery] = useState("");
-
   const getStatusBadge = (status: TPayment["status"]) => {
     switch (status) {
       case "SUCCESS":
@@ -176,11 +170,6 @@ export function DashboardPayments({ payments }: TPaymentsParams) {
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-
-                            {/* <Button size="lg">
-                        <Download className="mr-2 h-4" />
-                       Download Receipt
-                      </Button> */}
                     </TableCell>
                   </TableRow>
                 ))
@@ -189,48 +178,6 @@ export function DashboardPayments({ payments }: TPaymentsParams) {
           </Table>
         </div>
 
-        {/* Pagination */}
-        {/* {totalPages > 1 && (
-          <div className="flex items-center justify-between mt-4">
-            <p className="text-sm text-muted-foreground">
-              Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-              {Math.min(currentPage * itemsPerPage, filteredPayments.length)} of {filteredPayments.length} payments
-            </p>
-            <div className="flex items-center gap-1">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8 rounded-md"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Previous page</span>
-              </Button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <Button
-                  key={page}
-                  variant={page === currentPage ? "default" : "outline"}
-                  size="icon"
-                  className="h-8 w-8 rounded-md"
-                  onClick={() => setCurrentPage(page)}
-                >
-                  {page}
-                </Button>
-              ))}
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8 rounded-md"
-                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-              >
-                <ChevronRight className="h-4 w-4" />
-                <span className="sr-only">Next page</span>
-              </Button>
-            </div>
-          </div>
-        )} */}
       </CardContent>
     </Card>
   );

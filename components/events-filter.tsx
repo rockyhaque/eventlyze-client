@@ -81,7 +81,7 @@ export function EventsFilter({ refetchEvents }: IEventsFilterParams) {
                 {!sortBy ? "Price (Low to High)" : undefined}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent className="text-white">
+            <SelectContent>
               <SelectItem value="price:asc">Price (Low to High)</SelectItem>
               <SelectItem value="price:desc">Price (High to Low)</SelectItem>
               <SelectItem value="seat:asc">Seat (Low to High)</SelectItem>
