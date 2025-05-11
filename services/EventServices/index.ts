@@ -99,3 +99,16 @@ export const deleteEvent = async (id: string) => {
     return new Error(message);
   }
 };
+
+
+export const getAllUserEvents = async() => {
+  try {
+    const res = await app_axios.get(`/event/my-created-events`);
+    return res.data;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      "Something went wrong while getting events!";
+    return new Error(message);
+  }
+}

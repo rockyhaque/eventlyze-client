@@ -4,14 +4,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calendar, Filter, Grid, List, Plus } from "lucide-react"
 import { DashboardEvents } from "@/components/dashboard-events"
 import Link from "next/link"
-import { getAllEvents } from "@/services/EventServices"
-import { getActiveUser } from "@/hooks/getActiveUser"
+import { getAllUserEvents } from "@/services/EventServices"
+
 
 
 export default async function EventsPage() {
-  const { data } = await getAllEvents()
-  
-  
+  const { data } = await getAllUserEvents()
   return (
     <div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

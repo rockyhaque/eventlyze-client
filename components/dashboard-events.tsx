@@ -16,7 +16,7 @@ interface DashboardEventsProps {
 }
 
 export function DashboardEvents({ type, data }: DashboardEventsProps) {
-  const allEvents = data.data
+  const allEvents = data
 
   const events = useMemo(() => ({
     upcoming: allEvents.filter((event: any) => event.status === "UPCOMING"),
