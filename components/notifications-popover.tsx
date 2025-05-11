@@ -1,7 +1,5 @@
 
 "use client"
-
-import Link from "next/link"
 import { useEffect, useState } from "react"
 import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -147,7 +145,7 @@ export function NotificationsPopover() {
     }
   }
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <div><Bell className="h-5 w-5" /></div>
   if (error) return <div>Error: {error}</div>
 
   return (
