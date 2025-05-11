@@ -29,14 +29,15 @@ interface UserDialogProps {
   user: IUser
   action: "status" | "role" | null
   onClose: () => void
+  setUsers: React.Dispatch<React.SetStateAction<IUser[]>>
 }
 
-export function UserDialog({ open, onOpenChange, user, onClose, action }: UserDialogProps) {
+export function UserDialog({ open, onOpenChange, user, onClose, action, setUsers }: UserDialogProps) {
 
   const [status, setStatus] = useState("ACTIVE")
   const [role, setRole] = useState("USER")
   const [loading, setLoading] = useState(false)
-
+  
   useEffect(() => {
     if (user) {
       setStatus(user.status || "ACTIVE")
@@ -53,9 +54,30 @@ export function UserDialog({ open, onOpenChange, user, onClose, action }: UserDi
       if (action === "status") {
         await updatedUserStatus(user.id, status)
         toast.success(`User status updated to "${status}".`)
+        setUsers((prev) =>
+          prev.map((singleUser) =>
+            singleUser.id === user.id
+              ? {
+                  ...singleUser,
+                  status: (status?.toUpperCase() as IUser["status"]) || singleUser.status
+                }
+              : singleUser
+          )
+        )
+        
       } else if (action === "role") {
         await updatedUserRole(user.id, role)
         toast.success(`User role updated to "${role}".`)
+        setUsers((prev) =>
+          prev.map((singleUser) =>
+            singleUser.id === user.id
+              ? {
+                  ...singleUser,
+                  role: (role?.toUpperCase() as IUser["role"]) || singleUser.role
+                }
+              : singleUser
+          )
+        )
       }
       onClose()
     } catch (error) {
