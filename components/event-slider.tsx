@@ -33,31 +33,26 @@ export function EventSlider({ data }: any) {
   const containerRef = useRef<HTMLDivElement>(null);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
-  const events =
-    data?.data?.data
-      ?.slice()
-      .sort(
-        (a: any, b: any) =>
-          new Date(b.eventStartTime).getTime() -
-          new Date(a.eventStartTime).getTime()
-      )
-      .slice(0, 5)
-      .map((event: TEvent) => ({
-        id: event.id,
-        title: event.title,
-        image: event.eventBanner || "/placeholder.svg",
-        date: new Date(event.eventStartTime).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }),
-        location: event.location,
-        price: `$${event.price}`,
-        category: event.category.toLowerCase(),
-        attendees: event.participant.length || 0,
-        featured: event.status === "UPCOMING",
-        rating: 0, // CHANGE: Added default rating since API doesn't provide it
-      })) || [];
+  const events = data?.data?.data?.slice().sort((a: any, b: any) =>
+    new Date(b.eventStartTime).getTime() -
+    new Date(a.eventStartTime).getTime())
+    .slice(0, 5)
+    .map((event: TEvent) => ({
+      id: event.id,
+      title: event.title,
+      image: event.eventBanner || "/placeholder.svg",
+      date: new Date(event.eventStartTime).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+      location: event.location,
+      price: `$${event.price}`,
+      category: event.category.toLowerCase(),
+      attendees: event.participant.length || 0,
+      featured: event.status === "UPCOMING",
+      rating: 0, 
+    })) || [];
 
   // Motion values for parallax effect
   const mouseX = useMotionValue(0);

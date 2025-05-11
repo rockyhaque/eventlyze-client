@@ -1,7 +1,7 @@
+
 "use client"
 
 import type React from "react"
-
 import { useState, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -12,11 +12,9 @@ import {
   Users,
   Clock,
   Filter,
-  ChevronDown,
   Heart,
   CalendarDays,
   LayoutGrid,
-  Map,
   X,
   Star,
   Ticket,
@@ -28,8 +26,32 @@ import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
+import { TEvent } from "@/types/eventTypes"
 
-// Custom button styles with reduced radius and modern design
+interface Event {
+  id: string;
+  title: string;
+  image: string;
+  date: string;
+  endDate: string;
+  time: string;
+  location: string;
+  venue: string;
+  price: string;
+  category: string;
+  attendees: number;
+  rating: string;
+  featured: boolean;
+  tags: string[];
+  organizer: string;
+}
+
+interface UpcomingEventsProps {
+  data: {
+    data: TEvent[];
+  } | null;
+}
+
 const buttonStyles = `
   .event-btn {
     border-radius: 4px;
@@ -82,215 +104,69 @@ const buttonStyles = `
   }
 `
 
-// Sample event data
-const events = [
-  {
-    id: 1,
-    title: "Tech Conference 2023",
-    image: "/placeholder.svg?height=400&width=600&text=Tech+Conference",
-    date: "2023-05-20",
-    endDate: "2023-05-22",
-    time: "9:00 AM - 6:00 PM",
-    location: "San Francisco, CA",
-    venue: "Moscone Center",
-    coordinates: { lat: 37.7749, lng: -122.4194 },
-    price: "$299",
-    category: "Technology",
-    attendees: 1200,
-    rating: 4.8,
-    featured: true,
-    tags: ["AI", "Blockchain", "Web3"],
-    organizer: "TechEvents Inc.",
-  },
-  {
-    id: 2,
-    title: "Summer Music Festival",
-    image: "/placeholder.svg?height=400&width=600&text=Music+Festival",
-    date: "2023-06-15",
-    endDate: "2023-06-18",
-    time: "12:00 PM - 11:00 PM",
-    location: "Central Park, NY",
-    venue: "Great Lawn",
-    coordinates: { lat: 40.7812, lng: -73.9665 },
-    price: "$149",
-    category: "Music",
-    attendees: 5000,
-    rating: 4.9,
-    featured: true,
-    tags: ["Live Music", "Outdoor", "Festival"],
-    organizer: "Festival Productions",
-  },
-  {
-    id: 3,
-    title: "Food & Wine Expo",
-    image: "/placeholder.svg?height=400&width=600&text=Food+Expo",
-    date: "2023-07-08",
-    endDate: "2023-07-10",
-    time: "10:00 AM - 8:00 PM",
-    location: "Chicago, IL",
-    venue: "Navy Pier",
-    coordinates: { lat: 41.8919, lng: -87.6089 },
-    price: "$79",
-    category: "Food & Drink",
-    attendees: 3000,
-    rating: 4.7,
-    featured: false,
-    tags: ["Culinary", "Wine Tasting", "Gourmet"],
-    organizer: "Taste Ventures",
-  },
-  {
-    id: 4,
-    title: "Art Gallery Opening",
-    image: "/placeholder.svg?height=400&width=600&text=Art+Gallery",
-    date: "2023-08-05",
-    endDate: "2023-08-05",
-    time: "7:00 PM - 10:00 PM",
-    location: "Los Angeles, CA",
-    venue: "Modern Art Museum",
-    coordinates: { lat: 34.0522, lng: -118.2437 },
-    price: "Free",
-    category: "Art",
-    attendees: 500,
-    rating: 4.5,
-    featured: false,
-    tags: ["Contemporary", "Exhibition", "Opening Night"],
-    organizer: "LA Arts Foundation",
-  },
-  {
-    id: 5,
-    title: "Startup Pitch Competition",
-    image: "/placeholder.svg?height=400&width=600&text=Startup+Pitch",
-    date: "2023-09-12",
-    endDate: "2023-09-12",
-    time: "1:00 PM - 5:00 PM",
-    location: "Austin, TX",
-    venue: "Capital Factory",
-    coordinates: { lat: 30.2672, lng: -97.7431 },
-    price: "$49",
-    category: "Business",
-    attendees: 800,
-    rating: 4.6,
-    featured: true,
-    tags: ["Entrepreneurship", "Venture Capital", "Networking"],
-    organizer: "Startup Texas",
-  },
-  {
-    id: 6,
-    title: "Yoga & Wellness Retreat",
-    image: "/placeholder.svg?height=400&width=600&text=Wellness+Retreat",
-    date: "2023-10-01",
-    endDate: "2023-10-03",
-    time: "All Day",
-    location: "Sedona, AZ",
-    venue: "Red Rock Resort",
-    coordinates: { lat: 34.8697, lng: -111.7607 },
-    price: "$399",
-    category: "Wellness",
-    attendees: 150,
-    rating: 4.9,
-    featured: false,
-    tags: ["Yoga", "Meditation", "Wellness"],
-    organizer: "Mindful Journeys",
-  },
-  {
-    id: 7,
-    title: "Gaming Convention",
-    image: "/placeholder.svg?height=400&width=600&text=Gaming+Convention",
-    date: "2023-11-18",
-    endDate: "2023-11-20",
-    time: "10:00 AM - 8:00 PM",
-    location: "Seattle, WA",
-    venue: "Washington Convention Center",
-    coordinates: { lat: 47.6062, lng: -122.3321 },
-    price: "$89",
-    category: "Gaming",
-    attendees: 2500,
-    rating: 4.7,
-    featured: true,
-    tags: ["Video Games", "Esports", "Tabletop"],
-    organizer: "GameCon Northwest",
-  },
-  {
-    id: 8,
-    title: "Winter Fashion Show",
-    image: "/placeholder.svg?height=400&width=600&text=Fashion+Show",
-    date: "2023-12-05",
-    endDate: "2023-12-05",
-    time: "7:00 PM - 10:00 PM",
-    location: "Miami, FL",
-    venue: "Design District",
-    coordinates: { lat: 25.7617, lng: -80.1918 },
-    price: "$129",
-    category: "Fashion",
-    attendees: 1000,
-    rating: 4.8,
-    featured: false,
-    tags: ["Runway", "Designer", "Winter Collection"],
-    organizer: "Style Productions",
-  },
-  {
-    id: 9,
-    title: "New Year's Eve Gala",
-    image: "/placeholder.svg?height=400&width=600&text=NYE+Gala",
-    date: "2023-12-31",
-    endDate: "2023-12-31",
-    time: "8:00 PM - 2:00 AM",
-    location: "Las Vegas, NV",
-    venue: "Bellagio Hotel",
-    coordinates: { lat: 36.1699, lng: -115.1398 },
-    price: "$199",
-    category: "Nightlife",
-    attendees: 1500,
-    rating: 4.9,
-    featured: true,
-    tags: ["New Year", "Celebration", "Formal"],
-    organizer: "Luxury Events",
-  },
-]
+export function UpcomingEvents({ data }: UpcomingEventsProps) {
+  // Transform API data to match component format
+  const apiEvents: Event[] = data?.data?.map((event: TEvent) => ({
+    id: event.id,
+    title: event.title,
+    image: event.eventBanner || "/placeholder.svg",
+    date: event.eventStartTime,
+    endDate: event.eventEndTime,
+    time: `${new Date(event.eventStartTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${new Date(event.eventEndTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+    location: event.location,
+    venue: event.eventType === "ONLINE" ? "Online Event" : "Venue not specified",
+    price: event.isPaid ? `$${event.price}` : "Free",
+    category: event.category || "General",
+    attendees: event.participant?.length || 0,
+    rating: event.review?.length ?
+      (event.review.reduce((sum: number, review: any) => sum + review.rating, 0) / event.review.length).toFixed(1) :
+      "No ratings",
+    featured: event.status === "UPCOMING",
+    tags: [],
+    organizer: event.owner?.name || "Unknown Organizer"
+  })) || []
 
-// Sort events by date
-const sortedEvents = [...events].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-
-// Group events by month
-const eventsByMonth = sortedEvents.reduce(
-  (acc, event) => {
-    const date = new Date(event.date)
-    const monthYear = date.toLocaleString("default", { month: "long", year: "numeric" })
-
-    if (!acc[monthYear]) {
-      acc[monthYear] = []
-    }
-
-    acc[monthYear].push(event)
-    return acc
-  },
-  {} as Record<string, typeof events>,
-)
-
-// Get unique categories
-const categories = Array.from(new Set(events.map((event) => event.category)))
-
-export function UpcomingEvents() {
   const [viewMode, setViewMode] = useState<"timeline" | "grid">("timeline")
   const [activeFilters, setActiveFilters] = useState<string[]>([])
   const [showFilters, setShowFilters] = useState(false)
-  const [priceRange, setPriceRange] = useState([0, 500])
-  const [favorites, setFavorites] = useState<number[]>([])
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500])
+  const [favorites, setFavorites] = useState<string[]>([])
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ container: containerRef })
 
-  // Transform scroll progress for parallax effect
-  const timelineParallax = useTransform(scrollYProgress, [0, 1], [0, -100])
+  // Sort events by date
+  const sortedEvents = [...apiEvents].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+  // Group events by month
+  const eventsByMonth = sortedEvents.reduce(
+    (acc: Record<string, Event[]>, event) => {
+      const date = new Date(event.date)
+      const monthYear = date.toLocaleString("default", { month: "long", year: "numeric" })
+
+      if (!acc[monthYear]) {
+        acc[monthYear] = []
+      }
+
+      acc[monthYear].push(event)
+      return acc
+    },
+    {} as Record<string, Event[]>
+  )
+
+  // Get unique categories
+  const categories = Array.from(new Set(apiEvents.map((event) => event.category)))
 
   const toggleFilter = (filter: string) => {
     setActiveFilters((prev) => (prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]))
   }
 
-  const toggleFavorite = (id: number, e: React.MouseEvent) => {
+  const toggleFavorite = (id: string, e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    setFavorites((prev) => (prev.includes(id) ? prev.filter((fav) => fav !== id) : [...prev, id]))
+    setFavorites((prev) =>
+      prev.includes(id) ? prev.filter((fav) => fav !== id) : [...prev, id]
+    )
   }
 
   const clearFilters = () => {
@@ -302,10 +178,11 @@ export function UpcomingEvents() {
   // Filter events based on active filters
   const filteredEvents = sortedEvents.filter((event) => {
     const matchesCategory = activeFilters.length === 0 || activeFilters.includes(event.category)
-    const matchesPrice =
-      event.price === "Free" ||
-      (Number.parseInt(event.price.replace(/[^0-9]/g, "")) >= priceRange[0] &&
-        Number.parseInt(event.price.replace(/[^0-9]/g, "")) <= priceRange[1])
+
+    // Fixed price matching logic
+    const priceValue = event.price === "Free" ? 0 : Number(event.price.replace(/[^0-9]/g, ""))
+    const matchesPrice = priceValue >= priceRange[0] && priceValue <= priceRange[1]
+
     const matchesFeatured = showFeaturedOnly ? event.featured : true
 
     return matchesCategory && matchesPrice && matchesFeatured
@@ -313,13 +190,11 @@ export function UpcomingEvents() {
 
   // Filter events by month based on active filters
   const filteredEventsByMonth = Object.entries(eventsByMonth).reduce(
-    (acc, [month, monthEvents]) => {
+    (acc: Record<string, Event[]>, [month, monthEvents]) => {
       const filtered = monthEvents.filter((event) => {
         const matchesCategory = activeFilters.length === 0 || activeFilters.includes(event.category)
-        const matchesPrice =
-          event.price === "Free" ||
-          (Number.parseInt(event.price.replace(/[^0-9]/g, "")) >= priceRange[0] &&
-            Number.parseInt(event.price.replace(/[^0-9]/g, "")) <= priceRange[1])
+        const priceValue = event.price === "Free" ? 0 : Number(event.price.replace(/[^0-9]/g, ""))
+        const matchesPrice = priceValue >= priceRange[0] && priceValue <= priceRange[1]
         const matchesFeatured = showFeaturedOnly ? event.featured : true
 
         return matchesCategory && matchesPrice && matchesFeatured
@@ -331,8 +206,10 @@ export function UpcomingEvents() {
 
       return acc
     },
-    {} as Record<string, typeof events>,
+    {} as Record<string, Event[]>
   )
+
+  const timelineParallax = useTransform(scrollYProgress, [0, 1], [0, -100])
 
   return (
     <section className="py-16 overflow-hidden">
@@ -367,11 +244,10 @@ export function UpcomingEvents() {
                   <LayoutGrid className="h-4 w-4" />
                   <span className="hidden sm:inline">Grid</span>
                 </TabsTrigger>
-                
               </TabsList>
             </Tabs>
 
-            {/* <Button variant="outline" className="gap-2" onClick={() => setShowFilters(!showFilters)}>
+            <Button variant="outline" className="gap-2" onClick={() => setShowFilters(!showFilters)}>
               <Filter className={cn("h-4 w-4", showFilters && "text-primary")} />
               Filters
               {activeFilters.length > 0 && (
@@ -379,7 +255,7 @@ export function UpcomingEvents() {
                   {activeFilters.length}
                 </Badge>
               )}
-            </Button> */}
+            </Button>
           </div>
         </motion.div>
 
@@ -395,7 +271,7 @@ export function UpcomingEvents() {
               <div className="rounded-xl border bg-card p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-display text-lg font-bold">Filter Events</h3>
-                  <Button variant="ghost" size="sm" onClick={clearFilters} className="h-8 gap-1 ">
+                  <Button variant="ghost" size="sm" onClick={clearFilters} className="h-8 gap-1">
                     <X className="h-4 w-4" />
                     Clear All
                   </Button>
@@ -425,7 +301,7 @@ export function UpcomingEvents() {
                       max={500}
                       step={10}
                       value={priceRange}
-                      onValueChange={setPriceRange}
+                      onValueChange={(value) => setPriceRange(value as [number, number])}
                       className="py-4"
                     />
                     <div className="flex items-center justify-between">
@@ -473,7 +349,7 @@ export function UpcomingEvents() {
               eventsByMonth={filteredEventsByMonth}
               favorites={favorites}
               toggleFavorite={toggleFavorite}
-              containerRef={containerRef}
+              containerRef={containerRef as React.RefObject<HTMLDivElement>}
               timelineParallax={timelineParallax}
             />
           )}
@@ -481,27 +357,27 @@ export function UpcomingEvents() {
           {viewMode === "grid" && (
             <GridView key="grid" events={filteredEvents} favorites={favorites} toggleFavorite={toggleFavorite} />
           )}
-
         </AnimatePresence>
       </div>
     </section>
   )
 }
 
-// Timeline View Component
+interface TimelineViewProps {
+  eventsByMonth: Record<string, Event[]>;
+  favorites: string[];
+  toggleFavorite: (id: string, e: React.MouseEvent) => void;
+  containerRef: React.RefObject<HTMLDivElement>;
+  timelineParallax: any;
+}
+
 function TimelineView({
   eventsByMonth,
   favorites,
   toggleFavorite,
   containerRef,
   timelineParallax,
-}: {
-  eventsByMonth: Record<string, typeof events>
-  favorites: number[]
-  toggleFavorite: (id: number, e: React.MouseEvent) => void
-  containerRef: React.RefObject<HTMLDivElement>
-  timelineParallax: any
-}) {
+}: TimelineViewProps) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -510,19 +386,16 @@ function TimelineView({
       transition={{ duration: 0.5 }}
       className="relative"
     >
-      {/* Timeline track */}
       <div className="absolute left-[15px] top-0 bottom-0 w-0.5 bg-muted md:left-1/2" />
 
-      {/* Timeline content */}
       <div
         ref={containerRef}
         className="relative max-h-[600px] overflow-y-auto px-4 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-muted mt-10"
       >
-        <motion.div >
+        <motion.div>
           {Object.entries(eventsByMonth).length > 0 ? (
             Object.entries(eventsByMonth).map(([month, monthEvents]) => (
               <div key={month} className="relative">
-                {/* Month marker */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -534,7 +407,6 @@ function TimelineView({
                   </div>
                 </motion.div>
 
-                {/* Month events */}
                 {monthEvents.map((event, eventIndex) => {
                   const isEven = eventIndex % 2 === 0
                   const date = new Date(event.date)
@@ -552,9 +424,6 @@ function TimelineView({
                         isLast && "mb-0 pb-8"
                       )}
                     >
-                
-
-                      {/* Event card */}
                       <div
                         className={cn(
                           "relative w-full rounded-xl border bg-card shadow-sm transition-all hover:shadow-md",
@@ -564,7 +433,7 @@ function TimelineView({
                         <Link href={`/events/${event.id}`} className="block">
                           <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-xl max-h-[300px]">
                             <Image
-                              src={event.image || "/placeholder.svg"}
+                              src={event.image}
                               alt={event.title}
                               width={600}
                               height={400}
@@ -619,7 +488,7 @@ function TimelineView({
                                 <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                                 <span className="text-sm font-medium">{event.rating}</span>
                               </div>
-                              <Button size="sm" variant="outline" className="gap-1 ">
+                              <Button size="sm" variant="outline" className="gap-1">
                                 <Ticket className="h-3 w-3" />
                                 <span>Details</span>
                               </Button>
@@ -628,7 +497,6 @@ function TimelineView({
                         </Link>
                       </div>
 
-                      {/* Date label for mobile */}
                       <div className="absolute left-0 top-0 flex h-8 w-8 flex-col items-center text-[10px] font-medium text-muted-foreground md:hidden">
                         <span className="mt-10">{dayName}</span>
                       </div>
@@ -651,16 +519,17 @@ function TimelineView({
   )
 }
 
-// Grid View Component
+interface GridViewProps {
+  events: Event[];
+  favorites: string[];
+  toggleFavorite: (id: string, e: React.MouseEvent) => void;
+}
+
 function GridView({
   events,
   favorites,
   toggleFavorite,
-}: {
-  events: typeof sortedEvents
-  favorites: number[]
-  toggleFavorite: (id: number, e: React.MouseEvent) => void
-}) {
+}: GridViewProps) {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
       {events.length > 0 ? (
@@ -680,7 +549,7 @@ function GridView({
               >
                 <div className="relative aspect-[16/9] w-full overflow-hidden">
                   <Image
-                    src={event.image || "/placeholder.svg"}
+                    src={event.image}
                     alt={event.title}
                     width={600}
                     height={400}
@@ -706,7 +575,6 @@ function GridView({
                     </Badge>
                   </div>
 
-                  {/* Date badge */}
                   <div className="absolute right-3 bottom-3 flex flex-col items-center rounded-lg bg-white/90 p-2 text-center backdrop-blur-sm">
                     <span className="text-xs font-medium text-muted-foreground">
                       {new Date(event.date).toLocaleDateString("en-US", { month: "short" })}
@@ -740,7 +608,7 @@ function GridView({
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                       <span className="text-sm font-medium">{event.rating}</span>
                     </div>
-                    <Button size="sm" variant="outline" className="gap-1 ">
+                    <Button size="sm" variant="outline" className="gap-1">
                       <Ticket className="h-3 w-3" />
                       <span>Details</span>
                     </Button>
