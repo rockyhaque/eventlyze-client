@@ -15,6 +15,7 @@ import {
   UserCog,
   DollarSign,
   HomeIcon,
+  PersonStanding,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -45,6 +46,12 @@ export function DashboardSidebarMenu({ data }: any) {
       icon: Calendar,
       href: "/dashboard/events",
       color: "text-violet-500",
+    },
+    {
+      label: "Participants",
+      icon: PersonStanding,
+      href: "/dashboard/participants",
+      color: "text-teal-500",
     },
     {
       label: "Invitations",
