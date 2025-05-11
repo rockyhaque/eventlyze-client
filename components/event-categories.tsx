@@ -147,7 +147,6 @@ export function EventCategories() {
     const fetchCounts = async () => {
       try {
         const res = await eventCategoryStats()
-        console.log("API Response:", res) // Debug log
 
         if (res?.success && res?.data) {
           setCategories(prev =>
