@@ -18,7 +18,7 @@ import EFormDateInput from "@/components/modules/Shared/Form/EFormDateInput";
 import EFormTimeInput from "@/components/modules/Shared/Form/EFormTimeInput";
 import { categoryOptions, eventTypeOptions, tabs } from "@/components/modules/Dashboard/CreateEvent/eventSelectOptions";
 import EFormCheckbox from "@/components/modules/Shared/Form/EFormCheckbox";
-import {  getSingleEvent, updateEvent } from "@/services/EventServices";
+import { getSingleEvent, updateEvent } from "@/services/EventServices";
 import { convertToISO } from "@/hooks/convertToDate";
 import { useParams, useRouter } from "next/navigation";
 
