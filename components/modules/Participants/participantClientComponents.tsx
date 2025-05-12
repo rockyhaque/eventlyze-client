@@ -22,7 +22,7 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
     const [searchQuery, setSearchQuery] = useState("");
 
     // Search functionality
-    const filteredParticipants = participant.filter((parti) => {
+    const filteredParticipants = participant?.filter((parti) => {
         const searchLower = searchQuery.toLowerCase();
         return (
             parti.user.name.toLowerCase().includes(searchLower) ||
@@ -33,7 +33,7 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
         );
     });
 
-    const totalParticipants = filteredParticipants.length;
+    const totalParticipants = filteredParticipants?.length;
 
     const getStatusBadge = (status: TParticipantUser["status"]) => {
         switch (status) {
@@ -126,8 +126,8 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    filteredParticipants.map((parti) => (
-                                        <TableRow key={parti.id}>
+                                    filteredParticipants?.map((parti) => (
+                                        <TableRow key={parti?.id}>
                                             <TableCell className="font-medium">
                                                 <div className="flex items-center gap-2">
                                                     <Avatar className="h-8 w-8">
@@ -146,20 +146,20 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                                             </TableCell>
                                             <TableCell
                                                 className="max-w-[150px] truncate"
-                                                title={parti.event.title}
+                                                title={parti?.event?.title}
                                             >
-                                                {parti.event.title}
+                                                {parti?.event?.title}
                                             </TableCell>
                                             <TableCell>
-                                                {parti.event.category}
+                                                {parti?.event?.category}
                                             </TableCell>
                                             <TableCell>
-                                                {getStatusBadge(parti.status)}
+                                                {getStatusBadge(parti?.status)}
                                             </TableCell>
                                             <TableCell>
-                                                {formatDate(parti.createdAt)} at {formatDate(parti.createdAt, "h:mm A")}
+                                                {formatDate(parti?.createdAt)} at {formatDate(parti?.createdAt, "h:mm A")}
                                             </TableCell>
-                                            <Link href={`/events/${parti.eventId}`}>
+                                            <Link href={`/events/${parti?.eventId}`}>
                                                 <TableCell className="text-center">
                                                     <Button
                                                         variant="ghost"

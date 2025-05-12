@@ -32,11 +32,11 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
   }, []);
 
   const events = useMemo(() => ({
-    upcoming: allEvents.filter((event: any) => event.status === "UPCOMING"),
-    pending: allEvents.filter((event: any) => event.status === "PENDING"),
-    canceled: allEvents.filter((event: any) => event.status === "CANCELED"),
-    ongoing: allEvents.filter((event: any) => event.status === "ONGOING"),
-    completed: allEvents.filter((event: any) => event.status === "COMPLETED"),
+    upcoming: allEvents?.filter((event: any) => event.status === "UPCOMING"),
+    pending: allEvents?.filter((event: any) => event.status === "PENDING"),
+    canceled: allEvents?.filter((event: any) => event.status === "CANCELED"),
+    ongoing: allEvents?.filter((event: any) => event.status === "ONGOING"),
+    completed: allEvents?.filter((event: any) => event.status === "COMPLETED"),
   }), [allEvents])
 
   const [displayEvents, setDisplayEvents] = useState(events[type])
@@ -60,11 +60,11 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
     }
   }
 
-  if (displayEvents.length === 0) {
+  if (displayEvents?.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
         <div className="text-4xl">🗓️</div>
-        <h3 className="mt-4 text-lg font-medium">No events found</h3>
+        <h3 className="mt-4 text-lg font-medium">You haven't created any event</h3>
         <p className="mt-2 text-sm text-muted-foreground">
           {type === "upcoming" && "You don't have any upcoming events."}
           {type === "pending" && "You don't have any pending events."}
@@ -86,20 +86,20 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {displayEvents.map((event: any) => (
-        <Card key={event.id} className="overflow-hidden">
+      {displayEvents?.map((event: any) => (
+        <Card key={event?.id} className="overflow-hidden">
           <div className="aspect-video w-full overflow-hidden">
             <img
-              src={event.eventBanner || "/placeholder.svg"}
-              alt={event.title}
+              src={event?.eventBanner || "/placeholder.svg"}
+              alt={event?.title}
               className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
             />
           </div>
           <CardContent className="p-4">
             <div className="flex items-start justify-between">
               <div>
-                <Badge className="mb-2">{event.category}</Badge>
-                <h3 className="font-semibold">{event.title}</h3>
+                <Badge className="mb-2">{event?.category}</Badge>
+                <h3 className="font-semibold">{event?.title}</h3>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -111,7 +111,7 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
                 <DropdownMenuContent align="end">
                   {
                     user?.role == "USER" && <DropdownMenuItem asChild>
-                      <Link href={`/dashboard/events/edit/${event.id}`}>
+                      <Link href={`/dashboard/events/edit/${event?.id}`}>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                       </Link>
@@ -132,31 +132,31 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
             <div className="mt-4 space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span>{formatDate(event.eventStartTime)}</span>
+                <span>{formatDate(event?.eventStartTime)}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-muted-foreground" />
-                <span>{formatDate(event.eventStartTime)}</span>
+                <span>{formatDate(event?.eventStartTime)}</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-muted-foreground" />
-                <span className="truncate">{event.location}</span>
+                <span className="truncate">{event?.location}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-muted-foreground" />
                 <span>
-                  {event.seat} attendees
+                  {event?.seat} attendees
                 </span>
               </div>
             </div>
 
             <div className="mt-4 flex gap-2">
               <Button variant="outline" size="sm" className="flex-1" asChild>
-                <Link href={`/events/${event.id}`}>View</Link>
+                <Link href={`/events/${event?.id}`}>View</Link>
               </Button>
               {
                 user?.role == "USER" && <Button size="sm" className="flex-1" asChild>
-                  <Link href={`/dashboard/events/edit/${event.id}`}>Manage</Link>
+                  <Link href={`/dashboard/events/edit/${event?.id}`}>Manage</Link>
                 </Button>
               }
 
