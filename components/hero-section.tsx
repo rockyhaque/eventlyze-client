@@ -37,7 +37,7 @@ const userImages: UserImage[] = [
   },
 ];
 
-export function HeroSection({ data }: any) {
+export function HeroSection({ data, user }: any) {
   const events = data?.data?.data;
   const [featuredEvent, setFeaturedEvent] = useState<any | null>(null);
   useEffect(() => {
@@ -48,8 +48,7 @@ export function HeroSection({ data }: any) {
     }
   }, []);
 
-
-  console.log("feature events", featuredEvent)
+  console.log("feature events", featuredEvent);
   return (
     <section className="relative overflow-hidden pt-16 md:pt-24">
       {/* Background elements */}
@@ -90,9 +89,11 @@ export function HeroSection({ data }: any) {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/dashboard/create-event">Create Your Event</Link>
-            </Button>
+            {user?.role == "USER" && (
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/dashboard/create-event">Create Your Event</Link>
+              </Button>
+            )}
           </div>
 
           <div className="mt-4 flex items-center gap-6">
@@ -132,10 +133,7 @@ export function HeroSection({ data }: any) {
             {featuredEvent ? (
               <>
                 <Image
-                  src={
-                    featuredEvent?.eventBanner ||
-                    "/placeholder.svg"
-                  }
+                  src={featuredEvent?.eventBanner || "/placeholder.svg"}
                   alt={featuredEvent.title}
                   width={800}
                   height={600}
@@ -195,18 +193,20 @@ export function HeroSection({ data }: any) {
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg">
               <div className="text-center">
                 <div className="font-display text-xl font-bold text-primary">
-                  {new Date(
-                    featuredEvent?.eventStartTime
-                  ).toLocaleDateString("en-US", {
-                    day: "numeric",
-                  })}
+                  {new Date(featuredEvent?.eventStartTime).toLocaleDateString(
+                    "en-US",
+                    {
+                      day: "numeric",
+                    }
+                  )}
                 </div>
                 <div className="text-xs font-medium text-primary">
-                  {new Date(
-                    featuredEvent?.eventStartTime
-                  ).toLocaleDateString("en-US", {
-                    month: "long",
-                  })}
+                  {new Date(featuredEvent?.eventStartTime).toLocaleDateString(
+                    "en-US",
+                    {
+                      month: "long",
+                    }
+                  )}
                 </div>
               </div>
             </div>
