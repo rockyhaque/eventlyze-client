@@ -2,7 +2,7 @@ import { PageHeader } from "@/components/page-header"
 export const dynamic = "force-dynamic";
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 import { DashboardEvents } from "@/components/dashboard-events"
 import Link from "next/link"
 import { getAllUserEvents } from "@/services/EventServices"
@@ -12,6 +12,21 @@ import { getActiveUser } from "@/hooks/getActiveUser"
 
 export default async function EventsPage() {
   const { data } = await getAllUserEvents()
+
+  // if (data?.length === 0) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+  //       <div className="text-4xl">🎉</div>
+  //       <h3 className="mt-4 text-lg font-medium">You haven't created any event</h3>
+  //       {/* <p className="mt-2 text-sm text-muted-foreground">
+  //         {status === "pending" && "You don't have any pending invitations."}
+  //         {status === "accepted" && "You haven't accepted any invitations yet."}
+  //         {status === "rejected" && "You haven't rejected any invitations."}
+  //       </p> */}
+  //     </div>
+  //   )
+  // }
+
   const user = await getActiveUser()
   return (
     <div>

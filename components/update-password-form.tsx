@@ -14,7 +14,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from 'sonner'
 import { changePassword } from '@/services/AuthServices'
+import { useRouter } from 'next/navigation'
 const UpdatePasswordForm = () => {
+  const router = useRouter()
   const {
     register: registerPassword,
     handleSubmit: handleSubmitPassword,
@@ -27,7 +29,7 @@ const UpdatePasswordForm = () => {
   })
 
 
-  const onPasswordSubmit =async (data: any) => {
+  const onPasswordSubmit = async (data: any) => {
     const finalData = {
       "oldPassword": data.currentPassword,
       "newPassword": data.newPassword
@@ -40,6 +42,7 @@ const UpdatePasswordForm = () => {
     const response = await changePassword(finalData)
     if (response.success) {
       toast.success("Password Updated Successfully!")
+      router.push("/login")
     } else {
       toast.error("Password Updated Failed!")
     }
