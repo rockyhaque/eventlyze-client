@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TParticipantUser } from "@/types/participantType";
-import { Edit, Eye, MoreHorizontal, Search } from "lucide-react";
+import { Eye, Search } from "lucide-react";
 import { useState } from "react";
 import { formatDate } from "../Shared/DateTimeFormat/formatDate";
 import { Badge } from "@/components/ui/badge";
@@ -21,29 +21,7 @@ interface TParticipantProps {
 
 const ParticipantClientComponents = ({ participant, user }: TParticipantProps) => {
     const [searchQuery, setSearchQuery] = useState("");
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedParticipant, setSelectedParticipant] = useState<TParticipantUser | null>(null);
     const [participants, setParticipants] = useState<TParticipantUser[]>(participant);
-
-    const handleOpenDialog = (participant: TParticipantUser) => {
-        setSelectedParticipant(participant);
-        setIsDialogOpen(true);
-    };
-
-    const handleCloseDialog = () => {
-        setIsDialogOpen(false);
-        setSelectedParticipant(null);
-    };
-
-    const handleStatusUpdate = (updatedParticipant: TParticipantUser) => {
-        setParticipants(prev =>
-            prev.map(p =>
-                p.id === updatedParticipant.id
-                    ? updatedParticipant
-                    : p
-            )
-        );
-    };
 
     // Search functionality
     const filteredParticipants = participants?.filter((parti) => {
@@ -56,8 +34,6 @@ const ParticipantClientComponents = ({ participant, user }: TParticipantProps) =
             parti?.status.toLowerCase().includes(searchLower)
         );
     });
-
-    const totalParticipants = filteredParticipants?.length;
 
     const getStatusBadge = (status: TParticipantUser["status"]) => {
         switch (status) {
@@ -144,16 +120,7 @@ const ParticipantClientComponents = ({ participant, user }: TParticipantProps) =
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {totalParticipants === 0 ? (
-                                    <TableRow>
-                                        <TableCell
-                                            colSpan={6}
-                                            className="text-center py-8 text-muted-foreground"
-                                        >
-                                            No participants found
-                                        </TableCell>
-                                    </TableRow>
-                                ) : (
+                                {filteredParticipants?.length > 0 ? (
                                     filteredParticipants?.map((parti) => (
                                         <TableRow key={parti.id}>
                                             {
@@ -175,7 +142,6 @@ const ParticipantClientComponents = ({ participant, user }: TParticipantProps) =
                                                     </TableCell>
                                                 )
                                             }
-
                                             <TableCell
                                                 className="max-w-[150px] truncate"
                                                 title={parti.event?.title}
@@ -201,53 +167,29 @@ const ParticipantClientComponents = ({ participant, user }: TParticipantProps) =
                                                     </Button>
                                                 </TableCell>
                                             </Link>
-
-                                            {/* <TableCell className="text-right">
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            className="h-8 w-8 rounded-full"
-                                                        >
-                                                            <MoreHorizontal className="h-4 w-4" />
-                                                            <span className="sr-only">Open menu</span>
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        <DropdownMenuItem>
-                                                            <Eye className="mr-2 h-4 w-4" />
-                                                            <Link href={`/events/${parti.eventId}`}>
-                                                                View Details
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => handleOpenDialog(parti)}>
-                                                            <Edit className="mr-2 h-4 w-4" />
-                                                            Update Status
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </TableCell> */}
                                         </TableRow>
                                     ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={6}
+                                            className="text-center py-8 text-muted-foreground"
+                                        >
+                                            <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+                                                <div className="text-4xl">🎉</div>
+                                                <h3 className="mt-4 text-lg font-medium text-white">No Participants</h3>
+                                                <p className="mt-2 text-sm text-muted-foreground">
+                                                    You haven't joined any events.
+                                                </p>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
                                 )}
                             </TableBody>
                         </Table>
                     </div>
                 </CardContent>
             </Card>
-
-            {/* {selectedParticipant && (
-                <ParticipantStatusDialog
-                    open={isDialogOpen}
-                    onOpenChange={setIsDialogOpen}
-                    onClose={handleCloseDialog}
-                    action="status"
-                    id={selectedParticipant.id}
-                    currentStatus={selectedParticipant.status}
-                    onStatusUpdate={handleStatusUpdate}
-                />
-            )} */}
         </div>
     );
 };
