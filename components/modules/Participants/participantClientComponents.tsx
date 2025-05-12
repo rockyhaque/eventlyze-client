@@ -16,10 +16,14 @@ import { cn } from "@/lib/utils";
 
 interface TParticipantProps {
     participant: TParticipantUser[];
+    user: any
 }
 
-const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
+const ParticipantClientComponents = ({ participant, user }: TParticipantProps) => {
     const [searchQuery, setSearchQuery] = useState("");
+
+    console.log("user", user);
+
 
     // Search functionality
     const filteredParticipants = participant?.filter((parti) => {
@@ -132,7 +136,7 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                                                 <div className="flex items-center gap-2">
                                                     <Avatar className="h-8 w-8">
 
-                                                        <AvatarFallback>{ parti?.user?.name.charAt(0)}</AvatarFallback>
+                                                        <AvatarFallback>{parti?.user?.name.charAt(0)}</AvatarFallback>
                                                     </Avatar>
                                                     <div >
                                                         <p className="text-xs text-muted-foreground">
@@ -159,16 +163,32 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                                             <TableCell>
                                                 {formatDate(parti?.createdAt)} at {formatDate(parti?.createdAt, "h:mm A")}
                                             </TableCell>
+                                            {
+                                                user.role === "ADMIN" && (
+                                                    <Link href={`/events/${parti?.eventId}`}>
+                                                        <TableCell className="text-center">
+                                                            <Button
+                                                                variant="ghost"
+                                                                className=" rounded-full just"
+                                                            >
+                                                                <Eye />
+                                                            </Button>
+                                                        </TableCell>
+                                                    </Link>
+                                                )
+                                            }
+
                                             <Link href={`/events/${parti?.eventId}`}>
                                                 <TableCell className="text-center">
                                                     <Button
                                                         variant="ghost"
                                                         className=" rounded-full just"
                                                     >
-                                                        <Eye />
+                                                       ami
                                                     </Button>
                                                 </TableCell>
                                             </Link>
+
 
                                         </TableRow>
                                     ))
