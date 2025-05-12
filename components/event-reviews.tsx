@@ -37,11 +37,6 @@ export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
     (p) => p.userId === userId && p.status === "JOINED"
   );
 
-  // const participantUser = eventReviews?.participant?.some(
-  //   (p) => p.userId === userId
-  // );
-
-
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const reviewData = {
@@ -95,12 +90,6 @@ export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
                     ))}
                   </div>
                 </div>
-
-                {/* <Textarea
-            placeholder="Share your experience with this event..."
-            className="mb-4 min-h-[100px]"
-          /> */}
-
                 <EFormTextarea
                   name="content"
                   placeholder="Share your experience with this event..."
@@ -183,16 +172,6 @@ export function EventReviews({ eventReviews, activeUser }: EventReviewsProps) {
                 </div>
 
                 <p className="mb-4 text-muted-foreground">{review.content}</p>
-
-                {/* <Button
-            variant="ghost"
-            size="sm"
-            className="flex items-center gap-1 text-muted-foreground"
-            onClick={() => handleLike(review.id)}
-          >
-            <ThumbsUp className={cn("h-4 w-4", review.isLiked && "fill-primary text-primary")} />
-            <span>{review.likes} found this helpful</span>
-          </Button> */}
               </div>
             </>
           ))}

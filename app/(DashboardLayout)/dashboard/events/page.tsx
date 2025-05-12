@@ -12,21 +12,9 @@ import { getActiveUser } from "@/hooks/getActiveUser"
 
 export default async function EventsPage() {
   const { data } = await getAllUserEvents()
+  console.log(" data:", data)
 
-  // if (data?.length === 0) {
-  //   return (
-  //     <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-  //       <div className="text-4xl">🎉</div>
-  //       <h3 className="mt-4 text-lg font-medium">You haven't created any event</h3>
-  //       {/* <p className="mt-2 text-sm text-muted-foreground">
-  //         {status === "pending" && "You don't have any pending invitations."}
-  //         {status === "accepted" && "You haven't accepted any invitations yet."}
-  //         {status === "rejected" && "You haven't rejected any invitations."}
-  //       </p> */}
-  //     </div>
-  //   )
-  // }
-
+ 
   const user = await getActiveUser()
   return (
     <div>

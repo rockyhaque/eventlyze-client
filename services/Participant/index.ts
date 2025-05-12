@@ -25,8 +25,6 @@ export const createPayment = async (eventId: any) => {
   }
 };
 
-
-
 // Get all Participant
 export const getAllParticipants = async () => {
   try {
@@ -41,13 +39,16 @@ export const getAllParticipants = async () => {
   }
 };
 
-
 // Participator status update
 export const updatedParticipatStatus = async (id: string, data: any) => {
   try {
-    const response = await app_axios.patch(`/participation/update-status/${id}`, {
-      role: data,
-    });
+    const response = await app_axios.patch(
+      `/participation/update-status/${id}`,
+      {
+       status: data,
+      }
+    );
+
     return response.data;
   } catch (error: any) {
     const message =
