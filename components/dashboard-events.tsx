@@ -82,24 +82,6 @@ export function DashboardEvents({ type, data }: DashboardEventsProps) {
     }
   };
 
-  const handleParticipantApproved = async (id: string) => {
-    const res = await updatedParticipatStatus(id, "APPROVED");
-    if (res.success) {
-      toast.success("Participant is approved!");
-    } else {
-      toast.error(res.message);
-    }
-  };
-
-  const handleParticipantReject = async (id: string) => {
-    const res = await updatedParticipatStatus(id, "REJECTED");
-
-    if (res.success) {
-      toast.success("Participant is rejected!");
-    } else {
-      toast.error(res.message);
-    }
-  };
 
   if (displayEvents?.length === 0) {
     return (

@@ -7,24 +7,25 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TParticipantUser } from "@/types/participantType";
-import { Eye, Search } from "lucide-react";
+import { Check, CheckCheckIcon, CrossIcon, Edit, Eye, MoreHorizontal, Search, X } from "lucide-react";
 import { useState } from "react";
 import { formatDate } from "../Shared/DateTimeFormat/formatDate";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface TParticipantProps {
-    participant: TParticipantUser[];
-    user: any;
+    tableType: string
+    participants: TParticipantUser[];
 }
 
-const ParticipantClientComponents = ({ participant, user }: TParticipantProps) => {
+const ParticipantClientComponents = ({ participants, tableType }: TParticipantProps) => {
     const [searchQuery, setSearchQuery] = useState("");
-    const [participants, setParticipants] = useState<TParticipantUser[]>(participant);
+    const [allParticipants, setAllParticipants] = useState<TParticipantUser[]>(participants);
 
     // Search functionality
-    const filteredParticipants = participants?.filter((parti) => {
+    const filteredParticipants = allParticipants?.filter((parti) => {
         const searchLower = searchQuery.toLowerCase();
         return (
             parti?.user?.name.toLowerCase().includes(searchLower) ||
@@ -78,17 +79,34 @@ const ParticipantClientComponents = ({ participant, user }: TParticipantProps) =
         }
     };
 
+    const handleParticipantApproved = async (id: string) => {
+        console.log("id", id)
+        // const res = await updatedParticipatStatus(id, "APPROVED");
+        // if (res.success) {
+        //   toast.success("Participant is approved!");
+        // } else {
+        //   toast.error(res.message);
+        // }
+    };
+
+    const handleParticipantReject = async (id: string) => {
+        console.log("id", id)
+        // const res = await updatedParticipatStatus(id, "REJECTED");
+
+        // if (res.success) {
+        //   toast.success("Participant is rejected!");
+        // } else {
+        //   toast.error(res.message);
+        // }
+    };
+
+    if (tableType == "participation") return null
     return (
         <div>
             <Card className="shadow-md">
                 <CardHeader>
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div>
-                            <CardTitle>All Participants</CardTitle>
-                            <CardDescription>
-                                Track and manage event participants
-                            </CardDescription>
-                        </div>
+
                         <div className="flex flex-col sm:flex-row gap-2">
                             <div className="relative">
                                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -108,14 +126,13 @@ const ParticipantClientComponents = ({ participant, user }: TParticipantProps) =
                             <TableHeader>
                                 <TableRow>
                                     {
-                                        user?.role === "ADMIN" && (
-                                            <TableHead>Participantor</TableHead>
-                                        )
+                                        tableType == "request" && <TableHead>Requested User</TableHead>
                                     }
                                     <TableHead>Event Name</TableHead>
-                                    <TableHead>Category</TableHead>
                                     <TableHead>Status</TableHead>
-                                    <TableHead>Joining Date</TableHead>
+                                    {
+                                        tableType == "participation" && <TableHead>Requested On</TableHead>
+                                    }
                                     <TableHead className="text-center">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -123,50 +140,83 @@ const ParticipantClientComponents = ({ participant, user }: TParticipantProps) =
                                 {filteredParticipants?.length > 0 ? (
                                     filteredParticipants?.map((parti) => (
                                         <TableRow key={parti.id}>
+
                                             {
-                                                user?.role === "ADMIN" && (
-                                                    <TableCell className="font-medium">
-                                                        <div className="flex items-center gap-2">
-                                                            <Avatar className="h-8 w-8">
-                                                                <AvatarFallback>{parti.user?.name?.charAt(0)}</AvatarFallback>
-                                                            </Avatar>
-                                                            <div>
-                                                                <p className="text-xs text-muted-foreground">
-                                                                    {parti.user?.name}
-                                                                </p>
-                                                                <p className="text-xs text-muted-foreground text-yellow-600">
-                                                                    {parti.user?.email}
-                                                                </p>
-                                                            </div>
+                                                tableType == "request" && <TableCell className="font-medium">
+                                                    <div className="flex items-center gap-2">
+                                                        <Avatar className="h-8 w-8">
+                                                            <AvatarFallback>{parti.user?.name?.charAt(0)}</AvatarFallback>
+                                                        </Avatar>
+                                                        <div>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {parti.user?.name}
+                                                            </p>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {parti.user?.email}
+                                                            </p>
                                                         </div>
-                                                    </TableCell>
-                                                )
+                                                    </div>
+                                                </TableCell>
                                             }
+
                                             <TableCell
                                                 className="max-w-[150px] truncate"
                                                 title={parti.event?.title}
                                             >
-                                                {parti.event?.title}
+                                                {parti.event?.title || "Fallback Title"}
                                             </TableCell>
-                                            <TableCell>
-                                                {parti.event?.category}
-                                            </TableCell>
+
                                             <TableCell>
                                                 {getStatusBadge(parti.status)}
                                             </TableCell>
-                                            <TableCell>
-                                                {formatDate(parti.createdAt)} at {formatDate(parti.createdAt, "h:mm A")}
-                                            </TableCell>
-                                            <Link href={`/events/${parti?.eventId}`}>
-                                                <TableCell className="text-center items-center justify-center flex">
-                                                    <Button
-                                                        variant="ghost"
-                                                        className=" rounded-full just"
-                                                    >
-                                                        <Eye />
-                                                    </Button>
+                                            {
+                                                tableType == "participation" && <TableCell>
+                                                    {formatDate(parti.createdAt)} at {formatDate(parti.createdAt, "h:mm A")}
                                                 </TableCell>
-                                            </Link>
+                                            }
+
+                                            {
+                                                tableType == "participation" && <TableCell className="text-center items-center justify-center flex">
+                                                    <Link href={`/events/${parti?.eventId}`}>
+                                                        <Button
+                                                            variant="ghost"
+                                                            className=" rounded-full just"
+                                                        >
+                                                            <Eye />
+                                                        </Button>
+                                                    </Link>
+                                                </TableCell>
+                                            }
+                                            {
+                                                tableType == "request" && <TableCell className="text-right">
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8 rounded-full"
+                                                            >
+                                                                <MoreHorizontal className="h-4 w-4" />
+                                                                <span className="sr-only">Open menu</span>
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuItem className="text-green-500" onClick={() => handleParticipantApproved(parti.id)}>
+                                                                <Check className="mr-2 h-4 w-4" />
+
+                                                                Approved User
+
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem className="text-red-500" onClick={() => handleParticipantReject(parti.id)}>
+                                                                <X className="mr-2 h-4 w-4" />
+                                                                Reject User
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
+                                            }
+
+
                                         </TableRow>
                                     ))
                                 ) : (
