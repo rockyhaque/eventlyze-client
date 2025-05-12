@@ -38,6 +38,17 @@ export const getAllParticipants = async () => {
     return new Error(message);
   }
 };
+export const getAllHostParticipants = async () => {
+  try {
+    const res = await app_axios.get(`/participation/host-participants`);
+    return res.data;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      "Something went wrong while getting a notification!";
+    return new Error(message);
+  }
+};
 
 // Participator status update
 export const updatedParticipatStatus = async (id: string, data: any) => {

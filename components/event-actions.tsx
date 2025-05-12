@@ -33,10 +33,13 @@ type EventReviewsProps = {
 
 export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
   const participantUser = eventDetails?.participant?.some(
-    (p) => p.userId === activeUser?.userId && p.status === "JOINED" || p.status === "APPROVED" || p.status === "REQUESTED"
+    (p) => p.userId === activeUser?.userId && (p.status === "JOINED" || p.status === "APPROVED")
+  );
+  const isRequestedToJoin =  eventDetails?.participant?.some(
+    (p) => p.userId === activeUser?.userId && p.status === "REQUESTED"
   );
   const [isJoined, setIsJoined] = useState(participantUser || false)
-
+  const [isRequested, setIsRequested] = useState(isRequestedToJoin)
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -47,14 +50,6 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
   const [isRunning, setIsRunning] = useState(true);
  const isLoggedIn = activeUser
   const isOwner = eventDetails?.ownerId === activeUser?.userId
-
-
-
-  // const participantUser = eventReviews?.participant?.some(
-  //   (p) => p.userId === userId && p.status === "JOINED"
-  // );
-
-
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -126,8 +121,15 @@ export function EventActions({ eventDetails, activeUser }: EventReviewsProps) {
         </Button>
       );
     }
+    if(isRequested){
+      return (
+        <Button size="lg" className="w-full" disabled>
+          Requested
+        </Button>
+      );
+    }
 
-    if (isJoined || participantUser) {
+    if (isJoined) {
       return (
         <Button size="lg" className="w-full" disabled>
           Already Joined
