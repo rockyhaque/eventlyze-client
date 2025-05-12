@@ -1,15 +1,32 @@
-# Eventlyze – Frontend
+# Eventlyze – Your Non Stop Event Planing Platform
 
 This repository contains the frontend for the **Eventlyze - Event Planner & Participation System**, a secure and intuitive web platform designed for creating, managing, and participating in public and private events with optional registration fees. Built with Next.js and Tailwind CSS, the frontend provides a responsive, user-friendly interface that integrates seamlessly with the backend API to deliver a comprehensive event management experience.
 
-📃 **Documentation**  
-**Live Site** ➡️ [https://event-planner-frontend.vercel.app](https://event-planner-frontend.vercel.app)  
-**Backend API** ➡️ [https://event-planner-server.render.com](https://event-planner-server.render.com)
+**Live Link** ➡️ [https://eventlyze.vercel.app](https://eventlyze.vercel.app)
+
+**Server Link** ➡️ [https://eventlyze-server.vercel.app](https://eventlyze-server.vercel.app)
+
+**Backend Repository** ➡️ [https://github.com/rockyhaque/eventlyze-server](https://github.com/rockyhaque/eventlyze-server)
+
+## `Code Storm` Team  Members
+
+| 💼 Name              | 🆔 Student ID   | 📧 Email                                     |
+|----------------------|----------------|----------------------------------------------|
+| Md Rashed Ali        | `WEB8 - 3007`  | [tutorial.rashed@gmail.com](mailto:tutorial.rashed@gmail.com) |
+| OMAR FARUK           | `WEB9 - 2616`  | [faruk2059@gmail.com](mailto:faruk2059@gmail.com) |
+| Rasibul Islam        | `WEB8 - 1136`  | [rasibul179@gmail.com](mailto:rasibul179@gmail.com) |
+| Md Nahiduzzaman      | `WEB9 - 4276`  | [nahiduzzaman964@gmail.com](mailto:nahiduzzaman964@gmail.com) |
+| Md Sakib Al Hasan    | `WEB4 - 2247`  | [mdsakibalhasanprogrammer1@gmail.com](mailto:mdsakibalhasanprogrammer1@gmail.com) |
+| MD Sohel Rana        | `WEB8 - 2867`  | [ranaot56@gmail.com](mailto:ranaot56@gmail.com) |
+| Rakibul Haq Roky     | `WEB8 - 3916`  | [rockyhaque71@gmail.com](mailto:rockyhaque71@gmail.com) |
+
+
 
 🛠 **Tech Stack**
 
 - **Next.js** – React Framework for Server-Side Rendering and Static Site Generation
 - **Tailwind CSS** – Utility-First Styling Framework
+- **Framer Motion** – Visual Animation 
 - **Axios** – HTTP Client for API Communication
 - **React Query** – Efficient Data Fetching and State Management
 - **JWT** – Client-Side Authentication Handling
@@ -68,7 +85,7 @@ This repository contains the frontend for the **Eventlyze - Event Planner & Part
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/your-username/event-planner-frontend.git
+   git clone https://github.com/rockyhaque/eventlyze-client.git
    cd event-planner-frontend
    ```
 
@@ -79,7 +96,7 @@ This repository contains the frontend for the **Eventlyze - Event Planner & Part
    ```
 
 3. **Configure Environment**  
-   Create a `.env.local` file in the root directory with the following:
+    Create a `.env` file in the root directory. Refer to `.env.example` for guidance:
 
    ```
    NEXT_PUBLIC_API_URL=https://event-planner-server.render.com
@@ -112,4 +129,4 @@ This repository contains the frontend for the **Eventlyze - Event Planner & Part
 - **Linting & Formatting**: ESLint and Prettier are configured for code consistency. Run `npm run lint` to check for issues.
 
 📬 **Contact**  
-For issues or inquiries, reach out to [rockyhaque99@gmail.com](mailto:rockyhaque99@gmail.com).
+For issues or inquiries, reach out to [Team Eventlyze](mailto:rockyhaque71@gmail.com). Thank you 💜
