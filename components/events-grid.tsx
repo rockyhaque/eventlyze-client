@@ -151,7 +151,7 @@ export function EventsGrid({ eventsData }: { eventsData: TEventResponse }) {
             ))}
           </motion.div>
 
-          {eventsData.data.length > displayedEvents.length && (
+          {eventsData?.data.length > displayedEvents.length && (
             <div className="mt-12 flex justify-center">
               <Button size="lg" onClick={loadMoreEvents}>
                 Load More Events

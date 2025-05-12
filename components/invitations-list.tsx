@@ -29,7 +29,7 @@ export function InvitationsList({ status, data, onStatusChange }: InvitationsLis
     }
   }, [onStatusChange])
 
-  if (data.length === 0) {
+  if (data?.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
         <div className="text-4xl">📩</div>
@@ -45,7 +45,7 @@ export function InvitationsList({ status, data, onStatusChange }: InvitationsLis
 
   return (
     <div className="space-y-4">
-      {data.map((invitation: any) => (
+      {data?.map((invitation: any) => (
         <Card key={invitation.id}>
           <CardContent className="p-4 sm:p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start">

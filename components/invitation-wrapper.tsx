@@ -8,7 +8,7 @@ const InvitationWrapper = ({ data }: any) => {
   const [localData, setLocalData] = useState(data)
 
   const categorizedInvitations = useMemo(() => {
-    return localData.reduce((acc: Record<string, any[]>, invitation: any) => {
+    return localData?.reduce((acc: Record<string, any[]>, invitation: any) => {
       const status = invitation.status
       if (acc[status]) {
         acc[status].push(invitation)
@@ -35,7 +35,7 @@ const InvitationWrapper = ({ data }: any) => {
 
         <TabsContent value="pending">
           <InvitationsList
-            data={categorizedInvitations.pending}
+            data={categorizedInvitations?.pending}
             onStatusChange={handleUpdate}
             status="pending"
           />
@@ -43,7 +43,7 @@ const InvitationWrapper = ({ data }: any) => {
 
         <TabsContent value="accepted">
           <InvitationsList
-            data={categorizedInvitations.accepted}
+            data={categorizedInvitations?.accepted}
             onStatusChange={handleUpdate}
             status="accepted"
           />
@@ -51,7 +51,7 @@ const InvitationWrapper = ({ data }: any) => {
 
         <TabsContent value="rejected">
           <InvitationsList
-            data={categorizedInvitations.rejected}
+            data={categorizedInvitations?.rejected}
             onStatusChange={handleUpdate}
             status="rejected"
           />
