@@ -35,6 +35,10 @@ import { TPayment } from "@/types/paymentTypes";
 import { formatDate } from "./modules/Shared/DateTimeFormat/formatDate";
 import Link from "next/link";
 
+interface TPaymentsParams {
+  payments: any[]
+}
+
 export function DashboardPayments({ payments }: TPaymentsParams) {
   const [searchQuery, setSearchQuery] = useState("");
   const getStatusBadge = (status: TPayment["status"]) => {
@@ -124,7 +128,7 @@ export function DashboardPayments({ payments }: TPaymentsParams) {
                   </TableCell>
                 </TableRow>
               ) : (
-                payments?.map((payment) => (
+                payments?.map((payment: TPayment) => (
                   <TableRow key={payment.paymentId}>
                     <TableCell className="font-mono text-xs">
                       {payment?.paymentId}

@@ -1,4 +1,5 @@
 
+
 "use client"
 
 import { Button } from "@/components/ui/button";
@@ -6,23 +7,46 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TParticipantUser } from "@/types/participantType";
-import { Eye, Search } from "lucide-react";
+import { Edit, Eye, MoreHorizontal, Search } from "lucide-react";
 import { useState } from "react";
 import { formatDate } from "../Shared/DateTimeFormat/formatDate";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 
 interface TParticipantProps {
     participant: TParticipantUser[];
+    user: any;
 }
 
-const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
+const ParticipantClientComponents = ({ participant, user }: TParticipantProps) => {
     const [searchQuery, setSearchQuery] = useState("");
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [selectedParticipant, setSelectedParticipant] = useState<TParticipantUser | null>(null);
+    const [participants, setParticipants] = useState<TParticipantUser[]>(participant);
+
+    const handleOpenDialog = (participant: TParticipantUser) => {
+        setSelectedParticipant(participant);
+        setIsDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setIsDialogOpen(false);
+        setSelectedParticipant(null);
+    };
+
+    const handleStatusUpdate = (updatedParticipant: TParticipantUser) => {
+        setParticipants(prev =>
+            prev.map(p =>
+                p.id === updatedParticipant.id
+                    ? updatedParticipant
+                    : p
+            )
+        );
+    };
 
     // Search functionality
-    const filteredParticipants = participant?.filter((parti) => {
+    const filteredParticipants = participants?.filter((parti) => {
         const searchLower = searchQuery.toLowerCase();
         return (
             parti?.user?.name.toLowerCase().includes(searchLower) ||
@@ -107,19 +131,23 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Participantor</TableHead>
+                                    {
+                                        user?.role === "ADMIN" && (
+                                            <TableHead>Participantor</TableHead>
+                                        )
+                                    }
                                     <TableHead>Event Name</TableHead>
                                     <TableHead>Category</TableHead>
                                     <TableHead>Status</TableHead>
                                     <TableHead>Joining Date</TableHead>
-                                    <TableHead className="text-center5">Actions</TableHead>
+                                    <TableHead className="text-center">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {totalParticipants === 0 ? (
                                     <TableRow>
                                         <TableCell
-                                            colSpan={7}
+                                            colSpan={6}
                                             className="text-center py-8 text-muted-foreground"
                                         >
                                             No participants found
@@ -127,40 +155,44 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                                     </TableRow>
                                 ) : (
                                     filteredParticipants?.map((parti) => (
-                                        <TableRow key={parti?.id}>
-                                            <TableCell className="font-medium">
-                                                <div className="flex items-center gap-2">
-                                                    <Avatar className="h-8 w-8">
+                                        <TableRow key={parti.id}>
+                                            {
+                                                user?.role === "ADMIN" && (
+                                                    <TableCell className="font-medium">
+                                                        <div className="flex items-center gap-2">
+                                                            <Avatar className="h-8 w-8">
+                                                                <AvatarFallback>{parti.user?.name?.charAt(0)}</AvatarFallback>
+                                                            </Avatar>
+                                                            <div>
+                                                                <p className="text-xs text-muted-foreground">
+                                                                    {parti.user?.name}
+                                                                </p>
+                                                                <p className="text-xs text-muted-foreground text-yellow-600">
+                                                                    {parti.user?.email}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </TableCell>
+                                                )
+                                            }
 
-                                                        <AvatarFallback>{ parti?.user?.name.charAt(0)}</AvatarFallback>
-                                                    </Avatar>
-                                                    <div >
-                                                        <p className="text-xs text-muted-foreground">
-                                                            {parti?.user?.name}
-                                                        </p>
-                                                        <p className="text-xs text-muted-foreground text-yellow-600">
-                                                            {parti?.user?.email}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </TableCell>
                                             <TableCell
                                                 className="max-w-[150px] truncate"
-                                                title={parti?.event?.title}
+                                                title={parti.event?.title}
                                             >
-                                                {parti?.event?.title}
+                                                {parti.event?.title}
                                             </TableCell>
                                             <TableCell>
-                                                {parti?.event?.category}
+                                                {parti.event?.category}
                                             </TableCell>
                                             <TableCell>
-                                                {getStatusBadge(parti?.status)}
+                                                {getStatusBadge(parti.status)}
                                             </TableCell>
                                             <TableCell>
-                                                {formatDate(parti?.createdAt)} at {formatDate(parti?.createdAt, "h:mm A")}
+                                                {formatDate(parti.createdAt)} at {formatDate(parti.createdAt, "h:mm A")}
                                             </TableCell>
                                             <Link href={`/events/${parti?.eventId}`}>
-                                                <TableCell className="text-center">
+                                                <TableCell className="text-center items-center justify-center flex">
                                                     <Button
                                                         variant="ghost"
                                                         className=" rounded-full just"
@@ -170,6 +202,32 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                                                 </TableCell>
                                             </Link>
 
+                                            {/* <TableCell className="text-right">
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            className="h-8 w-8 rounded-full"
+                                                        >
+                                                            <MoreHorizontal className="h-4 w-4" />
+                                                            <span className="sr-only">Open menu</span>
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem>
+                                                            <Eye className="mr-2 h-4 w-4" />
+                                                            <Link href={`/events/${parti.eventId}`}>
+                                                                View Details
+                                                            </Link>
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => handleOpenDialog(parti)}>
+                                                            <Edit className="mr-2 h-4 w-4" />
+                                                            Update Status
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell> */}
                                         </TableRow>
                                     ))
                                 )}
@@ -178,6 +236,18 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
                     </div>
                 </CardContent>
             </Card>
+
+            {/* {selectedParticipant && (
+                <ParticipantStatusDialog
+                    open={isDialogOpen}
+                    onOpenChange={setIsDialogOpen}
+                    onClose={handleCloseDialog}
+                    action="status"
+                    id={selectedParticipant.id}
+                    currentStatus={selectedParticipant.status}
+                    onStatusUpdate={handleStatusUpdate}
+                />
+            )} */}
         </div>
     );
 };
