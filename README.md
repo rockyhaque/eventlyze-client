@@ -20,6 +20,17 @@ This repository contains the frontend for the **Eventlyze - Event Planner & Part
 | MD Sohel Rana        | `WEB8 - 2867`  | [ranaot56@gmail.com](mailto:ranaot56@gmail.com) |
 | Rakibul Haq Roky     | `WEB8 - 3916`  | [rockyhaque71@gmail.com](mailto:rockyhaque71@gmail.com) |
 
+### Admin Credentials
+
+**Email:** 
+```
+admin@gmail.com
+```
+
+**Password:**
+```
+admin123
+```
 
 
 🛠 **Tech Stack**
