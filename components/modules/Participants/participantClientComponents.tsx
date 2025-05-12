@@ -25,11 +25,11 @@ const ParticipantClientComponents = ({ participant }: TParticipantProps) => {
     const filteredParticipants = participant?.filter((parti) => {
         const searchLower = searchQuery.toLowerCase();
         return (
-            parti.user.name.toLowerCase().includes(searchLower) ||
-            parti.user.email.toLowerCase().includes(searchLower) ||
-            parti.event.title.toLowerCase().includes(searchLower) ||
-            parti.event.category.toLowerCase().includes(searchLower) ||
-            parti.status.toLowerCase().includes(searchLower)
+            parti?.user?.name.toLowerCase().includes(searchLower) ||
+            parti?.user?.email.toLowerCase().includes(searchLower) ||
+            parti?.event?.title.toLowerCase().includes(searchLower) ||
+            parti?.event?.category.toLowerCase().includes(searchLower) ||
+            parti?.status.toLowerCase().includes(searchLower)
         );
     });
 
