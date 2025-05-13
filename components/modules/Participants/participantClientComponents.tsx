@@ -14,6 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { updatedParticipatStatus } from "@/services/Participant";
+import { toast } from "sonner";
 
 interface TParticipantProps {
     tableType: string
@@ -79,28 +81,38 @@ const ParticipantClientComponents = ({ participants, tableType }: TParticipantPr
         }
     };
 
-    const handleParticipantApproved = async (id: string) => {
-        console.log("id", id)
-        // const res = await updatedParticipatStatus(id, "APPROVED");
-        // if (res.success) {
-        //   toast.success("Participant is approved!");
-        // } else {
-        //   toast.error(res.message);
-        // }
-    };
+ const handleParticipantApproved = async (id: string) => {
+    const res = await updatedParticipatStatus(id, "APPROVED");
 
-    const handleParticipantReject = async (id: string) => {
-        console.log("id", id)
-        // const res = await updatedParticipatStatus(id, "REJECTED");
+    if (res.success) {
+        // Optimistically update the participant's status in local state
+        setAllParticipants((prev) =>
+            prev.map((participant) =>
+                participant.id === id ? { ...participant, status: "APPROVED" } : participant
+            )
+        );
+        toast.success("Participant is approved!");
+    } else {
+        toast.error("Participant approval failed!");
+    }
+};
 
-        // if (res.success) {
-        //   toast.success("Participant is rejected!");
-        // } else {
-        //   toast.error(res.message);
-        // }
-    };
+const handleParticipantReject = async (id: string) => {
+    const res = await updatedParticipatStatus(id, "REJECTED");
 
-    if (tableType == "participation") return null
+    if (res.success) {
+        // Optimistically update the participant's status in local state
+        setAllParticipants((prev) =>
+            prev.map((participant) =>
+                participant.id === id ? { ...participant, status: "REJECTED" } : participant
+            )
+        );
+        toast.success("Participant is rejected!");
+    } else {
+        toast.error("Participant rejection failed!");
+    }
+};
+
     return (
         <div>
             <Card className="shadow-md">
