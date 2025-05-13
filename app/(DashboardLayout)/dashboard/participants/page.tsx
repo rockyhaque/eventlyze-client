@@ -3,10 +3,7 @@ export const dynamic = "force-dynamic";
 import ParticipantClientComponents from "@/components/modules/Participants/participantClientComponents";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getActiveUser } from "@/hooks/getActiveUser";
-import { getAllUserEvents } from "@/services/EventServices";
 import { getAllHostParticipants, getAllParticipants } from "@/services/Participant";
-import { TEvent } from "@/types/eventTypes";
 
 
 

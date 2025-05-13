@@ -65,6 +65,5 @@ export const updatedParticipatStatus = async (id: string, data: any) => {
     const message =
       error?.response?.data?.message ||
       "Something went wrong while updating user role!";
-    return new Error(message);
   }
 };
