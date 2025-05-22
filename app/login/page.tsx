@@ -35,13 +35,25 @@ export default function LoginPage() {
     formState: { isSubmitting },
   } = form;
 
+  const handleAdminCredentials = () => {
+    form.setValue("email", "admin@gmail.com");
+    form.setValue("password", "admin123");
+    toast.warning('Admin credentials filled. This is for demo purposes only.');
+  };
+
+  const handleUserCredentials = () => {
+    form.setValue("email", "test@user.com");
+    form.setValue("password", "user123");
+    toast.warning('Test user credentials filled. This is for demo purposes only.');
+  };
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await signInUser(data);
       if (res.success) {
         toast.success("Login successful!");
         router.push("/");
-      }else{
+      } else {
         toast.error("Invalid Credentials!");
       }
     } catch (error: any) {
@@ -69,6 +81,28 @@ export default function LoginPage() {
               </p>
             </div>
 
+            <div className="flex justify-center items-center gap-4">
+              <div>
+                <Button
+                  type="button"
+                  onClick={handleAdminCredentials}
+                  variant="outline"
+                >
+                  Admin Credential
+                </Button>
+              </div>
+
+              <div>
+                <Button
+                  type="button"
+                  onClick={handleUserCredentials}
+                  variant="outline"
+                >
+                  User Credential
+                </Button>
+              </div>
+            </div>
+
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -88,8 +122,6 @@ export default function LoginPage() {
                     />
                   </div>
                   <div className="space-y-2">
-          
-
                     {/* Form input */}
                     <EFormInput
                       name="password"
