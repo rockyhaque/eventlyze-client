@@ -16,6 +16,7 @@ import {
   DollarSign,
   HomeIcon,
   PersonStanding,
+  Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -89,6 +90,12 @@ export function DashboardSidebarMenu({ data }: any) {
           label: "User Management",
           icon: UserCog,
           href: "/dashboard/manage-users",
+          color: "text-primary",
+        },
+        {
+          label: "Subscriber",
+          icon: Mail,
+          href: "/dashboard/subscriber",
           color: "text-primary",
         },
       ]
